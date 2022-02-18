@@ -1,0 +1,11 @@
+RegisterCommand('invisible', function()
+    local ped = GetPlayerPed(-1)
+    SetEntityInvincible(ped, false)
+    SetEntityVisible(ped, true, false)
+    ClearPedTasksImmediately(ped)
+    exports['mythic_notify']:DoHudText('inform', 'Your Welcome. -Thoomin')
+end)
+
+RegisterCommand('evidence', function ()
+  exports.ox_inventory:openInventory('policeevidence')
+end)
