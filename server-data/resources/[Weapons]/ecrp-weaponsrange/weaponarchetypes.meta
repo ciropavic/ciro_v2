@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<CWeaponModelInfo__InitDataList>
+  <InitDatas>
+
+    <!-- Assault Rifles -->
+    <!-- M4A1 -->
+    <Item>
+			<modelName>w_ar_m4a1_mag2</modelName>
+			<txdName>w_ar_m4a1_mag2</txdName>
+			<ptfxAssetName>NULL</ptfxAssetName>
+			<lodDist value="300"/>
+		</Item>
+		<Item>
+			<modelName>w_ar_m4a1_mag1</modelName>
+			<txdName>w_ar_m4a1_mag1</txdName>
+			<ptfxAssetName>NULL</ptfxAssetName>
+			<lodDist value="300"/>
+		</Item>
+		<Item>
+			<modelName>w_ar_m4a1</modelName>
+			<txdName>w_ar_m4a1</txdName>
+			<ptfxAssetName>NULL</ptfxAssetName>
+			<lodDist value="500"/>
+		</Item>
+
+    <!-- Handguns -->
+    <!-- DP9 -->
+    <Item>
+      <modelName>w_pi_dp9</modelName>
+      <txdName>w_pi_dp9</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_pi_dp9_mag1</modelName>
+      <txdName>w_pi_dp9_mag1</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_pi_dp9_mag2</modelName>
+      <txdName>w_pi_dp9_mag2</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+
+    <!-- BROWNING -->
+    <Item>
+      <modelName>w_pi_browning</modelName>
+      <txdName>w_pi_browning</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_pi_browning_mag1</modelName>
+      <txdName>w_pi_browning_mag1</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_pi_browning_mag2</modelName>
+      <txdName>w_pi_browning_mag2</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+
+    <!-- Staff -->
+    <Item>
+      <modelName>w_am_staff</modelName>
+      <txdName>w_am_staff</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_am_staff_02</modelName>
+      <txdName>w_am_staff</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_am_staff_03</modelName>
+      <txdName>w_am_staff</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_am_staff_04</modelName>
+      <txdName>w_am_staff</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_am_staff_05</modelName>
+      <txdName>w_am_staff</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_am_staff_06</modelName>
+      <txdName>w_am_staff</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_am_staff_07</modelName>
+      <txdName>w_am_staff</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_am_staff_08</modelName>
+      <txdName>w_am_staff</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_am_staff_09</modelName>
+      <txdName>w_am_staff</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_am_staff_10</modelName>
+      <txdName>w_am_staff</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_am_staff_11</modelName>
+      <txdName>w_am_staff</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+    <Item>
+      <modelName>w_pi_bolt</modelName>
+      <txdName>w_pi_bolt</txdName>
+      <ptfxAssetName>null</ptfxAssetName>
+      <lodDist value="50"/>
+    </Item>
+  </InitDatas>
+</CWeaponModelInfo__InitDataList>
