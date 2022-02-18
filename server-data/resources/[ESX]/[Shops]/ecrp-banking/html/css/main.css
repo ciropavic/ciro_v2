@@ -1,0 +1,151 @@
+:root {
+  --main-color: #27303a;
+  --secondary-color: #1f4564;
+}
+
+body {
+    background: 0 0!important;
+    overflow: hidden!important
+}
+
+html {
+    overflow: hidden!important
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box
+}
+
+#bankui {
+    opacity: 0;
+    transition: .5s ease-in-out opacity;
+    margin-top: 3%
+}
+
+.hidden {
+    display: none!important
+}
+
+.img-spacer {
+    padding-right: 20px;
+    padding-left: 20px
+}
+
+.income {
+    color: #00e600;
+    text-shadow: 2px 2px rgba(0, 0, 0, .05)
+}
+
+.addition {
+    color: #00e600;
+    text-shadow: 2px 2px rgba(0, 0, 0, .05)
+}
+
+.expense {
+    color: #ff9100;
+    text-shadow: 2px 2px rgba(0, 0, 0, .05)
+}
+
+p {
+    margin-bottom: .5rem
+}
+
+.note {
+    margin: 0
+}
+
+.account {
+    margin: 1rem;
+    margin-bottom: .4rem
+}
+
+.deposit {
+    background: #3bc515;
+    color: rgb(255, 255, 255)!important;
+    border: 0
+}
+
+.withdraw {
+    background: #df7c31;
+    color: rgb(255, 255, 255)!important;
+    border: 0
+}
+
+.transfer {
+    background: #4086eb;
+    color: rgb(255, 255, 255)!important;
+    border: 0
+}
+
+.deposit:hover {
+    background: #3bc51541
+}
+
+.withdraw:hover {
+    background: #df7d3141;
+    color: #fff!important
+}
+
+.transfer:hover {
+    background: #4086eb41
+}
+
+.container {
+    margin-top: 13%
+}
+
+#Transaction_Row {
+    height: 900px;
+    overflow-y: scroll;
+    box-sizing: content-box
+}
+
+.dark-modal, .modal-body, .modal-footer, .modal-header {
+    color: #fff;
+    background-color: var(--main-color);
+    border: 0!important
+}
+
+.right {
+    float: right;
+    right: 0
+}
+
+.account_settings {
+    transition: color .2s ease-in-out
+}
+
+.account_settings:hover {
+    color: var(--main-color)
+}
+
+.container-fluid {
+  background-color: var(--main-color);
+}
+
+.playerAccounts {
+  background-color: var(--secondary-color);
+  box-shadow: 
+  0 1px 2px #fff, /*bottom external highlight*/
+  0 -1px 1px #666, /*top external shadow*/ 
+  inset 0 -1px 1px rgba(0,0,0,0.5), /*bottom internal shadow*/ 
+  inset 0 1px 1px rgba(255,255,255,0.8); /*top internal highlight*/
+}
+
+::-webkit-scrollbar {
+    width: 10px
+}
+
+::-webkit-scrollbar-track {
+    background: var(--main-color)
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--main-color)
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--main-color)
+}
