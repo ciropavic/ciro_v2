@@ -1,0 +1,70 @@
+.chat-window {
+  position: absolute;
+  background-color: transparent !important;
+  width: 1000px;
+  max-width: 1000px;
+}
+
+.chat-messages {
+  /* display: flex; */
+  width: 60%;
+  max-width: 60%;
+  font-size: 1.2vh;
+}
+
+.chat-window {
+  width: 60%;
+  overflow: hidden;
+}
+
+.chat-input > div.input {
+  display: flex;
+  align-items: center;
+  background-color: rgba(44, 59, 83, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  width: 60%;
+  height: 2.5vh;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.prefix {
+  display: flex;
+  align-items: center;
+}
+
+.suggestions {
+  width: 60%;
+  background-color: rgba(44, 59, 83, 0.5);
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.chat-input textarea {
+  resize: none;
+  font-size: 1.4vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+.msg {
+  padding: 7px;
+  margin-bottom: 15px;
+}
+
+.multiline {
+  display: none;
+}
+
+/* Template Styles */
+.ooc {
+  background-color: rgba(65, 129, 226, 0.7);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.localmsg {
+  background-color: rgba(240, 177, 4, 0.7);
+  padding: 10px;
+  border-radius: 10px;
+}
