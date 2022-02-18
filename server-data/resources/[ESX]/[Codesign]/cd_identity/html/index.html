@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Codesign Identity</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+        <link rel="stylesheet" href="css/stylesheet.css">
+    </head>
+    <body>
+        <div id="cd-identity">
+            <div id="cd-identity-wrapper">
+                <div id="cd-identity-centering">
+                    <div id="cd-identity-top">
+                        <img class="cd-identity-passport" src="images/passport_top.png" draggable="false"/>
+                        <div id="cd-identity-top-id">
+                            AC 0<span class="cd-identity-passport-number">1234567890</span>
+                        </div>
+                        <div id="cd-identity-top-field">
+                            <div id="cd-identity-top-field-title" class="row text-justify">
+                                &nbsp;United States of America
+                            </div>
+                            <div class="row">
+                                <div id="cd-identity-top-col-1" class="col-6">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent posuere porta mauris, vitae feugiat ligula fringilla non. Proin pretium nisl diam, finibus lacinia lectus mollis eget. Cras sed imperdiet turpis. Donec ut libero eu sem consectetur viverra vel in lectus. 
+                                </div>
+                                <div id="cd-identity-top-col-2" class="col-6">
+                                    Nullam convallis facilisis justo sed rutrum. Sed nec facilisis turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla facilisi. Quisque quis nisl mi. Integer dictum eros vel pellentesque tincidunt. 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="cd-identity-bottom">
+                        <img class="cd-identity-passport" src="images/passport_bottom.png" draggable="false"/>
+                        <div id="cd-identity-bottom-title">
+                            INTERNATIONAL PASSPORT
+                        </div>
+                        <div id="cd-identity-bottom-basic">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div id="cd-identity-bottom-type-title" class="cd-identity-text-title">
+                                        TYPE
+                                    </div>
+                                    <div id="cd-identity-bottom-type-value" class="cd-identity-text-value">
+                                        P
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div id="cd-identity-bottom-cc" class="cd-identity-text-title">
+                                        COUNTRY CODE
+                                    </div>
+                                    <div id="cd-identity-country-code" class="cd-identity-text-value">
+                                        USA
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div id="cd-identity-bottom-pn"class="cd-identity-text-title">
+                                        PASSPORT NO.
+                                    </div>
+                                    <div class="cd-identity-passport-number cd-identity-text-value">
+                                        812737495
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="cd-identity-bottom-picture">
+                            <img src="images/placeholder_id_picture_male.jpg" draggable="false" width="30%"/>
+                        </div>
+                        <div id="cd-identity-bottom-form">
+                            <div id="cd-identity-bottom-form-align">
+                                <label id="cd-identity-bottom-form-label-surname" class="cd-identity-bottom-form-label" for="cd-identity-form-surname">Surname</label><br/>
+                                <input type="text" id="cd-identity-form-surname" minlength="2" maxlength="16" class="cd-identity-form-input" name="surname" placeholder="Surname here"/><br/>
+                                <label id="cd-identity-bottom-form-label-name" class="cd-identity-bottom-form-label" for="cd-identity-form-name">Given name</label><br/>
+                                <input type="text" id="cd-identity-form-name" pattern="^[a-zA-Z\s]*$" minlength="2" maxlength="16" class="cd-identity-form-input" name="name" placeholder="Given name here" /><br/>
+                                <label id="cd-identity-bottom-form-label-nat" class="cd-identity-bottom-form-label" for="cd-identity-form-nationality">Nationality</label><br/>
+                                <input type="text" id="cd-identity-form-nationality" pattern="^[a-zA-Z\s]*$" minlength="2" maxlength="16" class="cd-identity-form-input" name="nationality" placeholder="Nationality here"/><br/>
+                                <label id="cd-identity-bottom-form-label-dob" class="cd-identity-bottom-form-label" for="cd-identity-form-dob">Date of Birth</label><br/>
+                                <input type="date" tabindex="-1" id="cd-identity-form-dob" class="cd-identity-form-input" name="dob" min="1920-01-01"/><br/>
+                                <div class="row p-0 m-0">
+                                    <div class="col-1 p-0 m-0">
+                                        <label id="cd-identity-bottom-form-label-sex" class="cd-identity-bottom-form-label" for="cd-identity-form-sex">Sex</label><br/>
+                                        <select name="sex" id="cd-identity-form-sex" class="cd-identity-form-input">
+                                            <option id="cd-identity-form-sex-male" value="m" selected>M</option>
+                                            <option id="cd-identity-form-sex-female" value="f">F</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <label id="cd-identity-bottom-form-label-pob" class="cd-identity-bottom-form-label" for="cd-identity-form-pob">Place of Birth</label><br/>
+                                        <input type="text" id="cd-identity-form-pob"  pattern="^[a-zA-Z\s]*$" class="cd-identity-form-input" name="pob" placeholder="Place of birth here"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div id="cd-identity-bottom-autofill">
+                            <div class="row p-0 m-0">
+                                <div class="col-3 p-0">
+                                    <span id="cd-identity-doi" class="cd-identity-bottom-form-label">Date of issue</span><br/>
+                                    <span id="cd-identity-autoform-doi" class="cd-identity-form-input">
+                                        01/12/2020
+                                    </span>
+                                </div>
+                                <div class="col-3 p-0">
+                                    <span id="cd-identity-authority"class="cd-identity-bottom-form-label">Authority</span><br/>
+                                    <span id="cd-identity-autoform-authority" class="cd-identity-form-input">
+                                        US Dept. of State
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row p-0 m-0">
+                                <div class="col-3 p-0">
+                                    <span id="cd-identity-doe" class="cd-identity-bottom-form-label">Date of expiry</span><br/>
+                                    <span id="cd-identity-autoform-doe" class="cd-identity-form-input">
+                                        01/12/2030                   
+                                    </span>
+                                </div>
+                                <div class="col-3 p-0 position-relative">
+                                    <span id="cd-identity-signature" class="cd-identity-bottom-form-label">Signature</span><br/>
+                                    <span id="cd-identity-autoform-signature" class="cd-identity-form-input">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="cd-identity-bottom-mrp">
+                            <div class="row p-0 m-0">
+                                <div id="cd-identity-mrp-1" class="col-12">
+                                    P&lt;USANAME&lt;&lt;SURNAME&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+                                </div>
+                            </div>
+                            <div class="row p-0 m-0">
+                                <div id="cd-identity-mrp-2" class="col-12">
+                                    8127374955USA0570310M3001010&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="cd-identity-submit">
+                        <button type="button" class="btn btn-sm btn-outline-danger">Issue passport</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="cd-id-animation">
+            <div id="cd-id" class="cd-identity-card">
+                <div id="cd-id-logo">
+                    <img src="images/id-card/city-of-los-santos.png" class="img-fluid w-75" />
+                </div>
+                <div id="cd-id-name">
+                    <div class="row m-0 p-0">
+                        <div class="col-12 m-0 p-0">
+                            <div id="cd-id-name-top" class="w-100">San Andreas</div>
+                            <div id="cd-id-name-bottom">Identity Card</div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div id="cd-id-image1">
+                    <img draggable="false" src="images/placeholder_id_picture_male.jpg" class="img-fluid w-75">
+                </div>
+    
+                <div id="cd-id-userdata">
+                    <div class="row m-0 p-0">
+                        <span class="cd-id-userdata-number mr-2">First Name:</span><span id="cd-id-userdata-firstname" class="cd-id-userdata-text">John</span>
+                    </div>
+                    <div class="row m-0 p-0">
+                        <span class="cd-id-userdata-number mr-2">Last Name:</span><span id="cd-id-userdata-lastname" class="cd-id-userdata-text">Doe</span>
+                    </div>
+                    <div class="row m-0 p-0">
+                        <span class="cd-id-userdata-number mr-2">DOB:</span><span id="cd-id-userdata-dob" class="cd-id-userdata-text">22/01/2021</span>
+                    </div>
+                    <div class="row m-0 p-0">
+                        <span class="cd-id-userdata-number mr-2">Sex:</span><span id="cd-id-userdata-sex" class="cd-id-userdata-text">M</span>
+                    </div>
+                    <div class="row m-0 p-0">
+                        <span class="cd-id-userdata-number mr-2">Issued:</span><span id="cd-id-userdata-doi" class="cd-id-userdata-text">22/01/2021</span>
+                    </div>
+                    <div class="row m-0 p-0">
+                        <span class="cd-id-userdata-number mr-2">Expiration:</span><span id="cd-id-userdata-doe" class="cd-id-userdata-text">22/01/2021</span>
+                    </div>
+                    <div class="row m-0 p-0">
+                        <span class="cd-id-userdata-number mr-2">Birth:</span><span id="cd-id-userdata-pob" class="cd-id-userdata-text">Los Santos, SA</span>
+                    </div>
+                    <div class="row m-0 p-0">
+                        <span class="cd-id-userdata-number mr-2">Country:</span><span id="cd-id-userdata-nat" class="cd-id-userdata-text">USA</span>
+                    </div>
+                </div>
+    
+                <div id="cd-id-signature">
+                    John Doe
+                </div>
+    
+                <div id="cd-id-licenses">
+    
+                </div>
+            </div>
+        </div>
+        <div>
+            <canvas id="photoEditor" width="127.2" height="126.18" style="display:none">
+
+            </canvas>
+        </div>
+        <div class="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content shadow">
+                <div class="modal-body text-center bg-dark text-light">
+                    <p id="modal-message" class="lead"></p>
+                    <div class="spinner-grow text-secondary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <script src="../configs/locale_ui.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+        <script src="js/script.js"></script>
+    </body>
+</html>
