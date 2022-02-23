@@ -4,7 +4,7 @@ game 'gta5'
 
 author 'Gabz'
 description 'Yachts'
-version '1.0.0'
+version '5.0.0'
 
 client_scripts {
   'client.lua',

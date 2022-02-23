@@ -10,6 +10,7 @@
     - [Ox Inventory](#ox-inventory)
     - [Mythic Notify](#mythic-notify)
   - [Changes](#changes)
+  - [Vehicles](#vehicles)
   - [Color Theme](#color-theme)
 
 ---
@@ -76,6 +77,7 @@
   ```
 
 ### Mythic Notify
+
 - Client:
   - Simple
     ```lua
@@ -105,6 +107,94 @@
   ```
 
 ---
+
+## Vehicles
+
+<details>
+  <summary>Vehicle Changes</summary>
+
+- Carcols:
+
+  <details>
+    <summary>Engine Upgrade</summary>
+
+  ```xml
+  <Item>
+    <identifier />
+    <modifier value="25" />
+    <audioApply value="1.000000" />
+    <weight value="20" />
+    <type>VMT_ENGINE</type>
+  </Item>
+  <Item>
+    <identifier />
+    <modifier value="50" />
+    <audioApply value="1.000000" />
+    <weight value="20" />
+    <type>VMT_ENGINE</type>
+  </Item>
+  <Item>
+    <identifier />
+    <modifier value="100" />
+    <audioApply value="1.000000" />
+    <weight value="20" />
+    <type>VMT_ENGINE</type>
+  </Item>
+  <Item>
+    <identifier />
+    <modifier value="150" />
+    <audioApply value="1.000000" />
+    <weight value="20" />
+    <type>VMT_ENGINE</type>
+  </Item>
+  <Item>
+    <identifier />
+    <modifier value="200" />
+    <audioApply value="1.000000" />
+    <weight value="20" />
+    <type>VMT_ENGINE</type>
+  </Item>
+  ```
+
+  </details>
+
+  <details>
+    <summary>Gearbox Upgrade</summary>
+
+  ```xml
+  <Item>
+    <identifier />
+    <modifier value="25" />
+    <audioApply value="1.000000" />
+    <weight value="5" />
+    <type>VMT_GEARBOX</type>
+  </Item>
+  <Item>
+    <identifier />
+    <modifier value="50" />
+    <audioApply value="1.000000" />
+    <weight value="5" />
+    <type>VMT_GEARBOX</type>
+  </Item>
+  <Item>
+    <identifier />
+    <modifier value="100" />
+    <audioApply value="1.000000" />
+    <weight value="5" />
+    <type>VMT_GEARBOX</type>
+  </Item>
+  <Item>
+    <identifier />
+    <modifier value="150" />
+    <audioApply value="1.000000" />
+    <weight value="5" />
+    <type>VMT_GEARBOX</type>
+  </Item>
+  ```
+
+  </details>
+
+</details>
 
 ---
 

@@ -38,11 +38,11 @@ end)
 function toggleSeatbelt(toggle)
     if toggle == nil then
         if seatbeltOn then
-            TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 2, 'seatbeltoff', 1.0)
+            TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'seatbeltoff', 1.0)
             SetFlyThroughWindscreenParams(Config.ejectVelocity, Config.unknownEjectVelocity, Config.unknownModifier,
                 Config.minDamage)
         else
-            TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 2, 'seatbelt', 1.0)
+            TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'seatbelt', 1.0)
             -- SetFlyThroughWindscreenParams(10000.0, 10000.0, 17.0, 500.0);
             SetFlyThroughWindscreenParams(15.6464, 2.2352, 0.0, 0.0);
             SetPedConfigFlag(PlayerPedId(), 32, true);
@@ -50,12 +50,12 @@ function toggleSeatbelt(toggle)
         seatbeltOn = not seatbeltOn
     else
         if toggle then
-            TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 2, 'seatbelt', 1.0)
+            TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'seatbelt', 1.0)
             -- SetFlyThroughWindscreenParams(10000.0, 10000.0, 17.0, 500.0);
             SetFlyThroughWindscreenParams(15.6464, 2.2352, 0.0, 0.0);
             SetPedConfigFlag(PlayerPedId(), 32, true);
         else
-            TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 2, 'seatbeltoff', 1.0)
+            TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'seatbeltoff', 1.0)
             SetFlyThroughWindscreenParams(Config.ejectVelocity, Config.unknownEjectVelocity, Config.unknownModifier,
                 Config.minDamage)
         end

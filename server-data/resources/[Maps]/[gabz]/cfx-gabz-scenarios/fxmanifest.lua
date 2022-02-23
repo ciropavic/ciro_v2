@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Gabz'
 description 'Scenarios'
-version '4.0.0'
+version '5.0.0'
 
 files {
     'sp_manifest.ymt',

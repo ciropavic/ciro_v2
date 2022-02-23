@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Gabz'
 description 'LaMesa PD'
-version '4.0.0'
+version '5.0.0'
 
 dependencies {
     'cfx-gabz-mapdata',

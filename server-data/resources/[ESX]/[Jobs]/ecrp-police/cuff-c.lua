@@ -35,7 +35,7 @@ AddEventHandler('cu:togglecuff', function(cop)
             cuffed = true
 
             Citizen.Wait(1000)
-            TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 5, 'handcuff', 0.6)
+            TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 3, 'handcuff', 0.6)
             SetEnableHandcuffs(ped, true)
             SetCurrentPedWeapon(ped, unarmed, true)
             Citizen.Wait(3500)
@@ -69,7 +69,7 @@ AddEventHandler('cu:togglesoftcuff', function(cop)
             softcuffed = true
 
             Citizen.Wait(1000)
-            TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 5, 'handcuff', 0.6)
+            TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 3, 'handcuff', 0.6)
             SetEnableHandcuffs(ped, true)
             SetCurrentPedWeapon(ped, unarmed, true)
             Citizen.Wait(3500)

@@ -5,7 +5,7 @@ lua54 'yes'
 
 author 'Gabz'
 description 'Bennys'
-version '4.0.0s'
+version '5.0.0s'
 
 this_is_a_map 'yes'
 

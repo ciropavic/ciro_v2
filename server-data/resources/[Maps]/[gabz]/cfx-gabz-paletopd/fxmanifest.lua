@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Gabz'
 description 'Paleto Sheriff'
-version '4.0.0'
+version '5.0.0'
 
 this_is_a_map 'yes'
 

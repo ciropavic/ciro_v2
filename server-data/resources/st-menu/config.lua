@@ -51,8 +51,10 @@ rootMenuConfig =  {
          PlayerData = ESX.GetPlayerData()
          dead = exports["ecrp-death"]:GetDeath()
          inGarage = exports["ecrp-policegarage"]:InGarage()
-          if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" and not dead and inGarage then
+          if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" then
+            if not dead and inGarage then
               return true
+            end
           end
       end,
     },
@@ -94,8 +96,10 @@ rootMenuConfig =  {
            local ped = PlayerPedId()
            PlayerData = ESX.GetPlayerData()
            dead = exports["ecrp-death"]:GetDeath()
-            if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" and dead then
+            if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" then
+              -- if dead then
                 return true
+              -- end
             end
         end,
         subMenus = {"police:downed", "police:downedE"}
