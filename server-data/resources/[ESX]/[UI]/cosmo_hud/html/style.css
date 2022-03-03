@@ -61,6 +61,14 @@ body {
   bottom: 1.3vh;
 }
 
+.fa-tachometer-alt {
+  color: white;
+  position: absolute;
+  font-size: 1.6vh;
+  left: 1vh;
+  bottom: 1.3vh;
+}
+
 .fa-running {
   color: white;
   position: absolute;
@@ -135,11 +143,11 @@ body {
   transform: rotate(-180deg);
 }
 
-#VoiceIndicator, #HealthIndicator, #HungerIndicator, #ThirstIndicator, #ArmorIndicator, #StressIndicator, #OxygenIndicator, #DevIndicator {
+#VoiceIndicator, #HealthIndicator, #HungerIndicator, #ThirstIndicator, #ArmorIndicator, #StressIndicator, #OxygenIndicator, #DevIndicator, #PursuitIndicator {
   background-color: transparent;
 }
 
-#VoiceIcon, #hp-icon, #HungerIcon, #ThirstIcon, #ArmorIcon, #StressIcon, #OxygenIcon, #DevIcon {
+#VoiceIcon, #hp-icon, #HungerIcon, #ThirstIcon, #ArmorIcon, #StressIcon, #OxygenIcon, #DevIcon, #PursuitIcon {
   background: rgb(39, 39, 39);
   line-height: 31px;
   width: 3.1vh;

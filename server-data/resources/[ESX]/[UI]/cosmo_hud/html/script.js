@@ -62,6 +62,15 @@ $(document).ready(function () {
     easing: "easeInOut",
   });
 
+  PursuitIndicator = new ProgressBar.Circle("#PursuitIndicator", {
+    color: "#de4362",
+    trailColor: "#de43624d",
+    strokeWidth: 12,
+    trailWidth: 12,
+    duration: 250,
+    easing: "easeInOut",
+  });
+
   Speedometer = new ProgressBar.Circle("#SpeedCircle", {
     color: "rgba(222, 222, 222, 1)",
     trailColor: "rgba(184, 184, 184, 0.082)",
@@ -122,6 +131,40 @@ window.addEventListener("message", function (event) {
     }
     VoiceIndicator.animate(data.voicelevel / 100);
   }
+
+  // Get current voice level and animate path
+  if (data.action == "pursuit_mode") {
+    if (data.pursuitmode == 0) {
+      $("#PursuitIndicator").fadeOut();
+    } else if (data.pursuitmode == 1) {
+      $("#PursuitIndicator").fadeIn();
+      data.pursuitmode = 33;
+    } else if (data.pursuitmode == 2) {
+      data.pursuitmode = 66;
+    } else if (data.pursuitmode == 3) {
+      data.pursuitmode = 100;
+    }
+    PursuitIndicator.animate(data.pursuitmode / 100);
+  }
+
+  // Get current voice level and animate path
+  // if (data.action == "pursuit_mode") {
+  //   switch (data.pursuitmode) {
+  //     case 1:
+  //       data.pursuitmode = 33;
+  //       break;
+  //     case 2:
+  //       data.pursuitmode = 66;
+  //       break;
+  //     case 3:
+  //       data.pursuitmode = 100;
+  //       break;
+  //     default:
+  //       data.pursuitmode = 33;
+  //       break;
+  //   }
+  //   PursuitIndicator.animate(data.pursuitmode / 100);
+  // }
 
   // Light up path if talking
   if (data.talking == 1) {
@@ -236,6 +279,12 @@ window.addEventListener("message", function (event) {
     $("#VehicleContainer").fadeIn();
   } else if (data.showSpeedo == false) {
     $("#VehicleContainer").fadeOut();
+  }
+
+  if (data.showPursuit == true) {
+    $("#PursuitIndicator").show();
+  } else if (data.showPursuit == false) {
+    $("#PursuitIndicator").hide();
   }
 
   if (data.showFuel == true) {

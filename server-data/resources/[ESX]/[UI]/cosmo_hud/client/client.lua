@@ -2,6 +2,7 @@ local isDriving = false;
 local isUnderwater = false;
 local seatbeltOn = false
 local dev = false
+local defaultHash, defaultHash2, defaultHash3, defaultHash4, defaultHash5, defaultHash6, defaultHash7 = "npolchal", "npolvette", "npolstang", "polchar", "npolvic", "npolexp", "npolchar"
 
 ESX = nil
 Citizen.CreateThread(function()
@@ -44,6 +45,20 @@ Citizen.CreateThread(function()
                 SendNUIMessage({showSpeedo = false})
             end
         end
+    end
+end)
+
+Citizen.CreateThread(function ()
+  while true do
+    Citizen.Wait(1000)
+    local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+    if IsPedSittingInAnyVehicle(PlayerId(), false) and not IsPedInFlyingVehicle(PlayerPedId()) and not IsPedInAnySub(PlayerPedId()) and IsVehicleModel(veh, defaultHash) or IsVehicleModel(veh, defaultHash2) or
+      IsVehicleModel(veh, defaultHash3) or IsVehicleModel(veh, defaultHash4) or IsVehicleModel(veh, defaultHash5) or
+      IsVehicleModel(veh, defaultHash6) or IsVehicleModel(veh, defaultHash7) then
+        SendNUIMessage({showPursuit = true})
+      elseif not IsPedInAnyVehicle(PlayerId(), false) then
+        SendNUIMessage({showPursuit = false})
+      end
     end
 end)
 
@@ -171,11 +186,11 @@ end
 
 exports('Voicelevel', Voicelevel)
 
-function Drivemode(val)
-    SendNUIMessage({action = "drive_mode", drivemode = val})
+function Pursuitmode(val)
+    SendNUIMessage({action = "pursuit_mode", pursuitmode = val})
 end
 
-exports('Drivemode', Drivemode)
+exports('Pursuitmode', Pursuitmode)
 
 RegisterCommand("togglehud",function()  
   SendNUIMessage({action = "toggle_hud"}) 

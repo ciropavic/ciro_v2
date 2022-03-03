@@ -111,6 +111,12 @@ files {
   'audioconfig/roger_sounds.dat54.rel',
   'sfx/dlc_roger/roger.awc',
   'sfx/dlc_roger/roger_npc.awc',
+  'audioconfig/npolchar_game.dat151.rel',
+  'audioconfig/npolchar_sounds.dat54.rel',
+  'sfx/dlc_npolchar/npolchar.awc',
+  'sfx/dlc_npolchar/npolchar_npc.awc',
+  'sfx/dlc_npolchar/npolchar2.awc',
+  'sfx/dlc_npolchar/npolchar2_npc.awc'
 }
 
 data_file 'HANDLING_FILE' 'data/handling.meta'
@@ -162,6 +168,9 @@ data_file 'AUDIO_WAVEPACK' 'sfx/dlc_skart'
 data_file 'AUDIO_GAMEDATA' 'audioconfig/roger_game.dat'
 data_file 'AUDIO_SOUNDDATA' 'audioconfig/roger_sounds.dat'
 data_file 'AUDIO_WAVEPACK' 'sfx/dlc_roger'
+data_file 'AUDIO_GAMEDATA' 'audioconfig/npolchar_game.dat'
+data_file 'AUDIO_SOUNDDATA' 'audioconfig/npolchar_sounds.dat'
+data_file 'AUDIO_WAVEPACK' 'sfx/dlc_npolchar'
 
 client_script 'data/vehicle_names.lua'
 

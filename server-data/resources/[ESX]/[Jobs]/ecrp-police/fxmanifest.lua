@@ -7,4 +7,4 @@ client_scripts {
 }
 server_script 'cuff-s.lua'
 
-dependency 'interact-sound'
+dependency 'InteractSound'

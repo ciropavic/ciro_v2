@@ -1,8 +1,6 @@
 fx_version 'cerulean'
 name 'cosmo_hud'
-description 'cosmo_hud for fivem, uses library from loading.io'
 ui_page 'html/ui.html'
-author 'CosmoKramer'
 game 'gta5'
 
 files {

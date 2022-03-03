@@ -131,9 +131,9 @@ CONFIG.uiDefaults =
 	-- Options: 0.25 - 2.5
 	scale =
 	{
-		radar = 0.50,
-		remote = 0.50,
-		plateReader = 0.50
+		radar = 0.65,
+		remote = 0.65,
+		plateReader = 0.65
 	},
 
 	-- The safezone size, must be a multiple of 5.
