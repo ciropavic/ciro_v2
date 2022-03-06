@@ -132,12 +132,10 @@ window.addEventListener("message", function (event) {
     VoiceIndicator.animate(data.voicelevel / 100);
   }
 
-  // Get current voice level and animate path
   if (data.action == "pursuit_mode") {
     if (data.pursuitmode == 0) {
-      $("#PursuitIndicator").fadeOut();
+      data.pursuitmode = 0;
     } else if (data.pursuitmode == 1) {
-      $("#PursuitIndicator").fadeIn();
       data.pursuitmode = 33;
     } else if (data.pursuitmode == 2) {
       data.pursuitmode = 66;
@@ -146,25 +144,6 @@ window.addEventListener("message", function (event) {
     }
     PursuitIndicator.animate(data.pursuitmode / 100);
   }
-
-  // Get current voice level and animate path
-  // if (data.action == "pursuit_mode") {
-  //   switch (data.pursuitmode) {
-  //     case 1:
-  //       data.pursuitmode = 33;
-  //       break;
-  //     case 2:
-  //       data.pursuitmode = 66;
-  //       break;
-  //     case 3:
-  //       data.pursuitmode = 100;
-  //       break;
-  //     default:
-  //       data.pursuitmode = 33;
-  //       break;
-  //   }
-  //   PursuitIndicator.animate(data.pursuitmode / 100);
-  // }
 
   // Light up path if talking
   if (data.talking == 1) {

@@ -64,6 +64,8 @@ Citizen.CreateThread(function()
         playerHeading = GetEntityHeading(ped)
 				vehModel = GetDisplayNameFromVehicleModel(GetEntityModel(veh))
 				vehModel2 = GetDisplayNameFromVehicleModel(GetEntityModel(veh2))
+        driveForce = GetVehicleHandlingFloat(veh, 'CHandlingData', 'fInitialDriveForce')
+        driveInertia = GetVehicleHandlingFloat(veh, 'CHandlingData', 'fDriveInertia')
 			
 				drawTxt(0.8, 0.52, 0.4,0.4,0.30, "Model: " .. vehModel, 245, 217, 39, 255)
 				drawTxt(0.8, 0.54, 0.4,0.4,0.30, "Speed: " .. (GetEntitySpeed(veh)*ihatemphbuteveryoneusesit), 245, 217, 39, 255)
@@ -73,33 +75,36 @@ Citizen.CreateThread(function()
 				
 				if (GetVehicleCurrentRpm(veh)*6000) < 1201 then currRPM = 0 else currRPM = (GetVehicleCurrentRpm(veh)*6000) end
 				drawTxt(0.8, 0.58, 0.4,0.4,0.30, "RPM: " .. currRPM, 245, 217, 39, 255)
+        
+				drawTxt(0.8, 0.60, 0.4,0.4,0.30, "Drive Force: " .. driveForce, 245, 217, 39, 255)
+				drawTxt(0.8, 0.62, 0.4,0.4,0.30, "Drive Inertia: " .. driveInertia, 245, 217, 39, 255)
 
 				if topSpeed < (GetEntitySpeed(veh)*ihatemphbuteveryoneusesit) then
 					topSpeed = (GetEntitySpeed(veh)*ihatemphbuteveryoneusesit)
-					drawTxt(0.8, 0.62, 0.4,0.4,0.30, "Top Speed: " .. topSpeed, 245, 217, 39, 255)
+					drawTxt(0.8, 0.66, 0.4,0.4,0.30, "Top Speed: " .. topSpeed, 245, 217, 39, 255)
 				elseif topSpeed > (GetEntitySpeed(veh)*ihatemphbuteveryoneusesit) then
-					drawTxt(0.8, 0.62, 0.4,0.4,0.30, "Top Speed: " .. topSpeed, 39, 245, 58, 255)
+					drawTxt(0.8, 0.66, 0.4,0.4,0.30, "Top Speed: " .. topSpeed, 39, 245, 58, 255)
 				else 
 					topSpeed = 0
-					drawTxt(0.8, 0.62, 0.4,0.4,0.30, "Top Speed: " .. topSpeed, 245, 217, 39, 255)
+					drawTxt(0.8, 0.66, 0.4,0.4,0.30, "Top Speed: " .. topSpeed, 245, 217, 39, 255)
 				end
 
 				if count0 then
-					drawTxt(0.8, 0.64, 0.4,0.4,0.30, "0-45: " .. countdown0 .. "s", 245, 217, 39, 255)
+					drawTxt(0.8, 0.68, 0.4,0.4,0.30, "0-45: " .. countdown0 .. "s", 245, 217, 39, 255)
 				elseif not count0 then
-					drawTxt(0.8, 0.64, 0.4,0.4,0.30, "0-45: " .. countdown0 .. "s", 39, 245, 58, 255)
+					drawTxt(0.8, 0.68, 0.4,0.4,0.30, "0-45: " .. countdown0 .. "s", 39, 245, 58, 255)
 				end
 
 				if count1 then
-					drawTxt(0.8, 0.66, 0.4,0.4,0.30, "0-60: " .. countdown1 .. "s", 245, 217, 39, 255)
+					drawTxt(0.8, 0.70, 0.4,0.4,0.30, "0-60: " .. countdown1 .. "s", 245, 217, 39, 255)
 				elseif not count1 then
-					drawTxt(0.8, 0.66, 0.4,0.4,0.30, "0-60: " .. countdown1 .. "s", 39, 245, 58, 255)
+					drawTxt(0.8, 0.70, 0.4,0.4,0.30, "0-60: " .. countdown1 .. "s", 39, 245, 58, 255)
 				end
 
 				if count2 then
-					drawTxt(0.8, 0.68, 0.4,0.4,0.30, "0-100: " .. countdown2 .. "s", 245, 217, 39, 255)
+					drawTxt(0.8, 0.72, 0.4,0.4,0.30, "0-100: " .. countdown2 .. "s", 245, 217, 39, 255)
 				elseif not count2 then
-					drawTxt(0.8, 0.68, 0.4,0.4,0.30, "0-100: " .. countdown2 .. "s", 39, 245, 58, 255)
+					drawTxt(0.8, 0.72, 0.4,0.4,0.30, "0-100: " .. countdown2 .. "s", 39, 245, 58, 255)
 				end
 
 				drawTxt(0.5, 0.52, 0.4,0.4,0.30, "Engine: " .. GetVehicleEngineHealth(veh), 0, 152, 255, 255)

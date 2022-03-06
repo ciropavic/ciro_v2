@@ -2,7 +2,8 @@ local isDriving = false;
 local isUnderwater = false;
 local seatbeltOn = false
 local dev = false
-local defaultHash, defaultHash2, defaultHash3, defaultHash4, defaultHash5, defaultHash6, defaultHash7 = "npolchal", "npolvette", "npolstang", "polchar", "npolvic", "npolexp", "npolchar"
+local npolchal, npolvette, npolstang, npolvic, npolexp, npolchar = "npolchal", "npolvette", "npolstang", "npolvic",
+    "npolexp", "npolchar"
 
 ESX = nil
 Citizen.CreateThread(function()
@@ -52,9 +53,7 @@ Citizen.CreateThread(function ()
   while true do
     Citizen.Wait(1000)
     local veh = GetVehiclePedIsIn(PlayerPedId(), false)
-    if IsPedSittingInAnyVehicle(PlayerId(), false) and not IsPedInFlyingVehicle(PlayerPedId()) and not IsPedInAnySub(PlayerPedId()) and IsVehicleModel(veh, defaultHash) or IsVehicleModel(veh, defaultHash2) or
-      IsVehicleModel(veh, defaultHash3) or IsVehicleModel(veh, defaultHash4) or IsVehicleModel(veh, defaultHash5) or
-      IsVehicleModel(veh, defaultHash6) or IsVehicleModel(veh, defaultHash7) then
+    if IsPedSittingInAnyVehicle(PlayerId()) and IsVehicleModel(veh, _) or IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or IsVehicleModel(veh, npolstang) or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) then
         SendNUIMessage({showPursuit = true})
       elseif not IsPedInAnyVehicle(PlayerId(), false) then
         SendNUIMessage({showPursuit = false})
@@ -212,6 +211,13 @@ Citizen.CreateThread(function()
     Citizen.Wait(5)
     if dev == true then
       local health = GetEntityHealth(PlayerPedId())
+      local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+      if veh > 0  then
+        local fuel = GetVehicleFuelLevel(veh)
+        if fuel < 50 then
+          exports["ecrp-fuel"]:SetFuel(veh, 100)
+        end
+      end
       if health < 150 then
         SetEntityHealth(PlayerPedId(), 100)
       end

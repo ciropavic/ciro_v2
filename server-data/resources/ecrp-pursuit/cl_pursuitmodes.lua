@@ -1,39 +1,36 @@
 ControlForPursuitMode = 172
 
-local defaultHash, defaultHash2, defaultHash3, defaultHash4, defaultHash5, defaultHash6, defaultHash7 = "npolchal",
-    "npolvette", "npolstang", "polchar", "npolvic", "npolexp", "npolchar"
+local npolchal, npolvette, npolstang, npolvic, npolexp, npolchar = "npolchal", "npolvette", "npolstang", "npolvic",
+    "npolexp", "npolchar"
 
 local pursuitEnabled = false
 
 local InPursuitModeAPlus = false
 
-local InPursuitModeS = false
+local InPursuitModeSPlus = false
+
+local InPursuitModeA = false
 
 -- [START]   Events for different modes
 
-RegisterNetEvent("police:Ghost:Pursuit:Mode:A")
-AddEventHandler("police:Ghost:Pursuit:Mode:A", function()
+RegisterNetEvent("police:Ghost:Pursuit:A")
+AddEventHandler("police:Ghost:Pursuit:A", function()
     local ped = PlayerPedId()
     if (IsPedInAnyVehicle(PlayerPedId(), true)) then
         local veh = GetVehiclePedIsIn(PlayerPedId(), false)
         local Driver = GetPedInVehicleSeat(veh, -1)
         local fInitialDriveForce = GetVehicleHandlingFloat(veh, 'CHandlingData', 'fInitialDriveForce')
-        local First = 'A'
-        if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, defaultHash) or IsVehicleModel(veh, defaultHash2) or
-            IsVehicleModel(veh, defaultHash3) or IsVehicleModel(veh, defaultHash4) or IsVehicleModel(veh, defaultHash5) or
-            IsVehicleModel(veh, defaultHash6) or IsVehicleModel(veh, defaultHash7) then
+
+        if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or
+            IsVehicleModel(veh, npolstang) or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or
+            IsVehicleModel(veh, npolchar) then
             SetVehicleModKit(veh, 0)
-            SetVehicleMod(veh, 46, 4, true)
-            SetVehicleMod(veh, 11, 4, true)
-            SetVehicleMod(veh, 12, 4, false)
-            SetVehicleMod(veh, 13, 4, false)
+            SetVehicleMod(veh, 11, 1, false)
+            SetVehicleMod(veh, 12, 2, false)
+            SetVehicleMod(veh, 13, 1, false)
             ToggleVehicleMod(veh, 18, false)
-            PursuitEnabled = true
+            exports['cosmo_hud']:Pursuitmode(1)
             exports['mythic_notify']:DoHudText('inform', 'Pursuit Mode: A')
-            SetVehicleHandlingField(veh, 'CHandlingData', 'fInitialDriveForce', 0.3970000)
-            SetVehicleHandlingField(veh, 'CHandlingData', 'fDriveInertia', 1.000000)
-            print(GetVehicleHandlingFloat(veh, 'CHandlingData', 'fInitialDriveForce'))
-            print(GetVehicleHandlingFloat(veh, 'CHandlingData', 'fDriveInertia'))
         end
     end
 end)
@@ -45,24 +42,15 @@ AddEventHandler("police:Ghost:Pursuit:A:Plus", function()
         local veh = GetVehiclePedIsIn(PlayerPedId(), false)
         local Driver = GetPedInVehicleSeat(veh, -1)
         local fInitialDriveForce = GetVehicleHandlingFloat(veh, 'CHandlingData', 'fInitialDriveForce')
-        local mode1 = 'A+'
 
-        if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, defaultHash) or IsVehicleModel(veh, defaultHash2) or
-            IsVehicleModel(veh, defaultHash3) -- Vehicle Checks
-        or IsVehicleModel(veh, defaultHash4) or IsVehicleModel(veh, defaultHash5) or IsVehicleModel(veh, defaultHash6) or
-            IsVehicleModel(veh, defaultHash7) then
+        if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or IsVehicleModel(veh, npolstang) or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) then
             SetVehicleModKit(veh, 0)
-            SetVehicleMod(veh, 46, 4, true)
-            SetVehicleMod(veh, 11, 4, true)
-            SetVehicleMod(veh, 12, 4, true)
-            SetVehicleMod(veh, 13, 4, true)
+            SetVehicleMod(veh, 11, 3, false)
+            SetVehicleMod(veh, 12, 2, false)
+            SetVehicleMod(veh, 13, 2, false)
             ToggleVehicleMod(veh, 18, true)
-            PursuitEnabled = true
+            exports['cosmo_hud']:Pursuitmode(2)
             exports['mythic_notify']:DoHudText('inform', 'Pursuit Mode: A+')
-            SetVehicleHandlingField(veh, 'CHandlingData', 'fInitialDriveForce', 0.4270000)
-            SetVehicleHandlingField(veh, 'CHandlingData', 'fDriveInertia', 1.000000)
-            print(GetVehicleHandlingFloat(veh, 'CHandlingData', 'fInitialDriveForce'))
-            print(GetVehicleHandlingFloat(veh, 'CHandlingData', 'fDriveInertia'))
         end
     end
 end)
@@ -74,53 +62,38 @@ AddEventHandler("police:Ghost:Pursuit:S", function()
         local veh = GetVehiclePedIsIn(PlayerPedId(), false)
         local Driver = GetPedInVehicleSeat(veh, -1)
         local fInitialDriveForce = GetVehicleHandlingFloat(veh, 'CHandlingData', 'fInitialDriveForce')
-        local mode2 = 'S'
 
-        if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, defaultHash) or IsVehicleModel(veh, defaultHash2) or
-            IsVehicleModel(veh, defaultHash3) -- Vehicle Checks
-        or IsVehicleModel(veh, defaultHash4) or IsVehicleModel(veh, defaultHash5) or IsVehicleModel(veh, defaultHash6) or
-            IsVehicleModel(veh, defaultHash7) then
+        if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or
+            IsVehicleModel(veh, npolstang) -- Vehicle Checks
+        or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) then
             SetVehicleModKit(veh, 0)
-            SetVehicleMod(veh, 46, 4, true)
-            SetVehicleMod(veh, 11, 4, true)
-            SetVehicleMod(veh, 12, 4, true)
-            SetVehicleMod(veh, 13, 4, true)
+            SetVehicleMod(veh, 11, 4, false)
+            SetVehicleMod(veh, 12, 2, false)
+            SetVehicleMod(veh, 13, 3, false)
             ToggleVehicleMod(veh, 18, true)
-            PursuitEnabled = true
+            exports['cosmo_hud']:Pursuitmode(3)
             exports['mythic_notify']:DoHudText('inform', 'Pursuit Mode: S+')
-            SetVehicleHandlingField(veh, 'CHandlingData', 'fInitialDriveForce', 0.4970000)
-            SetVehicleHandlingField(veh, 'CHandlingData', 'fDriveInertia', 1.100000)
-            print(GetVehicleHandlingFloat(veh, 'CHandlingData', 'fInitialDriveForce'))
-            print(GetVehicleHandlingFloat(veh, 'CHandlingData', 'fDriveInertia'))
         end
     end
 end)
 
-RegisterNetEvent("police:pursuitmodeOff")
-AddEventHandler("police:pursuitmodeOff", function()
+RegisterNetEvent("police:Ghost:Pursuit:Off")
+AddEventHandler("police:Ghost:Pursuit:Off", function()
     local ped = PlayerPedId()
     if (IsPedInAnyVehicle(PlayerPedId(), true)) then
         local veh = GetVehiclePedIsIn(PlayerPedId(), false)
         local Driver = GetPedInVehicleSeat(veh, -1)
         local fInitialDriveForce = GetVehicleHandlingFloat(veh, 'CHandlingData', 'fInitialDriveForce')
-        if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, defaultHash) or IsVehicleModel(veh, defaultHash2) or
-            IsVehicleModel(veh, defaultHash3) or IsVehicleModel(veh, defaultHash4) or IsVehicleModel(veh, defaultHash5) or
-            IsVehicleModel(veh, defaultHash6) or IsVehicleModel(veh, defaultHash7) then
-            SetVehicleModKit(veh, 0)
-            SetVehicleMod(veh, 46, 4, false)
-            SetVehicleMod(veh, 13, 4, false)
-            SetVehicleMod(veh, 12, 4, false)
-            SetVehicleMod(veh, 11, 4, false)
-            ToggleVehicleMod(veh, 18, false)
 
-            InPursuitModeAPlus = false
-            pursuitEnabled = false
-            InPursuitModeS = false
+        if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or IsVehicleModel(veh, npolstang)
+        or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) then
+            SetVehicleModKit(veh, 0)
+            SetVehicleMod(veh, 11, -1, false)
+            SetVehicleMod(veh, 12, -1, false)
+            SetVehicleMod(veh, 13, -1, false)
+            ToggleVehicleMod(veh, 18, false)
+            exports['cosmo_hud']:Pursuitmode(0)
             exports['mythic_notify']:DoHudText('inform', 'Pursuit Mode: Off')
-            SetVehicleHandlingField(veh, 'CHandlingData', 'fInitialDriveForce', 0.305000)
-            SetVehicleHandlingField(veh, 'CHandlingData', 'fDriveInertia', 0.850000)
-            print(GetVehicleHandlingFloat(veh, 'CHandlingData', 'fInitialDriveForce'))
-            print(GetVehicleHandlingFloat(veh, 'CHandlingData', 'fDriveInertia'))
         end
     end
 end)
@@ -132,42 +105,32 @@ Citizen.CreateThread(function()
         Citizen.Wait(5)
         local ped = PlayerPedId()
         local veh = GetVehiclePedIsIn(PlayerPedId(), false)
-        if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, defaultHash) or IsVehicleModel(veh, defaultHash2) or
-            IsVehicleModel(veh, defaultHash3) or IsVehicleModel(veh, defaultHash4) or IsVehicleModel(veh, defaultHash5) or
-            IsVehicleModel(veh, defaultHash6) or IsVehicleModel(veh, defaultHash7) then
-            if (IsDisabledControlJustReleased(0, ControlForPursuitMode)) and InPursuitModeAPlus == false then
-                if (not IsPauseMenuActive()) then
-                    if pursuitEnabled == false then
-                        pursuitEnabled = true
-                        exports['cosmo_hud']:Pursuitmode(1)
-                        TriggerEvent('police:Ghost:Pursuit:Mode:A')
+        if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or IsVehicleModel(veh, npolstang)
+        or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) then
+            if IsDisabledControlJustReleased(0, ControlForPursuitMode) and InPursuitModeA == false then
+                InPursuitModeA = true
+                TriggerEvent('police:Ghost:Pursuit:A')
 
-                        while pursuitEnabled == true do
+                while InPursuitModeA == true do
+                    Citizen.Wait(5)
+                    if IsDisabledControlJustReleased(0, ControlForPursuitMode) then
+                        InPursuitModeA = false
+                        InPursuitModeAPlus = true
+                        TriggerEvent('police:Ghost:Pursuit:A:Plus')
+
+                        while InPursuitModeAPlus == true do
                             Citizen.Wait(5)
-                            if (not IsPauseMenuActive()) and (IsDisabledControlJustReleased(0, ControlForPursuitMode)) then
-                                InPursuitModeAPlus = true
-                                pursuitEnabled = false
-                                exports['cosmo_hud']:Pursuitmode(2)
-                                TriggerEvent('police:Ghost:Pursuit:A:Plus')
+                            if IsDisabledControlJustReleased(0, ControlForPursuitMode) then
+                                InPursuitModeAPlus = false
+                                InPursuitModeSPlus = true
+                                TriggerEvent('police:Ghost:Pursuit:S')
 
-                                while InPursuitModeAPlus == true do
+                                while InPursuitModeSPlus == true do
                                     Citizen.Wait(5)
-                                    if (not IsPauseMenuActive()) and
-                                        (IsDisabledControlJustReleased(0, ControlForPursuitMode)) then
-                                        InPursuitModeS = true
-                                        InPursuitModeAPlus = false
-                                        exports['cosmo_hud']:Pursuitmode(3)
-                                        TriggerEvent('police:Ghost:Pursuit:S')
-
-                                        while InPursuitModeS == true do
-                                            Citizen.Wait(5)
-                                            if (not IsPauseMenuActive()) and
-                                                (IsDisabledControlJustReleased(0, ControlForPursuitMode)) then
-                                                InPursuitModeAPlus = false
-                                                exports['cosmo_hud']:Pursuitmode(0)
-                                                TriggerEvent('police:pursuitmodeOff')
-                                            end
-                                        end
+                                    if IsDisabledControlJustReleased(0, ControlForPursuitMode) then
+                                        InPursuitModeSPlus = false
+                                        InPursuitModeA = false
+                                        TriggerEvent('police:Ghost:Pursuit:Off')
                                     end
                                 end
                             end
@@ -177,4 +140,18 @@ Citizen.CreateThread(function()
             end
         end
     end
+end)
+
+Citizen.CreateThread(function ()
+  while true do
+    Citizen.Wait(0)
+    local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+    if InPursuitModeA == true then
+      SetVehicleCheatPowerIncrease(veh, 1.2)
+    elseif InPursuitModeAPlus == true then
+      SetVehicleCheatPowerIncrease(veh, 1.4)
+    elseif InPursuitModeSPlus == true then
+      SetVehicleCheatPowerIncrease(veh, 1.6)
+    end
+  end
 end)
