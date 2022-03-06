@@ -151,7 +151,7 @@ Citizen.CreateThread(function ()
     elseif InPursuitModeAPlus == true then
       SetVehicleCheatPowerIncrease(veh, 1.4)
     elseif InPursuitModeSPlus == true then
-      SetVehicleCheatPowerIncrease(veh, 1.6)
+      SetVehicleCheatPowerIncrease(veh, 1.45)
     end
   end
 end)
