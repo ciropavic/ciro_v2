@@ -29,6 +29,9 @@ data_file 'AUDIO_WAVEPACK' 'sfx/dlc_cvpiv8'
 data_file 'AUDIO_GAMEDATA' 'audioconfig/ecoboostv6_game.dat'
 data_file 'AUDIO_SOUNDDATA' 'audioconfig/ecoboostv6_sounds.dat'
 data_file 'AUDIO_WAVEPACK' 'sfx/dlc_ecoboostv6'
+data_file 'AUDIO_GAMEDATA' 'audioconfig/demonv8_game.dat'
+data_file 'AUDIO_SOUNDDATA' 'audioconfig/demonv8_sounds.dat'
+data_file 'AUDIO_WAVEPACK' 'sfx/dlc_demonv8'
 
 client_script 'data/vehicle_names.lua'
 
