@@ -42,7 +42,7 @@ function Notify(msg)
     DrawNotification(0,1)
     ]]
 
-    exports['mythic_notify']:SendAlert('inform', msg)
+    exports['mythic_notify']:DoHudText('inform', msg)
     --exports['dopeNotify2']:Alert("", msg, 3500, 'info')
 
 end

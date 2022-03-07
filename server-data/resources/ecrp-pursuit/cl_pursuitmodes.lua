@@ -107,27 +107,27 @@ Citizen.CreateThread(function()
         local veh = GetVehiclePedIsIn(PlayerPedId(), false)
         if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or IsVehicleModel(veh, npolstang)
         or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) then
-            if IsDisabledControlJustReleased(0, ControlForPursuitMode) and InPursuitModeA == false then
+            if (not IsPauseMenuActive()) and (IsDisabledControlJustPressed(0, ControlForPursuitMode)) and InPursuitModeA == false then
                 InPursuitModeA = true
                 TriggerEvent('police:Ghost:Pursuit:A')
 
                 while InPursuitModeA == true do
                     Citizen.Wait(5)
-                    if IsDisabledControlJustReleased(0, ControlForPursuitMode) then
+                    if (not IsPauseMenuActive()) and (IsDisabledControlJustPressed(0, ControlForPursuitMode))  then
                         InPursuitModeA = false
                         InPursuitModeAPlus = true
                         TriggerEvent('police:Ghost:Pursuit:A:Plus')
 
                         while InPursuitModeAPlus == true do
                             Citizen.Wait(5)
-                            if IsDisabledControlJustReleased(0, ControlForPursuitMode) then
+                            if (not IsPauseMenuActive()) and (IsDisabledControlJustPressed(0, ControlForPursuitMode))  then
                                 InPursuitModeAPlus = false
                                 InPursuitModeSPlus = true
                                 TriggerEvent('police:Ghost:Pursuit:S')
 
                                 while InPursuitModeSPlus == true do
                                     Citizen.Wait(5)
-                                    if IsDisabledControlJustReleased(0, ControlForPursuitMode) then
+                                    if (not IsPauseMenuActive()) and (IsDisabledControlJustPressed(0, ControlForPursuitMode))  then
                                         InPursuitModeSPlus = false
                                         InPursuitModeA = false
                                         TriggerEvent('police:Ghost:Pursuit:Off')

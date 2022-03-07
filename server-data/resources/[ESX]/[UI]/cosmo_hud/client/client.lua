@@ -1,6 +1,5 @@
 local isDriving = false;
 local isUnderwater = false;
-local seatbeltOn = false
 local dev = false
 local npolchal, npolvette, npolstang, npolvic, npolexp, npolchar = "npolchal", "npolvette", "npolstang", "npolvic",
     "npolexp", "npolchar"
