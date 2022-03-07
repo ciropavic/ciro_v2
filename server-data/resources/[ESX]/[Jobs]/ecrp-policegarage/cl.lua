@@ -160,8 +160,8 @@ RegisterNetEvent('nh-context:policeCars', function()
     }, {
         header = "Charger",
         event = "policeCars:spawn",
-        image = "https://i.imgur.com/po6D67J.jpeg",
-        args = {"POLCHAR"}
+        image = "https://i.imgur.com/nh3rily.jpeg",
+        args = {"NPOLCHAR"}
     }, {
         header = "Corvette",
         event = "policeCars:spawn",
@@ -177,7 +177,13 @@ RegisterNetEvent('nh-context:policeCars', function()
         event = "policeCars:spawn",
         image = "https://i.imgur.com/rAkeHHM.jpeg",
         args = {"NPOLSTANG"}
-    }})
+    }, {
+        header = "Explorer",
+        event = "policeCars:spawn",
+        image = "https://i.imgur.com/VAr7Ce8.jpeg",
+        args = {"NPOLEXP"}
+    },
+  })
 end)
 
 -- Spawn police vehicles
