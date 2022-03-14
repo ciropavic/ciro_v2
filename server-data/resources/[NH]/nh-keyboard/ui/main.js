@@ -1,60 +1,73 @@
-let RowsData = [];
-let Rows = [];
-let savedHeader = "";
+var RowsData = [];
+var Rows = [];
+var saved = "";
 
-const OpenKeyboard = (data) => {
+const OpenMenu = (data) => {
     $(`.main-wrapper`).fadeIn(0)
     $(`.background`).fadeIn(0)
-    SetHeader(data.header ? data.header : "")
+    SetHeader(data.header)
     AddRow(data.rows)
 }
 
-const SetHeader = (header) => {
-    let element = $('<h1>' + header + '<h1>');
-    $('.header').append(element);
-    savedHeader = element
+function SetHeader(header) {
+    var element
+    element = $('<h1>' + header + '<h1>');
+    $('.heading').append(element);
+    saved = element
 }
 
-const CloseKeyboard = () => {
+const CloseMenu = () => {
     $(`.main-wrapper`).fadeOut(0);
     $(`.background`).fadeOut(0);
-    $(savedHeader).remove();
+    $(saved).remove();
     RowsData = [];
     Rows = [];
-    savedHeader = "";
+    saved = "";
 };
 
-const AddRow = (data) => {
+function AddRow(data) {
     RowsData = data
-    for (let i = 0; i < RowsData.length; i++) {
-        let element = $('<label for="usr">' + RowsData[i] + '</label> <input type="text" class="form-control" id="' + i + '" />');
+    for (var i = 0; i < RowsData.length; i++) {
+        var message = RowsData[i].txt
+        var id = RowsData[i].id
+        var element
+
+        element = $('<label for="usr">' + message + '</label> <input type="text" class="form-control" id="' + id + '" />');
         $('.body').append(element);
-        Rows[i] = element
+        Rows[id] = element
     }
-    document.getElementById(0).focus();
-};
+    setTimeout(() => {
+        document.getElementById(0).focus();
+    }, 100);
+}
 
 $(`#submit`).click(() => {
     SubmitData();
 })
 
 
-const SubmitData = () => {
+function SubmitData() {
     const returnData = [];
-    for (let i = 0; i < RowsData.length; i++) {
-        let data = document.getElementById(i)
+    for (var i = 0; i < RowsData.length; i++) {
+        var id = RowsData[i].id
+        var data = document.getElementById(id)
         if (data.value) {
             returnData.push({
+                _id: id,
                 input: data.value,
             });
         } else {
             returnData.push({
+                _id: id,
                 input: null,
             });
         }
-        $(Rows[i]).remove();
+        $(Rows[id]).remove();
     }
-    $.post(`https://nh-keyboard/dataPost`, JSON.stringify({data: returnData}))
+    PostData({
+        data: returnData
+    })
+    CloseMenu();
 }
 
 
@@ -62,11 +75,13 @@ const PostData = (data) => {
     return $.post(`https://nh-keyboard/dataPost`, JSON.stringify(data))
 }
 
-const CancelKeyboard = () => {
-    for (let i = 0; i < RowsData.length; i++) {
-        $(Rows[i]).remove();
+const CancelMenu = () => {
+    for (var i = 0; i < RowsData.length; i++) {
+        var id = RowsData[i].id
+        $(Rows[id]).remove();
     }
     $.post(`https://nh-keyboard/cancel`)
+    return CloseMenu();
 }
 
 window.addEventListener("message", (evt) => {
@@ -74,29 +89,30 @@ window.addEventListener("message", (evt) => {
     const info = data.data
     const action = data.action
     switch (action) {
-        case "OPEN":
-            return OpenKeyboard(info);
-        case "CLOSE":
-            return CloseKeyboard();
-        case "CANCEL":
-            return CancelKeyboard();
+        case "OPEN_MENU":
+            return OpenMenu(info);
+        case "CLOSE_MENU":
+            return CloseMenu();
         default:
             return;
     }
 })
 
-window.addEventListener("keyup", (ev) => {
-    if (ev.which == 27) {
-        CancelKeyboard();
-    } else if (ev.which == 13) {
+
+document.onkeyup = function (event) {
+    event = event || window.event;
+    var charCode = event.keyCode || event.which;
+    if (charCode == 27) {
+        CancelMenu();
+    } else if (charCode == 13) {
         SubmitData()
     }
-})
+};
 
 $(document).click(function (event) {
-    let $target = $(event.target);
+    var $target = $(event.target);
     if (!$target.closest('.main-wrapper').length &&
         $('.main-wrapper').is(":visible")) {
-        CancelKeyboard();
+        CancelMenu();
     }
 });

@@ -136,10 +136,6 @@ ESX.RegisterCommand('tpm', 'admin', function(xPlayer, args, showError)
 	xPlayer.triggerEvent('esx:tpm')
 end, false)
 
-ESX.RegisterCommand('noclip', 'admin', function(xPlayer, args, showError)
-	xPlayer.triggerEvent('esx:noclip')
-end, false)
-
 ESX.RegisterCommand('goto', 'admin', function(xPlayer, args, showError)
 		local targetCoords = args.playerId.getCoords()
 		xPlayer.setCoords(targetCoords)

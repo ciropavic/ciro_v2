@@ -207,7 +207,7 @@ end)
 
 Citizen.CreateThread(function()
   while true do
-    Citizen.Wait(5)
+    Citizen.Wait(0)
     if dev == true then
       local health = GetEntityHealth(PlayerPedId())
       local veh = GetVehiclePedIsIn(PlayerPedId(), false)
@@ -217,20 +217,20 @@ Citizen.CreateThread(function()
           exports["ecrp-fuel"]:SetFuel(veh, 100)
         end
       end
-      if health < 150 then
-        SetEntityHealth(PlayerPedId(), 100)
+      if health < 200 then
+        SetEntityHealth(PlayerPedId(), 200)
       end
       if health == 0 then
         Citizen.Wait(100)
         ExecuteCommand('adrev')
       end
-      if hunger < 50 then
+      if hunger < 999999 then
         TriggerEvent('esx_status:set', 'hunger', 1000000)
       end
-      if thirst < 50 then
+      if thirst < 999999 then
         TriggerEvent('esx_status:set', 'thirst', 1000000)
       end
-      if stress > 50 then
+      if stress > 1 then
         TriggerEvent('esx_status:set', 'stress', 0)
       end
     end

@@ -6,4 +6,12 @@ game 'gta5'
 
 version '1.0'
 
-client_script "client.lua"
+client_scripts {
+  "client.lua", 
+  "config.lua",
+}
+
+server_scripts {
+  "server.lua",
+  "config.lua",
+}

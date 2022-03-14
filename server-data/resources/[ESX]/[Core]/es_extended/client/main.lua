@@ -206,41 +206,6 @@ RegisterNetEvent('esx:tpm', function()
 	end)
 end)
 
-local noclip
-RegisterNetEvent('esx:noclip', function()
-	ESX.TriggerServerCallback('esx:admincommand', function(result)
-		if result then
-			if not noclip then
-				local playerPed = ESX.PlayerData.ped
-				SetEntityInvincible(playerPed, true)
-				SetPedAoBlobRendering(playerPed, false)
-				SetEntityAlpha(playerPed, 0)
-				local position = GetEntityCoords(playerPed)
-
-				noclip = SetInterval(function()
-					playerPed = ESX.PlayerData.ped
-					local heading = GetFinalRenderedCamRot(2)?.z or 0.0
-					SetEntityHeading(playerPed, heading)
-
-					if (IsControlPressed(1, 8)) then position = GetOffsetFromEntityInWorldCoords(playerPed, 0.0, -1.0, 0.0) end
-					if (IsControlPressed(1, 32)) then position = GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 1.0, 0.0) end
-					if (IsControlPressed(1, 27)) then position = GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 0.0, 1.0) end
-					if (IsControlPressed(1, 173)) then position = GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 0.0, -1.0) end
-
-					SetEntityCoordsNoOffset(playerPed, position.x, position.y, position.z, 0, 0, 0)
-				end, 0)
-			else
-				ClearInterval(noclip)
-				local playerPed = ESX.PlayerData.ped
-				SetEntityInvincible(playerPed, false)
-				SetPedAoBlobRendering(playerPed, true)
-				ResetEntityAlpha(playerPed)
-				noclip = false
-			end
-		end
-	end)
-end)
-
 RegisterNetEvent('esx:spawnVehicle')
 AddEventHandler('esx:spawnVehicle', function(vehicle)
 	local model = (type(vehicle) == 'number' and vehicle or GetHashKey(vehicle))

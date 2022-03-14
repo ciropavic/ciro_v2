@@ -1,65 +1,33 @@
-local Promise, KeyboardActive = nil, false
+local p = nil
 
 RegisterNUICallback("dataPost", function(data, cb)
-    Promise:resolve(data.data)
-    Promise = nil
-    CloseKeyboard()
+    SetNuiFocus(false)
+    p:resolve(data.data)
+    p = nil
     cb("ok")
 end)
 
 RegisterNUICallback("cancel", function(data, cb)
-    Promise:resolve(nil)
-    Promise = nil
-    CloseKeyboard()
+    SetNuiFocus(false)
+    p:resolve(nil)
+    p = nil
     cb("ok")
 end)
 
-Keyboard = function(data)
-    if not data or Promise then return end
-    while KeyboardActive do Wait(0) end
+function KeyboardInput(data)
+    Wait(150)
+    if not data then return end
+    if p then return end
     
-    Promise = promise.new()
-    
-    OpenKeyboard(data)
-    
-    local keyboard = Citizen.Await(Promise)
-    return keyboard and true or false, UnpackInput(keyboard)
-end
+    p = promise.new()
 
-UnpackInput = function(kb, i)
-    if not kb then return end
-    local index = i or 1
-    
-    if index <= #kb then
-        return kb[index].input, UnpackInput(kb, index + 1)
-    end
-end
-
-OpenKeyboard = function(data)
-    KeyboardActive = true
     SetNuiFocus(true, true)
     SendNUIMessage({
-        action = "OPEN",
+        action = "OPEN_MENU",
         data = data
     })
+
+    return Citizen.Await(p)
 end
 
-CloseKeyboard = function()
-    SetNuiFocus(false, false)
-    SendNUIMessage({
-        action = "CLOSE",
-    })
-    KeyboardActive = false
-end
-
-CancelKeyboard = function()
-    SendNUIMessage({
-        action = "CANCEL"
-    })
-end
-
-
-exports("Keyboard", Keyboard)
-exports("CancelKeyboard", CancelKeyboard)
-
-RegisterNetEvent("nh-keyboard:cancel", CancelKeyboard)
+exports("KeyboardInput", KeyboardInput)

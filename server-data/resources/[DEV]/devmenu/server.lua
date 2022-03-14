@@ -1,20 +1,15 @@
 ESX = nil
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-local dev = false
 
-RegisterNetEvent('toggleDev')
-AddEventHandler('toggleDev', function (player)
+TriggerEvent('esx:getSharedObject', function(obj)
+    ESX = obj
+end)
+
+RegisterNetEvent('ecrp:menu:checkperms')
+AddEventHandler('ecrp:menu:checkperms', function (player)
   local xPlayer = ESX.GetPlayerFromId(player)
+
   if havePermission(xPlayer) then
-    if dev == false then
-      dev = true
-      TriggerClientEvent('cl:toggleDev', source, dev)
-      TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'inform', text = 'Dev Mode Enabled'})
-    elseif dev == true then
-      dev = false
-      TriggerClientEvent('cl:toggleDev', source, dev)
-      TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'inform', text = 'Dev Mode Disabled'})
-    end
+    TriggerClientEvent('returnIsAllowed', player)
   else 
     TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'error', text = 'No Permission'})
   end
@@ -24,10 +19,10 @@ function havePermission(xPlayer, exclude)
   if exclude and type(exclude) ~= 'table' then
       exclude = nil;
       print("exclude argument is not table")
-  end
+  end 
 
   local playerGroup = xPlayer.getGroup()
-  for k, v in pairs(Config.Perms) do
+  for k, v in pairs(Config.adminRanks) do
       if v == playerGroup then
           if not exclude then
               return true
