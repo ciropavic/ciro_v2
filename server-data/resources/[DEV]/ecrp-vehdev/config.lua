@@ -24,16 +24,24 @@ Config.TeleportToCoordsName = "Military"
 
 --Configure teleport key.
 Config.UseTeleport2 = true --Or false to disable
-Config.TeleportToCoords2 = vector3(250.6, -852.2, 29.1) --Teleport location
-Config.TeleportToCoordsHeading2 = 248.49 --Which way you are looking after being teleported
-Config.TeleportToCoordsKey2 = 188 --Currently "N"
-Config.TeleportToCoordsLabel2 = "Up" -- Only for visuals. Replace with "nil" if you dont want it to show
+Config.TeleportToCoords2 = vector3(250.6, -852.2, 29.1)
+Config.TeleportToCoordsHeading2 = 248.49
+Config.TeleportToCoordsKey2 = 188
+Config.TeleportToCoordsLabel2 = "Up"
 Config.TeleportToCoordsName2 = "Legion"
 
+--Configure teleport key.
+Config.UseTeleport3 = true
+Config.TeleportToCoords3 = vector3(2010.48, 2569.87, 53.78)
+Config.TeleportToCoordsHeading3 = 314.05
+Config.TeleportToCoordsKey3 = 187
+Config.TeleportToCoordsLabel3 = "Down"
+Config.TeleportToCoordsName3 = "Highway"
+
 --Delete vehicle
-Config.UseDeleteVehicle = true --Or false to disable
-Config.DeleteVehicleKey = 137--Currently "N"
-Config.DeleteVehicleKeyLabel = "CAPS" -- Only for visuals. Replace with "nil" if you dont want it to show
+Config.UseDeleteVehicle = true
+Config.DeleteVehicleKey = 137
+Config.DeleteVehicleKeyLabel = "CAPS"
 
 -- Restart vehicles
 Config.UseRestart = true

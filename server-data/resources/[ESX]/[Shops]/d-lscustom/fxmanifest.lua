@@ -16,10 +16,12 @@ client_scripts {
 	'config.lua',
 	'client/compatibility.lua',
 	'client/main.lua',
-	'client/zones.lua',
+  'client/zones.lua',
 }
 
 server_scripts {
+	-- esx dependencies
+
 	'@oxmysql/lib/MySQL.lua',
 
 	-------------------------------
@@ -41,9 +43,14 @@ files {
 } 
 
 escrow_ignore {
-	'config.lua'
+	'config.lua',
+	'client/compatibility.lua',
+	'client/main.lua',
+	'server/compatibility.lua',
 }
 
 exports {
   'InBennys',
 }
+
+dependency '/assetpacks'

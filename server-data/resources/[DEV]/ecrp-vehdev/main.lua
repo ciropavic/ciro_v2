@@ -127,12 +127,16 @@ Citizen.CreateThread(function()
 					drawTxt(0.5, 0.66, 0.4,0.4,0.30, "["..Config.TeleportToCoordsLabel2.."] Teleport " ..Config.TeleportToCoordsName2, 255, 214, 129, 255)
 				end
 
+				if Config.UseTeleport3 then 
+					drawTxt(0.5, 0.68, 0.4,0.4,0.30, "["..Config.TeleportToCoordsLabel3.."] Teleport " ..Config.TeleportToCoordsName3, 255, 214, 129, 255)
+				end
+
 				if Config.UseDeleteVehicle then 
-					drawTxt(0.5, 0.68, 0.4,0.4,0.30, "["..Config.DeleteVehicleKeyLabel.."] Delete Vehicle", 255, 214, 129, 255)
+					drawTxt(0.5, 0.70, 0.4,0.4,0.30, "["..Config.DeleteVehicleKeyLabel.."] Delete Vehicle", 255, 214, 129, 255)
 				end
 
 				if Config.UseRestart then 
-					drawTxt(0.5, 0.70, 0.4,0.4,0.30, "["..Config.RestartKeyLabel.."] Restart Vehicles", 255, 214, 129, 255)
+					drawTxt(0.5, 0.72, 0.4,0.4,0.30, "["..Config.RestartKeyLabel.."] Restart Vehicles", 255, 214, 129, 255)
 				end
 			end
 			if (IsControlJustReleased(1, Config.Reset)) then
@@ -186,6 +190,18 @@ Citizen.CreateThread(function()
 				if (IsControlJustReleased(1, Config.TeleportToCoordsKey2)) then
 					SetEntityCoordsNoOffset(veh, Config.TeleportToCoords2, false, false, false, false)
 					SetEntityHeading(veh, Config.TeleportToCoordsHeading2)
+
+					if Config.Notif ~= "MYTHIC" then 
+						print("Teleported to Coords")
+					else
+						exports['mythic_notify']:DoHudText("Inform", "Teleported to Coords", 3000)
+					end
+				end
+			end
+			if Config.UseTeleport3 then
+				if (IsControlJustReleased(1, Config.TeleportToCoordsKey3)) then
+					SetEntityCoordsNoOffset(veh, Config.TeleportToCoords3, false, false, false, false)
+					SetEntityHeading(veh, Config.TeleportToCoordsHeading3)
 
 					if Config.Notif ~= "MYTHIC" then 
 						print("Teleported to Coords")

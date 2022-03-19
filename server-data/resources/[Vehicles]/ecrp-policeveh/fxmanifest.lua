@@ -13,3 +13,5 @@ files {
     'data/**/*.meta',
     'data/vehiclelayouts.meta'
 }
+
+client_script 'vehicle_names.lua'

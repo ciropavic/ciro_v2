@@ -46,7 +46,7 @@ Config = {
 			{ label = "HYDRAULICS", name = "hydraulics", id = 38, parentMenu = "misc" },
 			{ label = "SPEAKERS", name = "speakers", id = 31, parentMenu = "misc" },
 
-			-- { label = "ARMOUR", name = "armour", id = 16, parentMenu = "customization" },
+			{ label = "ARMOUR", name = "armour", id = 16, parentMenu = "customization" },
 		},
 		cosmetics = {
 			{ name = "EXHAUST", id = 4 },
@@ -83,16 +83,16 @@ Config = {
 	},
 	shops = {
 		{ 
-			name = "Bennys", -- name to be shown as a blip label
-			coords = vector3(-338.56442260742, -136.2606048584, 39.009624481201),
-			range = 4.0, 
+			name = "LS Customs", -- name to be shown as a blip label
+			coords = vector3(-336.2901, -135.5341, 38.29456), 
+			range = 6.0, 
 			whitelistedJobs = {'mechanic'}, -- access granting if [whitelistedJob] is enabled below
-			-- blip = { sprite = 402, colour = 5 },
+			blip = { sprite = 72, colour = 2 },
 			jobPrices = {
 				['default'] = 1.0,
-				--['mechanic'] = 0.8,
+				['mechanic'] = 0.8,
 			}
-		}
+		},
 	},
 	whitelistedJob = false, -- enables shop access granting for configure jobs
 	-- make sure to define whitelisted jobs on each shop, otherwise the shop will be unaccessible if enabled
@@ -138,6 +138,7 @@ Config = {
 	wheeltypesections = {
 		[0] = "wheelssection1", [1] = "wheelssection1", [2] = "wheelssection1", [3] = "wheelssection1", [4] = "wheelssection1", 
 		[5] = "wheelssection2", [6] = "wheelssection2", [7] = "wheelssection2", [8] = "wheelssection2", [9] = "wheelssection2", 
+		[10] = "wheelssection3", [11] = "wheelssection3", [12] = "wheelssection3", 
 	},
 	doorsOpen = {
 		{
@@ -162,7 +163,7 @@ Config = {
 		},]]
 	},
 	stance = {
-		enable = true, -- toggles stance menu [READ INSTRUCTIONS HOW TO ENABLE!]
+		enable = false, -- toggles stance menu [READ INSTRUCTIONS HOW TO ENABLE!]
 		range = {
 			frontWidth = 0.1,
 			rearWidth = 0.1,
@@ -176,12 +177,12 @@ Config = {
 		ratio = 0.2, -- (vehicle_price * ratio) this amount will be saved to the society account if enabled
 	},
 	marker = {
-		enable = false, -- toggles visible marker for the shop range
+		enable = true, -- toggles visible marker for the shop range
 		type = 27,
 		zOffset = -0.2,
 		range = 30.0,
 		color = { r = 255, g = 255, b = 255},
-		alpha = 0
+		alpha = 150
 	}
 }
 
@@ -368,6 +369,7 @@ MenusTemplate = {
 		list = {
 			{ label = "SECTION_1", childMenu = "wheelssection1", icon = "wheels" }, 
 			{ label = "SECTION_2", childMenu = "wheelssection2", icon = "wheels" },
+			{ label = "SECTION_3", childMenu = "wheelssection3", icon = "wheels" },
 			{ label = "EFFECTS", name = "effects", childMenu = "effects" },
 		},
 		activeElement = 0,
@@ -391,6 +393,15 @@ MenusTemplate = {
 			{ label = "HIGH END", childMenu = "wheels_7", icon = "wheels" }, 
 			{ label = "IMPORT", childMenu = "wheels_8", icon = "wheels" }, 
 			{ label = "LOWRIDER EXTENDED", childMenu = "wheels_9", icon = "wheels" }, 
+		},
+		activeElement = 0,
+		parentMenu = "wheeltypes"
+	},
+	wheelssection3 = {
+		list = {
+			{ label = "OPEN WHEEL", childMenu = "wheels_10", icon = "wheels" }, 
+			{ label = "STREET", childMenu = "wheels_11", icon = "wheels" }, 
+			{ label = "TRACK", childMenu = "wheels_12", icon = "wheels" }, 
 		},
 		activeElement = 0,
 		parentMenu = "wheeltypes"

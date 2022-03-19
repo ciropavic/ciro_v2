@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<CVehicleModelInfoVarGlobal>   
+<CVehicleModelInfoVarGlobal>
   <Kits>
     <Item>
       <kitName>3021_m5e60_modkit</kitName>
@@ -248,6 +248,13 @@
       <statMods>
         <Item>
           <identifier />
+          <modifier value="10" />
+          <audioApply value="1.000000" />
+          <weight value="20" />
+          <type>VMT_ENGINE</type>
+        </Item>
+        <Item>
+          <identifier />
           <modifier value="25" />
           <audioApply value="1.000000" />
           <weight value="20" />
@@ -262,21 +269,14 @@
         </Item>
         <Item>
           <identifier />
+          <modifier value="75" />
+          <audioApply value="1.000000" />
+          <weight value="20" />
+          <type>VMT_ENGINE</type>
+        </Item>
+        <Item>
+          <identifier />
           <modifier value="100" />
-          <audioApply value="1.000000" />
-          <weight value="20" />
-          <type>VMT_ENGINE</type>
-        </Item>
-        <Item>
-          <identifier />
-          <modifier value="150" />
-          <audioApply value="1.000000" />
-          <weight value="20" />
-          <type>VMT_ENGINE</type>
-        </Item>
-        <Item>
-          <identifier />
-          <modifier value="200" />
           <audioApply value="1.000000" />
           <weight value="20" />
           <type>VMT_ENGINE</type>
@@ -318,14 +318,14 @@
         </Item>
         <Item>
           <identifier />
-          <modifier value="100" />
+          <modifier value="75" />
           <audioApply value="1.000000" />
           <weight value="5" />
           <type>VMT_GEARBOX</type>
         </Item>
         <Item>
           <identifier />
-          <modifier value="150" />
+          <modifier value="100" />
           <audioApply value="1.000000" />
           <weight value="5" />
           <type>VMT_GEARBOX</type>
@@ -364,6 +364,34 @@
           <audioApply value="1.000000" />
           <weight value="40" />
           <type>VMT_ARMOUR</type>
+        </Item>
+        <Item>
+          <identifier />
+          <modifier value="4" />
+          <audioApply value="1.000000" />
+          <weight value="0" />
+          <type>VMT_SUSPENSION</type>
+        </Item>
+        <Item>
+          <identifier />
+          <modifier value="8" />
+          <audioApply value="1.000000" />
+          <weight value="0" />
+          <type>VMT_SUSPENSION</type>
+        </Item>
+        <Item>
+          <identifier />
+          <modifier value="12" />
+          <audioApply value="1.000000" />
+          <weight value="0" />
+          <type>VMT_SUSPENSION</type>
+        </Item>
+        <Item>
+          <identifier />
+          <modifier value="16" />
+          <audioApply value="1.000000" />
+          <weight value="0" />
+          <type>VMT_SUSPENSION</type>
         </Item>
         <Item>
           <identifier>HORN_TRUCK</identifier>
@@ -693,34 +721,6 @@
           <audioApply value="1.000000" />
           <weight value="0" />
           <type>VMT_HORN</type>
-        </Item>
-        <Item>
-          <identifier />
-          <modifier value="6" />
-          <audioApply value="1.000000" />
-          <weight value="0" />
-          <type>VMT_SUSPENSION</type>
-        </Item>
-        <Item>
-          <identifier />
-          <modifier value="11" />
-          <audioApply value="1.000000" />
-          <weight value="0" />
-          <type>VMT_SUSPENSION</type>
-        </Item>
-        <Item>
-          <identifier />
-          <modifier value="16" />
-          <audioApply value="1.000000" />
-          <weight value="0" />
-          <type>VMT_SUSPENSION</type>
-        </Item>
-        <Item>
-          <identifier />
-          <modifier value="22" />
-          <audioApply value="1.000000" />
-          <weight value="0" />
-          <type>VMT_SUSPENSION</type>
         </Item>
       </statMods>
       <slotNames />
