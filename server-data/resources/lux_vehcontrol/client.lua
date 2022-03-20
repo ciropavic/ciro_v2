@@ -504,20 +504,6 @@ Citizen.CreateThread(function()
 									SetLxSirenStateForVeh(veh, 0)
 									count_bcast_timer = delay_bcast_timer
 								end
-----------------------------------------------------------------------------------------------------
-							-- POWERCALL
-							elseif IsDisabledControlJustReleased(0, 172) then
-								if state_pwrcall[veh] == true then
-									--TriggerEvent("lux_vehcontrol:ELSClick", "Downgrade", 1) -- Downgrade
-									TogPowercallStateForVeh(veh, false)
-									count_bcast_timer = delay_bcast_timer
-								else
-									if IsVehicleSirenOn(veh) then
-										--TriggerEvent("lux_vehcontrol:ELSClick", "Upgrade", 0.7) -- Upgrade
-										TogPowercallStateForVeh(veh, true)
-										count_bcast_timer = delay_bcast_timer
-									end
-								end
 								
 							end
 ----------------------------------------------------------------------------------------------------

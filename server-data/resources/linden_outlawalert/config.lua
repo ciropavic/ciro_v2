@@ -20,7 +20,7 @@ Config.Debug = true
 Config.DebugChance = true
 
 -- enable default alerts
-Config.Enable.Speeding = true
+Config.Enable.Speeding = false
 Config.Enable.Shooting = true
 Config.Enable.Autotheft = true
 Config.Enable.Melee = false

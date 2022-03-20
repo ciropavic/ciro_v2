@@ -1,7 +1,6 @@
 ControlForPursuitMode = 172
 
-local npolchal, npolvette, npolstang, npolvic, npolexp, npolchar = "npolchal", "npolvette", "npolstang", "npolvic",
-    "npolexp", "npolchar"
+local npolchal, npolvette, npolstang, npolvic, npolexp, npolchar = "npolchal", "npolvette", "npolstang", "npolvic", "npolexp", "npolchar"
 
 local pursuitEnabled = false
 
