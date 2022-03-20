@@ -211,21 +211,21 @@ end)
 
 RegisterCommand('engine', function ()
   local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-  if vehicle ~= nil and vehicle ~= 0 and GetPedInVehicleSeat(vehicle, 0) then
+  if vehicle ~= nil and vehicle ~= 0 and GetPedInVehicleSeat(vehicle, 0) and not IsPauseMenuActive() then
       SetVehicleEngineOn(vehicle, (not GetIsVehicleEngineRunning(vehicle)), false, true)
   end
 end)
 
 RegisterCommand('hood', function ()
   local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-  if vehicle ~= nil and vehicle ~= 0 and GetPedInVehicleSeat(vehicle, 0) then
+  if vehicle ~= nil and vehicle ~= 0 and GetPedInVehicleSeat(vehicle, 0) and not IsPauseMenuActive() then
     ToggleDoor(vehicle, 4)
   end
 end)
 
 RegisterCommand('trunk', function ()
   local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-  if vehicle ~= nil and vehicle ~= 0 and GetPedInVehicleSeat(vehicle, 0) then
+  if vehicle ~= nil and vehicle ~= 0 and GetPedInVehicleSeat(vehicle, 0) and not IsPauseMenuActive() then
     ToggleDoor(vehicle, 5)
   end
 end)
@@ -235,6 +235,6 @@ RegisterNUICallback('escape', function(data, cb)
     cb('ok')
 end)
 
-RegisterKeyMapping('engine', '[Vehicle] Toggle engine', 'keyboard', '')
-RegisterKeyMapping('hood', '[Vehicle] Toggle hood', 'keyboard', '')
-RegisterKeyMapping('trunk', '[Vehicle] Toggle trunk', 'keyboard', '')
+RegisterKeyMapping('engine', '(Vehicle) Toggle engine', 'keyboard', '')
+RegisterKeyMapping('hood', '(Vehicle) Toggle hood', 'keyboard', '')
+RegisterKeyMapping('trunk', '(Vehicle) Toggle trunk', 'keyboard', '')

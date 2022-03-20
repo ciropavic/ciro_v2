@@ -50,9 +50,9 @@ RegisterCommand('softcuff', function()
     end
 end)
 
-RegisterKeyMapping('cuff', '[Police] Cuff player', 'keyboard', '')
-RegisterKeyMapping('softcuff', '[Police] Softcuff player', 'keyboard', '')
-RegisterKeyMapping('drag', '[Police] Drag player', 'keyboard', '')
+RegisterKeyMapping('cuff', '(Police) Cuff player', 'keyboard', '')
+RegisterKeyMapping('softcuff', '(Police) Softcuff player', 'keyboard', '')
+RegisterKeyMapping('drag', '(Police) Drag player', 'keyboard', '')
 
 RegisterNetEvent('cu:cuffanim')
 AddEventHandler('cu:cuffanim', function()
