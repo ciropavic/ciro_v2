@@ -6,6 +6,21 @@
       <id value="3055" />
       <kitType>MKT_SPECIAL</kitType>
       <visibleMods>
+        <Item>
+          <modelName>rs322_spoiler1</modelName>
+          <modShopLabel>RS322_SPOIL1</modShopLabel>
+          <linkedModels />
+          <turnOffBones />
+          <type>VMT_SPOILER</type>
+          <bone>boot</bone>
+          <collisionBone>boot</collisionBone>
+          <cameraPos>VMCP_DEFAULT</cameraPos>
+          <audioApply value="1.000000" />
+          <weight value="0" />
+          <turnOffExtra value="false" />
+          <disableBonnetCamera value="false" />
+          <allowBonnetSlide value="true" />
+        </Item>
       </visibleMods>
       <linkMods />
       <statMods>

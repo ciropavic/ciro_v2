@@ -277,6 +277,7 @@ Citizen.CreateThread(function ()
     vehicles = {
       'gtam', 
       'db11', 
+      'a4',
       'etrongt',
       'r8',
       'r8h',
@@ -295,6 +296,7 @@ Citizen.CreateThread(function ()
       'exor',
       'c7',
       'demon',
+      'charger21',
       '488misha',
       'focusrs',
       'gt17',

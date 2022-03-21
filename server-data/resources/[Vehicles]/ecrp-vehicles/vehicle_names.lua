@@ -3,70 +3,100 @@ function AddTextEntry(key, value)
 end
 
 Citizen.CreateThread(function()
-	AddTextEntry("gtam", "Alfa Romeo Giulia GTAm")
-	AddTextEntry("db11", "Aston Martin DB11")
-  -- Audi
-	AddTextEntry("etrongt", "Audi e-tron GT")
-	AddTextEntry("r8", "Audi R8")
-	AddTextEntry("r8h", "Audi R8 Custom")
-	AddTextEntry("rs5", "Audi RS5")
-	AddTextEntry("rs322", "Audi RS3 2022")
-	AddTextEntry("audirs6tk", "Audi RS6")
-  -- Bentley
-	AddTextEntry("bdragon", "Bentley Continental GT Dragon")
-	AddTextEntry("contss", "Bentley Continental SS")
-  -- BMW
-	AddTextEntry("m5e60", "BMW E60 M5")
-	AddTextEntry("e36", "BMW M3 E36 RB")
-	AddTextEntry("e46", "BMW M3 E46")
-	AddTextEntry("m3e46", "BMW M3 E46 GTR")
-	AddTextEntry("m4", "BMW M4 LW")
-	AddTextEntry("bolide", "Bugatti Bolide")
-	AddTextEntry("esv", "Cadillac Escalade")
-	AddTextEntry("exor", "Chevrolet Camaro ZL1")
-	AddTextEntry("c7", "Chevrolet Corvette C7")
-	AddTextEntry("demon", "Dodge Challenger")
-	AddTextEntry("488misha", "Ferrari 488 GTB Misha")
-	AddTextEntry("focusrs", "Ford Focus RS")
-	AddTextEntry("gt17", "Ford GT")
-	AddTextEntry("f150", "Ford Raptor")
-	AddTextEntry("rudiharley", "Harley Davidson")
-	AddTextEntry("fk8", "Honda Civic Type R")
-	AddTextEntry("srt8b", "Jeep Grand Cherokee SRT-8")
-	AddTextEntry("zx10", "Kawasaki Ninja ZX10R")
-	AddTextEntry("lp700", "Lamborghini Aventador LP700")
-	AddTextEntry("aventador", "Lamborghini Aventador LP700R")
-	AddTextEntry("huracan", "Lamborghini Huracan")
-	AddTextEntry("lc500", "Lexus LC500")
-	AddTextEntry("rcf", "Lexus RCF")
-	AddTextEntry("granlb", "Maserati Gran Turismo LW")
-	AddTextEntry("na6", "Mazda Miata")
-	AddTextEntry("675ltsp", "Mclaren 675ltsp")
-	AddTextEntry("720s", "Mclaren 720s")
-	AddTextEntry("senna", "Mclaren Senna")
-	AddTextEntry("22g63", "Mercedes AMG G63")
-	AddTextEntry("gt63", "Mercedes AMG GT63")
-	AddTextEntry("gtrc", "Mercedes AMG GTR")
-	AddTextEntry("c63", "Mercedes C63 AMG")
-	AddTextEntry("evo9", "Mitsubishi Lancer Evolution IX MR FQ-400")
-	AddTextEntry("cp9a", "Mitsubishi Lancer Evolution VI GSR TME")
-	AddTextEntry("r35", "Nissan GTR R35")
-	AddTextEntry("lwgtr", "Nissan GTR R35 LW")
-	AddTextEntry("gtr", "Nissan GTR R35 RB")
-	AddTextEntry("skyline", "Nissan Skyline R34 GTR")
-	AddTextEntry("bc", "Pagani Huayra BC")
-	AddTextEntry("por930", "Porsche 911 930")
-	AddTextEntry("gt3", "Porsche 911 GT3 2022")
-	AddTextEntry("gt3rs", "Porsche 911 GT3RS")
-	AddTextEntry("turbos", "Porsche 911 Turbo S")
-	AddTextEntry("panamera", "Porsche Panamera Turbo")
-	AddTextEntry("subwrx", "Subaru Impreza WRX")
-	AddTextEntry("sultanrsv8", "Sultan RS V8")
-	AddTextEntry("gt86", "Toyota GT86")
-	AddTextEntry("supraiv", "Toyota Supra Mk.IV")
-	AddTextEntry("supra20", "Toyota Supra Mk.V")
-	AddTextEntry("golfp", "Volkswagen Pandem Golf R")
-	AddTextEntry("r1", "Yamaha R1")
+  -- Alfa Romeo --
+	AddTextEntry("0x663E4820", "Alfa Romeo Giulia GTAm")
+  -- Aston Martin --
+	AddTextEntry("0x2D9B91D5", "Aston Martin DB11")
+  -- Audi --
+  AddTextEntry("0x71E00691", "Audi RS3 2022")
+  AddTextEntry("0x854A7616", "Downforce COPIUM") -- 22' RS3 Spoiler
+	AddTextEntry("0x2D306CF9", "Audi A4")
+	AddTextEntry("0x52B6A1A6", "Audi e-tron GT")
+	AddTextEntry("0xD0A7A0E9", "Audi R8")
+	AddTextEntry("0x43234BA2", "Audi R8 Custom")
+	AddTextEntry("0x8C262984", "Audi RS5")
+	AddTextEntry("0xADC1CDA9", "Audi RS6")
+  -- Bentley --
+	AddTextEntry("0xBFCB55A7", "Bentley Continental GT Dragon")
+	AddTextEntry("0xCC84E283", "Bentley Continental SS")
+  -- BMW --
+	AddTextEntry("0x711BDD36", "BMW E60 M5")
+	AddTextEntry("0x5F44A917", "BMW M3 E36 RB")
+	AddTextEntry("0x6DB3BC05", "BMW M3 E46")
+	AddTextEntry("0x7108F136", "BMW M3 E46 GTR")
+	AddTextEntry("0xD590B003", "BMW M4 LW")
+  -- Bugatti --
+	AddTextEntry("0x75B95AFC", "Bugatti Bolide")
+  -- Cadillac --
+	AddTextEntry("0x3DB189E3", "Cadillac Escalade")
+  -- Chevrolet --
+	AddTextEntry("0x5785CD5B", "Chevrolet Camaro ZL1")
+	AddTextEntry("0x342378AB", "Chevrolet Corvette C7")
+  -- Dodge --
+	AddTextEntry("0x34C675D5", "Dodge Challenger")
+	AddTextEntry("0x5EBC9DA5", "Dodge Charger")
+  -- Ferrari --
+	AddTextEntry("0xD4889B05", "Ferrari 488 GTB Misha")
+  -- Ford --
+	AddTextEntry("0x30DF4174", "Ford Focus RS")
+	AddTextEntry("0x881D9D6E", "Ford GT")
+	AddTextEntry("0xB23A7959", "Ford Raptor")
+  -- Harley --
+	AddTextEntry("0x91A9A559", "Harley Davidson")
+  -- Honda --
+	AddTextEntry("0x97F15D25", "Honda Civic Type R")
+  -- Jeep --
+	AddTextEntry("0xE76F4093", "Jeep Grand Cherokee SRT-8")
+  -- Kawasaki -- 
+	AddTextEntry("0x65E5302C", "Kawasaki Ninja ZX10R")
+  -- Lamborghini --
+	AddTextEntry("0xD4D7F312", "Lamborghini Aventador LP700")
+	AddTextEntry("0x70A9FE89", "Lamborghini Aventador LP700R")
+	AddTextEntry("0x62B5FD88", "Lamborghini Huracan")
+  -- Lexus --
+	AddTextEntry("0x2912AF12", "Lexus LC500")
+	AddTextEntry("0xF345AE2D", "Lexus RCF")
+  -- Maserati --
+	AddTextEntry("0x8E5465CD", "Maserati Gran Turismo LW")
+  -- Mazda --
+	AddTextEntry("0xA44047E5", "Mazda Miata")
+  -- Mclaren --
+	AddTextEntry("0xEDDC53EF", "Mclaren 675ltsp")
+	AddTextEntry("0xAE55C28A", "Mclaren 720s")
+	AddTextEntry("0xE6224504", "Mclaren Senna")
+  -- Mercedes --
+	AddTextEntry("0x80ADFFF7", "Mercedes AMG G63")
+	AddTextEntry("0xF136BC0B", "Mercedes AMG GT63")
+	AddTextEntry("0xAD7F2149", "Mercedes AMG GTR")
+	AddTextEntry("0xB78FBC26", "Mercedes C63 AMG")
+  -- Mitsubishi --
+	AddTextEntry("0xF260EF37", "Mitsubishi Lancer Evolution IX MR FQ-400")
+	AddTextEntry("0x16D90E46", "Mitsubishi Lancer Evolution VI GSR TME")
+  -- Nissan --
+	AddTextEntry("0xC593CAF5", "Nissan GTR R35")
+	AddTextEntry("0x2335823A", "Nissan GTR R35 LW")
+	AddTextEntry("0x9790D1BD", "Nissan GTR R35 RB")
+	AddTextEntry("0x7E39B694", "Nissan Skyline R34 GTR")
+  -- Pagani --
+	AddTextEntry("0xE803E16D", "Pagani Huayra BC")
+  -- Porsche --
+	AddTextEntry("0x6F47E848", "Porsche 911 930")
+	AddTextEntry("0x1751D12D", "Porsche 911 GT3 2022")
+	AddTextEntry("0x1F48A6EE", "Porsche 911 GT3RS")
+	AddTextEntry("0xA5F498D6", "Porsche 911 Turbo S")
+	AddTextEntry("0x3D37BFDF", "Porsche Panamera Turbo")
+  -- Subaru --
+	AddTextEntry("0xB29C6362", "Subaru Impreza WRX")
+  -- Sultan --
+	AddTextEntry("0xCD0E5CEF", "Sultan RS V8")
+  -- Toyota --
+	AddTextEntry("0xDE4A98BB", "Toyota GT86")
+	AddTextEntry("0x77274E0F", "Toyota Supra Mk.IV")
+	AddTextEntry("0x1241753C", "Toyota Supra Mk.V")
+  -- Volkswagen --
+	AddTextEntry("0x5E701E79", "Volkswagen Pandem Golf R")
+  -- Yamaha --
+	AddTextEntry("0x57DBAF4F", "Yamaha R1")
 
   -- Police
   AddTextEntry("npolvic", "Ford Crown Victoria")

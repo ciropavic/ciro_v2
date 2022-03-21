@@ -41,6 +41,8 @@ Config.RollOver = false -- true disable flipping over a flipped vehicle with A a
 
 Config.ShowPlayerID = false -- Shows player ID on screen.
 
+Config.LeaveEngineOn = true -- Leave engine on when player exists
+
 Config.PlayerID = { -- only works when "Config.ShowPlayerId = true"
     LocationX = 1.442,
     LocationY = 1.245,

@@ -321,31 +321,43 @@ AddEventHandler('fuel:startfuel', function(data)
 	end)
 end)
 
+RegisterCommand('lowfuel', function ()
+  local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+  SetFuel(veh, 15.0)
+end)
+
 function StartFuel(vehicle)
-	local fuel = GetVehicleFuelLevel(vehicle)
-  local fuelTotal = fuel * 2
-  local fuelTime = fuel * 1000
-	TaskTurnPedToFaceEntity(ped, vehicle, 1000)
-	Citizen.Wait(1000)
-  exports.ox_inventory:Progress({
-    duration = fuelTime,
-    label = 'Fueling',
-    useWhileDead = false,
-    canCancel = false,
-    disable = {
-        move = true,
-        car = true,
-        combat = true,
-        mouse = false
-    },
-    anim = {
-        dict = 'timetable@gardener@filling_can',
-        clip = 'gar_ig_5_filling_can'
-    }
-  })
-	Citizen.Wait(fuelTime)
-  SetFuel(vehicle, 100.0)
-	TriggerServerEvent('ecrp-fuel:takemoney', fuelTotal)
+  local fuel = GetVehicleFuelLevel(vehicle)
+  local fuelTotal = 100 - fuel
+  local fuelTime = fuelTotal * 500
+  print('Fuel: ' .. fuel)
+  print('Fuel Total: ' .. fuelTotal)
+  print('Fuel Time: ' .. fuelTime)
+  if fuel < 100.0 then
+    TaskTurnPedToFaceEntity(ped, vehicle, 1000)
+    Citizen.Wait(1000)
+    exports.ox_inventory:Progress({
+      duration = fuelTime,
+      label = 'Fueling',
+      useWhileDead = false,
+      canCancel = false,
+      disable = {
+          move = true,
+          car = true,
+          combat = true,
+          mouse = false
+      },
+      anim = {
+          dict = 'timetable@gardener@filling_can',
+          clip = 'gar_ig_5_filling_can'
+      }
+    })
+    Citizen.Wait(fuelTime)
+    SetFuel(vehicle, 100.0)
+    TriggerServerEvent('ecrp-fuel:takemoney', fuelTotal)
+  elseif fuel == 100.0 then
+    exports['mythic_notify']:DoHudText('error', 'Fuel tank is full')
+  end
 end
 
 function ManageFuelUsage(vehicle)
