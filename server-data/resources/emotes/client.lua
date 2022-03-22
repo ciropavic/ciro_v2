@@ -950,6 +950,53 @@ anims = {
         end
 
     end,
+    
+    ["sheesh"] = function(ped)
+
+        local testdic = "custom@sheeeeesh"
+        local testanim = "sheeeeesh"
+
+        if IsPedArmed(ped, 7) then
+            SetCurrentPedWeapon(ped, 0xA2719263, true)
+        end
+
+        RequestAnimDict(testdic)
+        while not HasAnimDictLoaded(testdic) and not handCuffed do
+            Citizen.Wait(0)
+        end
+
+        if IsEntityPlayingAnim(ped, testdic, testanim, 3) then
+            ClearPedSecondaryTask(ped)
+        else
+            local animLength = GetAnimDuration(testdic, testanim)
+            TaskPlayAnim(ped, testdic, testanim, 1.0, 1.0, animLength, 48, 0, 0, 0, 0)
+        end
+
+    end,
+    
+    ["gangnamstyle"] = function(ped)
+
+        local testdic = "custom@gangnamstyle"
+        local testanim = "gangnamstyle"
+
+        if IsPedArmed(ped, 7) then
+            SetCurrentPedWeapon(ped, 0xA2719263, true)
+        end
+
+        RequestAnimDict(testdic)
+        while not HasAnimDictLoaded(testdic) and not handCuffed do
+            Citizen.Wait(0)
+        end
+
+        if IsEntityPlayingAnim(ped, testdic, testanim, 3) then
+            ClearPedSecondaryTask(ped)
+        else
+            local animLength = GetAnimDuration(testdic, testanim)
+            TaskPlayAnim(ped, testdic, testanim, 1.0, 1.0, animLength, 1, 0, 0, 0, 0)
+        end
+
+    end,
+
     ["taxi"] = function(ped)
 
         local testdic = "taxi_hail"
