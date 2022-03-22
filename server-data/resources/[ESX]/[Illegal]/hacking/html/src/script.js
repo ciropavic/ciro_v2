@@ -10,15 +10,19 @@ async function start(){
     $('.try-again').classList.add('hidden')
     $('.spy-icon').src = 'assets/spy-icon.png'
 
-    const dialing = playSound('assets/dialing.mp3', 0.1)
-
+    
     // mock loading screen
-    setInformationText('ESTABLISHING CONNECTION')
-    await delay(1)
+    setInformationText('DEVICE BOOTING UP...')
+    await delay(2)
+    const dialing = playSound('assets/Dial-up.mp3', 0.1)
+    setInformationText('DIALING...')
+    await delay(8)
+    setInformationText('ESTABLISHING CONNECTION...')
+    await delay(10)
     setInformationText('DOING SOME HACKERMANS STUFF...')
-    await delay(1)
+    await delay(8)
     setInformationText('ACCESS CODE FLAGGED; REQUIRES HUMAN CAPTCHA INPUT..')
-    await delay(1)
+    await delay(5)
 
     // hide text and show squares
     $('#text-container').classList.toggle('hidden')

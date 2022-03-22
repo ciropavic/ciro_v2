@@ -83,7 +83,7 @@ export function generateQuestionAndAnswer(nums, puzzles){
     // this is confusing as hell, but works somehow
     const question =  `${firstQuestion} (${nums[positionOne]}) AND ${secondQuestion} (${nums[positionTwo]})`
     const answer = QUESTIONS[firstQuestion](puzzles[positionOne]) + ' ' + QUESTIONS[secondQuestion](puzzles[positionTwo])
-console.log(answer)
+    // console.log(answer)
     return [question, answer]
 }
 
