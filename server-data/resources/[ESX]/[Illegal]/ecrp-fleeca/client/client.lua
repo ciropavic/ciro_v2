@@ -119,18 +119,18 @@ AddEventHandler("esx:setJob", function(job)
     PlayerData.job = job
 end)
 
-RegisterNetEvent("norp-fleeca:resetDoorState")
-AddEventHandler("norp-fleeca:resetDoorState", function(name)
+RegisterNetEvent("ecrp-fleeca:resetDoorState")
+AddEventHandler("ecrp-fleeca:resetDoorState", function(name)
     Freeze[name] = 0
 end)
 
-RegisterNetEvent("norp-fleeca:lootup_c")
-AddEventHandler("norp-fleeca:lootup_c", function(var, var2)
+RegisterNetEvent("ecrp-fleeca:lootup_c")
+AddEventHandler("ecrp-fleeca:lootup_c", function(var, var2)
     LootCheck[var][var2] = true
 end)
 
-RegisterNetEvent("norp-fleeca:outcome")
-AddEventHandler("norp-fleeca:outcome", function(oc, arg)
+RegisterNetEvent("ecrp-fleeca:outcome")
+AddEventHandler("ecrp-fleeca:outcome", function(oc, arg)
     for i = 1, #Check, 1 do
         Check[i] = false
     end
@@ -142,7 +142,7 @@ AddEventHandler("norp-fleeca:outcome", function(oc, arg)
     print(oc)
     if oc then
         Check[arg] = true
-        TriggerEvent("norp-fleeca:startheist", Config.Banks[arg], arg)
+        TriggerEvent("ecrp-fleeca:startheist", Config.Banks[arg], arg)
     elseif not oc then
         TriggerEvent('ox_inventory:notify', {
             type = 'error',
@@ -151,8 +151,8 @@ AddEventHandler("norp-fleeca:outcome", function(oc, arg)
     end
 end)
 
-RegisterNetEvent("norp-fleeca:startLoot_c")
-AddEventHandler("norp-fleeca:startLoot_c", function(data, name)
+RegisterNetEvent("ecrp-fleeca:startLoot_c")
+AddEventHandler("ecrp-fleeca:startLoot_c", function(data, name)
 
     currentname = name
     currentcoords = vector3(data.doors.startloc.x, data.doors.startloc.y, data.doors.startloc.z)
@@ -171,7 +171,7 @@ AddEventHandler("norp-fleeca:startLoot_c", function(data, name)
                         (LootCheck[name].Loot1 and LootCheck[name].Loot2 and LootCheck[name].Loot3) then
                         LootCheck[name].Stop = false
                         if initiator then
-                            TriggerEvent("norp-fleeca:reset", name, data)
+                            TriggerEvent("ecrp-fleeca:reset", name, data)
                             return
                         end
                         return
@@ -185,14 +185,14 @@ AddEventHandler("norp-fleeca:startLoot_c", function(data, name)
     end
 end)
 
-RegisterNetEvent("norp-fleeca:stopHeist_c")
-AddEventHandler("norp-fleeca:stopHeist_c", function(name)
+RegisterNetEvent("ecrp-fleeca:stopHeist_c")
+AddEventHandler("ecrp-fleeca:stopHeist_c", function(name)
     LootCheck[name].Stop = true
 end)
 
 -- MAIN DOOR UPDATE --
 
-AddEventHandler("norp-fleeca:freezeDoors", function()
+AddEventHandler("ecrp-fleeca:freezeDoors", function()
     Citizen.CreateThread(function()
         while true do
             for k, v in pairs(Doors) do
@@ -212,8 +212,8 @@ AddEventHandler("norp-fleeca:freezeDoors", function()
         end
     end)
 end)
-RegisterNetEvent("norp-fleeca:toggleVault")
-AddEventHandler("norp-fleeca:toggleVault", function(key, state)
+RegisterNetEvent("ecrp-fleeca:toggleVault")
+AddEventHandler("ecrp-fleeca:toggleVault", function(key, state)
     dooruse = true
     Doors[key][2].state = nil
     if Config.Banks[key].hash == nil then
@@ -231,7 +231,7 @@ AddEventHandler("norp-fleeca:toggleVault", function(key, state)
             until count == 900
             Doors[key][2].locked = state
             Doors[key][2].state = GetEntityHeading(obj)
-            TriggerServerEvent("norp-fleeca:updateVaultState", key, Doors[key][2].state)
+            TriggerServerEvent("ecrp-fleeca:updateVaultState", key, Doors[key][2].state)
         elseif state then
             local obj = GetClosestObjectOfType(Config.Banks[key].doors.startloc.x, Config.Banks[key].doors.startloc.y,
                 Config.Banks[key].doors.startloc.z, 2.0, GetHashKey(Config.vaultdoor), false, false, false)
@@ -246,7 +246,7 @@ AddEventHandler("norp-fleeca:toggleVault", function(key, state)
             until count == 900
             Doors[key][2].locked = state
             Doors[key][2].state = GetEntityHeading(obj)
-            TriggerServerEvent("norp-fleeca:updateVaultState", key, Doors[key][2].state)
+            TriggerServerEvent("ecrp-fleeca:updateVaultState", key, Doors[key][2].state)
         end
     else
         if not state then
@@ -262,7 +262,7 @@ AddEventHandler("norp-fleeca:toggleVault", function(key, state)
             until count == 900
             Doors[key][2].locked = state
             Doors[key][2].state = GetEntityHeading(obj)
-            TriggerServerEvent("norp-fleeca:updateVaultState", key, Doors[key][2].state)
+            TriggerServerEvent("ecrp-fleeca:updateVaultState", key, Doors[key][2].state)
         elseif state then
             local obj = GetClosestObjectOfType(Config.Banks.F4.doors.startloc.x, Config.Banks.F4.doors.startloc.y,
                 Config.Banks.F4.doors.startloc.z, 2.0, Config.Banks.F4.hash, false, false, false)
@@ -277,24 +277,24 @@ AddEventHandler("norp-fleeca:toggleVault", function(key, state)
             until count == 900
             Doors[key][2].locked = state
             Doors[key][2].state = GetEntityHeading(obj)
-            TriggerServerEvent("norp-fleeca:updateVaultState", key, Doors[key][2].state)
+            TriggerServerEvent("ecrp-fleeca:updateVaultState", key, Doors[key][2].state)
         end
     end
     dooruse = false
 end)
 
-AddEventHandler("norp-fleeca:reset", function(name, data)
+AddEventHandler("ecrp-fleeca:reset", function(name, data)
     for i = 1, #LootCheck[name], 1 do
         LootCheck[name][i] = false
     end
     Check[name] = false
     Citizen.Wait(1800000)
-    TriggerServerEvent("norp-fleeca:toggleVault", name, true)
-    TriggerEvent("norp-fleeca:cleanUp", data, name)
+    TriggerServerEvent("ecrp-fleeca:toggleVault", name, true)
+    TriggerEvent("ecrp-fleeca:cleanUp", data, name)
 end)
 
-AddEventHandler("norp-fleeca:startheist", function(data, name)
-    TriggerServerEvent("norp-fleeca:toggleDoor", name, true) -- ensure to lock the second door for the second, third, fourth... heist
+AddEventHandler("ecrp-fleeca:startheist", function(data, name)
+    TriggerServerEvent("ecrp-fleeca:toggleDoor", name, true) -- ensure to lock the second door for the second, third, fourth... heist
     disableinput = true
     currentname = name
     currentcoords = vector3(data.doors.startloc.x, data.doors.startloc.y, data.doors.startloc.z)
@@ -326,13 +326,13 @@ AddEventHandler("norp-fleeca:startheist", function(data, name)
     Citizen.Wait(1000)
     Wait(2000)
     PlaySoundFrontend(-1, "ATM_WINDOW", "HUD_FRONTEND_DEFAULT_SOUNDSET")
-    TriggerServerEvent("norp-fleeca:toggleVault", name, false)
+    TriggerServerEvent("ecrp-fleeca:toggleVault", name, false)
     startdstcheck = true
     currentname = name
     SpawnTrolleys(data, name)
 end)
 
-AddEventHandler("norp-fleeca:cleanUp", function(data, name)
+AddEventHandler("ecrp-fleeca:cleanUp", function(data, name)
   Citizen.Wait(10000)
   for i = 1, 3, 1 do -- full trolley clean
       local obj = GetClosestObjectOfType(data.objects[i].x, data.objects[i].y, data.objects[i].z, 0.75, `hei_prop_hei_cash_trolly_01`, false, false, false)
@@ -354,7 +354,7 @@ AddEventHandler("norp-fleeca:cleanUp", function(data, name)
   if DoesEntityExist(IdProp2) then
       DeleteEntity(IdProp2)
   end
-  TriggerServerEvent("norp-fleeca:setCooldown", name)
+  TriggerServerEvent("ecrp-fleeca:setCooldown", name)
   initiator = false
 end)
 
@@ -371,7 +371,7 @@ function SpawnTrolleys(data, name)
         useZ = true
     }, {
         options = {{
-            event = "norp-fleeca:grab",
+            event = "ecrp-fleeca:grab",
             icon = "fas fa-money-bill",
             label = "Grab the cash"
         }},
@@ -388,12 +388,12 @@ function SpawnTrolleys(data, name)
             table.insert(missionplayers, GetPlayerServerId(players[i]))
         end
     end
-    TriggerServerEvent("norp-fleeca:startLoot", data, name, missionplayers)
+    TriggerServerEvent("ecrp-fleeca:startLoot", data, name, missionplayers)
     done = false
 end
 
-RegisterNetEvent('norp-fleeca:grab')
-AddEventHandler('norp-fleeca:grab', function(name)
+RegisterNetEvent('ecrp-fleeca:grab')
+AddEventHandler('ecrp-fleeca:grab', function(name)
     disableinput = true
     local ped = PlayerPedId()
     local model = "hei_prop_heist_cash_pile"
@@ -428,7 +428,7 @@ AddEventHandler('norp-fleeca:grab', function(name)
 			    if HasAnimEventFired(ped, `RELEASE_CASH_DESTROY`) then
 				    if IsEntityVisible(grabobj) then
                         SetEntityVisible(grabobj, false, false)
-                        TriggerServerEvent("norp-fleeca:rewardCash")
+                        TriggerServerEvent("ecrp-fleeca:rewardCash")
 				    end
 			    end
 		    end
@@ -501,7 +501,7 @@ Citizen.CreateThread(function()
                 if (GetDistanceBetweenCoords(playercoord, currentcoords, true)) > 20 then
                     LootCheck[currentname].Stop = true
                     startdstcheck = false
-                    TriggerServerEvent("norp-fleeca:stopHeist", currentname)
+                    TriggerServerEvent("ecrp-fleeca:stopHeist", currentname)
                 end
             end
             Citizen.Wait(1)
@@ -519,11 +519,11 @@ Citizen.CreateThread(function()
     while PlayerData == nil do
         Citizen.Wait(500)
     end
-    ESX.TriggerServerCallback("norp-fleeca:getBanks", function(bank, door)
+    ESX.TriggerServerCallback("ecrp-fleeca:getBanks", function(bank, door)
         Config.Banks = bank
         Doors = door
     end)
-    TriggerEvent("norp-fleeca:freezeDoors")
+    TriggerEvent("ecrp-fleeca:freezeDoors")
     while true do
         if PlayerData.job.name ~= "police" then
             local coords = GetEntityCoords(PlayerPedId())
@@ -536,11 +536,11 @@ Citizen.CreateThread(function()
 end)
 --[[
 RegisterCommand('norpfleeca', function()
-    TriggerEvent('norp-fleeca:hack')
+    TriggerEvent('ecrp-fleeca:hack')
 end)]] --
 
-RegisterNetEvent('norp-fleeca:hack')
-AddEventHandler('norp-fleeca:hack', function()
+RegisterNetEvent('ecrp-fleeca:hack')
+AddEventHandler('ecrp-fleeca:hack', function()
     local coords = GetEntityCoords(PlayerPedId())
 
     for k, v in pairs(Config.Banks) do
@@ -554,18 +554,18 @@ AddEventHandler('norp-fleeca:hack', function()
                 })
                 if item >= 1 then
                     exports['mythic_notify']:DoHudText('error', 'Your laptop broke')
-                    TriggerServerEvent("norp-fleeca:delusb")
+                    TriggerServerEvent("ecrp-fleeca:delusb")
                 else
                     exports['hacking']:OpenHackingGame(function(outcome)
                         if outcome == true then
-                            TriggerServerEvent("norp-fleeca:startcheck", k)
-                            TriggerServerEvent("norp-fleeca:metadata")
+                            TriggerServerEvent("ecrp-fleeca:startcheck", k)
+                            TriggerServerEvent("ecrp-fleeca:metadata")
                             exports['mythic_notify']:DoHudText('success', 'Hack successful')
                         elseif outcome == false then
                             Wait(750)
-                            -- TriggerServerEvent("norp-fleeca:startcheck", k)
+                            -- TriggerServerEvent("ecrp-fleeca:startcheck", k)
                             exports['mythic_notify']:DoHudText('error', 'Hack failed')
-                            TriggerServerEvent("norp-fleeca:metadata")
+                            TriggerServerEvent("ecrp-fleeca:metadata")
                         end
                     end)
                 end
@@ -574,8 +574,8 @@ AddEventHandler('norp-fleeca:hack', function()
     end
 end)
 
-RegisterNetEvent("norp-fleeca:policenotify")
-AddEventHandler("norp-fleeca:policenotify", function(name)
+RegisterNetEvent("ecrp-fleeca:policenotify")
+AddEventHandler("ecrp-fleeca:policenotify", function(name)
     local PlayerData = ESX.GetPlayerData()
     local blip = nil
 
@@ -609,7 +609,7 @@ exports['qtarget']:AddBoxZone("fleecapad1", vector3(311.58, -284.62, 54.17), 0.5
     maxZ = 54.72
 }, {
     options = {{
-        event = "norp-fleeca:hack",
+        event = "ecrp-fleeca:hack",
         icon = "fas fa-laptop-code",
         label = "HACK DOOR",
         item = "greenlaptop"
@@ -625,7 +625,7 @@ exports['qtarget']:AddBoxZone("fleecapad2", vector3(147.2, -1046.22, 29.38), 0.6
     maxZ = 29.93
 }, {
     options = {{
-        event = "norp-fleeca:hack",
+        event = "ecrp-fleeca:hack",
         icon = "fas fa-laptop-code",
         label = "HACK DOOR",
         item = "greenlaptop"
@@ -641,7 +641,7 @@ exports['qtarget']:AddBoxZone("fleecapad3", vector3(-1210.44, -336.41, 37.79), 0
     maxZ = 38.34
 }, {
     options = {{
-        event = "norp-fleeca:hack",
+        event = "ecrp-fleeca:hack",
         icon = "fas fa-laptop-code",
         label = "HACK DOOR",
         item = "greenlaptop"
@@ -657,7 +657,7 @@ exports['qtarget']:AddBoxZone("fleecapad4", vector3(-2956.5, 482.12, 15.71), 0.1
     maxZ = 16.26
 }, {
     options = {{
-        event = "norp-fleeca:hack",
+        event = "ecrp-fleeca:hack",
         icon = "fas fa-laptop-code",
         label = "HACK DOOR",
         item = "greenlaptop"
@@ -673,7 +673,7 @@ exports['qtarget']:AddBoxZone("fleecapad5", vector3(-353.51, -55.47, 49.05), 0.5
     maxZ = 49.6
 }, {
     options = {{
-        event = "norp-fleeca:hack",
+        event = "ecrp-fleeca:hack",
         icon = "fas fa-laptop-code",
         label = "HACK DOOR",
         item = "greenlaptop"
@@ -689,7 +689,7 @@ exports['qtarget']:AddBoxZone("fleecapad6", vector3(1175.63, 2712.9, 38.1), 0.6,
     maxZ = 38.65
 }, {
     options = {{
-        event = "norp-fleeca:hack",
+        event = "ecrp-fleeca:hack",
         icon = "fas fa-laptop-code",
         label = "HACK DOOR",
         item = "greenlaptop"

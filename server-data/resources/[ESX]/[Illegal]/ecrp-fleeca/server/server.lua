@@ -7,8 +7,8 @@ Doors = {
     ["F6"] = {{loc = vector3(1174.24, 2712.47, 38.09), h = 160.91, txtloc = vector3(1174.24, 2712.47, 38.09), obj = nil, locked = false}, {loc = vector3(1176.40, 2712.75, 38.09), txtloc = vector3(1176.40, 2712.75, 38.09), state = nil, locked = true}},
 }
 
-RegisterServerEvent("norp-fleeca:startcheck")
-AddEventHandler("norp-fleeca:startcheck", function(bank)
+RegisterServerEvent("ecrp-fleeca:startcheck")
+AddEventHandler("ecrp-fleeca:startcheck", function(bank)
     local _source = source
     local copcount = 0
     local Players = ESX.GetPlayers()
@@ -28,58 +28,58 @@ AddEventHandler("norp-fleeca:startcheck", function(bank)
             if (os.time() - Config.cooldown) > Config.Banks[bank].lastrobbed then
                 Config.Banks[bank].onaction = true
                 xPlayer.removeInventoryItem("greenlaptop", 1)
-                TriggerClientEvent("norp-fleeca:outcome", _source, true, bank)
-                TriggerClientEvent("norp-fleeca:policenotify", -1, bank)
+                TriggerClientEvent("ecrp-fleeca:outcome", _source, true, bank)
+                TriggerClientEvent("ecrp-fleeca:policenotify", -1, bank)
             else
-                TriggerClientEvent("norp-fleeca:outcome", _source, false, "This bank recently robbed. You need to wait "..math.floor((Config.cooldown - (os.time() - Config.Banks[bank].lastrobbed)) / 60)..":"..math.fmod((Config.cooldown - (os.time() - Config.Banks[bank].lastrobbed)), 60))
+                TriggerClientEvent("ecrp-fleeca:outcome", _source, false, "This bank recently robbed. You need to wait "..math.floor((Config.cooldown - (os.time() - Config.Banks[bank].lastrobbed)) / 60)..":"..math.fmod((Config.cooldown - (os.time() - Config.Banks[bank].lastrobbed)), 60))
             end
         else
-            TriggerClientEvent("norp-fleeca:outcome", _source, false, "This bank is currently being robbed.")
+            TriggerClientEvent("ecrp-fleeca:outcome", _source, false, "This bank is currently being robbed.")
         end
     else
-        TriggerClientEvent("norp-fleeca:outcome", _source, false, "There is not enough police in the city.")
+        TriggerClientEvent("ecrp-fleeca:outcome", _source, false, "There is not enough police in the city.")
     end
 end)
 
 
-RegisterServerEvent("norp-fleeca:lootup")
-AddEventHandler("norp-fleeca:lootup", function(var, var2)
-    TriggerClientEvent("norp-fleeca:lootup_c", -1, var, var2)
+RegisterServerEvent("ecrp-fleeca:lootup")
+AddEventHandler("ecrp-fleeca:lootup", function(var, var2)
+    TriggerClientEvent("ecrp-fleeca:lootup_c", -1, var, var2)
 end)
 
-RegisterServerEvent("norp-fleeca:openDoor")
-AddEventHandler("norp-fleeca:openDoor", function(coords, method)
-    TriggerClientEvent("norp-fleeca:openDoor_c", -1, coords, method)
+RegisterServerEvent("ecrp-fleeca:openDoor")
+AddEventHandler("ecrp-fleeca:openDoor", function(coords, method)
+    TriggerClientEvent("ecrp-fleeca:openDoor_c", -1, coords, method)
 end)
 
-RegisterServerEvent("norp-fleeca:toggleVault")
-AddEventHandler("norp-fleeca:toggleVault", function(key, state)
+RegisterServerEvent("ecrp-fleeca:toggleVault")
+AddEventHandler("ecrp-fleeca:toggleVault", function(key, state)
     Doors[key][2].locked = state
-    TriggerClientEvent("norp-fleeca:toggleVault", -1, key, state)
+    TriggerClientEvent("ecrp-fleeca:toggleVault", -1, key, state)
 end)
 
-RegisterServerEvent("norp-fleeca:updateVaultState")
-AddEventHandler("norp-fleeca:updateVaultState", function(key, state)
+RegisterServerEvent("ecrp-fleeca:updateVaultState")
+AddEventHandler("ecrp-fleeca:updateVaultState", function(key, state)
     Doors[key][2].state = state
 end)
 
-RegisterServerEvent("norp-fleeca:startLoot")
-AddEventHandler("norp-fleeca:startLoot", function(data, name, players)
+RegisterServerEvent("ecrp-fleeca:startLoot")
+AddEventHandler("ecrp-fleeca:startLoot", function(data, name, players)
     local _source = source
 
     for i = 1, #players, 1 do
-        TriggerClientEvent("norp-fleeca:startLoot_c", players[i], data, name)
+        TriggerClientEvent("ecrp-fleeca:startLoot_c", players[i], data, name)
     end
-    TriggerClientEvent("norp-fleeca:startLoot_c", _source, data, name)
+    TriggerClientEvent("ecrp-fleeca:startLoot_c", _source, data, name)
 end)
 
-RegisterServerEvent("norp-fleeca:stopHeist")
-AddEventHandler("norp-fleeca:stopHeist", function(name)
-    TriggerClientEvent("norp-fleeca:stopHeist_c", -1, name)
+RegisterServerEvent("ecrp-fleeca:stopHeist")
+AddEventHandler("ecrp-fleeca:stopHeist", function(name)
+    TriggerClientEvent("ecrp-fleeca:stopHeist_c", -1, name)
 end)
 
-RegisterServerEvent("norp-fleeca:rewardCash")
-AddEventHandler("norp-fleeca:rewardCash", function()
+RegisterServerEvent("ecrp-fleeca:rewardCash")
+AddEventHandler("ecrp-fleeca:rewardCash", function()
     local xPlayer = ESX.GetPlayerFromId(source)
     local reward = math.random(Config.mincash, Config.maxcash)
 
@@ -90,20 +90,20 @@ AddEventHandler("norp-fleeca:rewardCash", function()
     end
 end)
 
-RegisterServerEvent("norp-fleeca:setCooldown")
-AddEventHandler("norp-fleeca:setCooldown", function(name)
+RegisterServerEvent("ecrp-fleeca:setCooldown")
+AddEventHandler("ecrp-fleeca:setCooldown", function(name)
     Config.Banks[name].lastrobbed = os.time()
     Config.Banks[name].onaction = false
-    TriggerClientEvent("norp-fleeca:resetDoorState", -1, name)
+    TriggerClientEvent("ecrp-fleeca:resetDoorState", -1, name)
 end)
 
-ESX.RegisterServerCallback("norp-fleeca:getBanks", function(source, cb)
+ESX.RegisterServerCallback("ecrp-fleeca:getBanks", function(source, cb)
     cb(Config.Banks, Doors)
 end)
 local ox_inventory = exports.ox_inventory
 
-RegisterServerEvent("norp-fleeca:metadata")
-AddEventHandler("norp-fleeca:metadata", function()
+RegisterServerEvent("ecrp-fleeca:metadata")
+AddEventHandler("ecrp-fleeca:metadata", function()
     local xPlayer = ESX.GetPlayerFromId(source)
     local greenlaptop = ox_inventory:Search(xPlayer.source, 1, 'greenlaptop')
     for k, v in pairs(greenlaptop) do
@@ -121,8 +121,8 @@ AddEventHandler("norp-fleeca:metadata", function()
 end) 
 
 
-RegisterServerEvent("norp-fleeca:delusb")
-AddEventHandler("norp-fleeca:delusb", function()
+RegisterServerEvent("ecrp-fleeca:delusb")
+AddEventHandler("ecrp-fleeca:delusb", function()
     local xPlayer = ESX.GetPlayerFromId(source)
     exports.ox_inventory:RemoveItem(xPlayer.source, 'greenlaptop', 1, {durability = 0})
 end) 
