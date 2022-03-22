@@ -1,48 +1,326 @@
-ESX = nil
-local closestDoor, closestV, closestDistance, playerPed, playerCoords, doorCount, retrievedData
-local isDead, isCuffed = false, false
-local playerNotActive = true
-
-Citizen.CreateThread(function()
-    while ESX == nil do
-        TriggerEvent('esx:getSharedObject', function(obj)
-            ESX = obj
-        end)
-        Citizen.Wait(0)
-    end
-    -- Sync doors with the server
-    Citizen.Wait(1000)
-    ESX.TriggerServerCallback('nui_doorlock:getDoorInfo', function(doorInfo)
-        for doorID, locked in pairs(doorInfo) do
-            Config.DoorList[doorID].locked = locked
-        end
-        retrievedData = true
+if not ESX then
+    SetTimeout(3000, function()
+        print('[^3WARNING^7] Unable to start NUI Doorlock - ensure you are using ESX Legacy')
     end)
-    while not retrievedData do
-        Citizen.Wait(0)
-    end
-    while IsPedStill(PlayerPedId()) and not IsPedInAnyVehicle(PlayerPedId()) do
-        Citizen.Wait(0)
-    end
-    updateDoors()
-    playerNotActive = nil
-    retrievedData = nil
-end)
+else
+    local Config = Config
 
--- Sync a door with the server
-RegisterNetEvent('nui_doorlock:setState')
-AddEventHandler('nui_doorlock:setState', function(sid, doorID, locked, src)
-    CreateThread(function()
+    local isCuffed, playerCoords, doorCount = false
+    local nearbyDoors, closestDoor = {}, {}
+
+    local round = function(num, decimal)
+        local mult = 10 ^ (decimal)
+        return math.floor(num * mult + 0.5) / mult
+    end
+
+    local SetTextCoords = function(data)
+        local minDimension, maxDimension = GetModelDimensions(data.objHash)
+        local dimensions = maxDimension - minDimension
+        local dx, dy = tonumber(dimensions.x), tonumber(dimensions.y)
+        if dy <= -1 or dy >= 1 then
+            dx = dy
+        end
+        if data.fixText then
+            return GetOffsetFromEntityInWorldCoords(data.object, dx / 2, 0, 0)
+        else
+            return GetOffsetFromEntityInWorldCoords(data.object, -dx / 2, 0, 0)
+        end
+    end
+
+    local UpdateDoors = function(specificDoor)
+        playerCoords = GetEntityCoords(ESX.PlayerData.ped)
+        for doorID, data in pairs(Config.DoorList) do
+            if (not specificDoor or doorID == specificDoor) then
+                if data.doors then
+                    for k, v in pairs(data.doors) do
+                        if #(playerCoords - v.objCoords) < 30 then
+                            Citizen.Wait(1)
+                            v.object = GetClosestObjectOfType(v.objCoords, 1.0, v.objHash, false, false, false)
+                            if data.delete then
+                                SetEntityAsMissionEntity(v.object, 1, 1)
+                                DeleteObject(v.object)
+                                v.object = nil
+                            end
+                            if v.object then
+                                v.doorHash = 'l_' .. doorID .. '_' .. k
+                                if not IsDoorRegisteredWithSystem(v.doorHash) then
+                                    AddDoorToSystem(v.doorHash, v.objHash, v.objCoords, false, false, false)
+                                    nearbyDoors[doorID] = true
+                                    if data.locked then
+                                        DoorSystemSetDoorState(v.doorHash, 4, false, false)
+                                        DoorSystemSetDoorState(v.doorHash, 1, false, false)
+                                    else
+                                        DoorSystemSetDoorState(v.doorHash, 0, false, false)
+                                        if data.oldMethod then
+                                            FreezeEntityPosition(v.object, false)
+                                        end
+                                    end
+                                end
+                            end
+                        elseif v.object then
+                            RemoveDoorFromSystem(v.doorHash)
+                            nearbyDoors[doorID] = nil
+                        end
+                    end
+                elseif not data.doors then
+                    if #(playerCoords - data.objCoords) < 30 then
+                        Citizen.Wait(2)
+                        if data.slides then
+                            data.object = GetClosestObjectOfType(data.objCoords, 5.0, data.objHash, false, false, false)
+                        else
+                            data.object = GetClosestObjectOfType(data.objCoords, 1.0, data.objHash, false, false, false)
+                        end
+                        if data.delete then
+                            SetEntityAsMissionEntity(data.object, 1, 1)
+                            DeleteObject(data.object)
+                            data.object = nil
+                        end
+                        if data.object then
+                            data.doorHash = 'l_' .. doorID
+                            if not IsDoorRegisteredWithSystem(data.doorHash) then
+                                AddDoorToSystem(data.doorHash, data.objHash, data.objCoords, false, false, false)
+                                nearbyDoors[doorID] = true
+                                if data.locked then
+                                    DoorSystemSetDoorState(data.doorHash, 4, false, false)
+                                    DoorSystemSetDoorState(data.doorHash, 1, false, false)
+                                else
+                                    DoorSystemSetDoorState(data.doorHash, 0, false, false)
+                                    if data.oldMethod then
+                                        FreezeEntityPosition(data.object, false)
+                                    end
+                                end
+                            end
+                        end
+                    elseif data.object then
+                        RemoveDoorFromSystem(data.doorHash)
+                        nearbyDoors[doorID] = false
+                    end
+                end
+                -- set text coords
+                if not data.setText and data.doors then
+                    for k, v in pairs(data.doors) do
+                        if k == 1 and DoesEntityExist(v.object) then
+                            data.textCoords = v.objCoords
+                        elseif k == 2 and DoesEntityExist(v.object) and data.textCoords then
+                            local textDistance = data.textCoords - v.objCoords
+                            data.textCoords = (data.textCoords - (textDistance / 2))
+                            data.setText = true
+                        end
+                        if k == 2 and data.textCoords and data.slides then
+                            if GetEntityHeightAboveGround(v.object) < 1 then
+                                data.textCoords = vector3(data.textCoords.x, data.textCoords.y, data.textCoords.z + 1.2)
+                            end
+                        end
+                    end
+                elseif not data.setText and not data.doors and DoesEntityExist(data.object) then
+                    if data.garage == true then
+                        data.textCoords = data.objCoords
+                        data.setText = true
+                    else
+                        data.textCoords = SetTextCoords(data)
+                        data.setText = true
+                    end
+                    if data.slides then
+                        if GetEntityHeightAboveGround(data.object) < 1 then
+                            data.textCoords = vector3(data.textCoords.x, data.textCoords.y, data.textCoords.z + 1.6)
+                        end
+                    end
+                end
+            end
+        end
+        doorCount = DoorSystemGetSize()
+        lastCoords = playerCoords
+    end
+
+    local paused, last_x, last_y, lasttext = false
+    local Draw3dNUI = function(coords, text)
+        local _, x, y = GetScreenCoordFromWorldCoord(coords.x, coords.y, coords.z)
+        if x ~= last_x or y ~= last_y or text ~= lasttext then
+            isDrawing = true
+            -- SendNUIMessage({
+            --     type = "display",
+            --     x = x,
+            --     y = y,
+            --     text = text
+            -- })
+            last_x, last_y, lasttext = x, y, text
+            Citizen.Wait(0)
+        end
+    end
+
+    local DoorLoop = function()
+        ESX.TriggerServerCallback('nui_doorlock:getDoorList', function(doorList)
+            Config.DoorList = doorList
+            UpdateDoors()
+            while ESX.PlayerLoaded do
+                playerCoords = GetEntityCoords(ESX.PlayerData.ped)
+                local doorSleep = 1000
+                if not closestDoor.id then
+                    local distance = #(playerCoords - lastCoords)
+                    if distance > 30 then
+                        UpdateDoors()
+                    else
+                        closestDoor.distance = 30
+                        for k in pairs(nearbyDoors) do
+                            local door = Config.DoorList[k]
+                            if door.setText and door.textCoords then
+                                distance = #(door.textCoords - playerCoords)
+                                if distance < closestDoor.distance or 10 then
+                                    if distance < door.maxDistance then
+                                        closestDoor = {
+                                            distance = distance,
+                                            id = k,
+                                            data = door
+                                        }
+                                        doorSleep = 0
+                                    end
+                                end
+                            end
+                            Citizen.Wait(5)
+                        end
+                    end
+                end
+                if closestDoor.id then
+                    while true do
+                        if not paused and IsPauseMenuActive() then
+                            SendNUIMessage({
+                                type = "hide"
+                            })
+                            paused = true
+                        elseif paused then
+                            Citizen.Wait(20)
+                            if not IsPauseMenuActive() then
+                                lasttext, paused = '', false
+                            end
+                        else
+                            playerCoords = GetEntityCoords(ESX.PlayerData.ped)
+                            closestDoor.distance = #(closestDoor.data.textCoords - playerCoords)
+                            if closestDoor.distance < closestDoor.data.maxDistance then
+                                if not closestDoor.data.doors then
+                                    local doorState = DoorSystemGetDoorState(closestDoor.data.doorHash)
+                                    if closestDoor.data.locked and doorState ~= 1 then
+                                        Draw3dNUI(closestDoor.data.textCoords, 'Locking')
+                                    elseif not closestDoor.data.locked then
+                                        if Config.ShowUnlockedText then
+                                            Draw3dNUI(closestDoor.data.textCoords, '')
+                                            TriggerEvent('cd_drawtextui:ShowUI', 'show', "<span class='outline'>[E]</span> Unlocked", "green", "green")
+                                        else
+                                            if isDrawing then
+                                                TriggerEvent('cd_drawtextui:HideUI')
+                                                isDrawing = false
+                                            end
+                                        end
+                                    else
+                                        Draw3dNUI(closestDoor.data.textCoords, '')
+                                        TriggerEvent('cd_drawtextui:ShowUI', 'show', "<span class='outline'>[E]</span> Locked", "red", "red")
+                                    end
+                                else
+                                    local door = {}
+                                    local state = {}
+                                    door[1] = closestDoor.data.doors[1]
+                                    door[2] = closestDoor.data.doors[2]
+                                    state[1] = DoorSystemGetDoorState(door[1].doorHash)
+                                    state[2] = DoorSystemGetDoorState(door[2].doorHash)
+
+                                    if closestDoor.data.locked and (state[1] ~= 1 or state[2] ~= 1) then
+                                        Draw3dNUI(closestDoor.data.textCoords, 'Locking')
+                                    elseif not closestDoor.data.locked then
+                                        if Config.ShowUnlockedText then
+                                            Draw3dNUI(closestDoor.data.textCoords, '')
+                                            TriggerEvent('cd_drawtextui:ShowUI', 'show', "<span class='outline'>[E]</span> Unlocked", "green", "green")
+                                        else
+                                            if isDrawing then
+                                                TriggerEvent('cd_drawtextui:HideUI')
+                                                isDrawing = false
+                                            end
+                                        end
+                                    else
+                                      TriggerEvent('cd_drawtextui:ShowUI', 'show', "<span class='outline'>[E]</span> Locked", "red", "red")
+                                    end
+                                end
+                            else
+                                if closestDoor.distance > closestDoor.data.maxDistance and isDrawing then
+                                    TriggerEvent('cd_drawtextui:HideUI')
+                                    isDrawing = false
+                                end
+                                break
+                            end
+                            Citizen.Wait(5)
+                        end
+                    end
+                    closestDoor = {}
+                    doorSleep = 5
+                end
+                Citizen.Wait(doorSleep)
+            end
+        end)
+    end
+
+    local PlaySound = function(door, src)
+        local origin
+        if src and src ~= ESX.PlayerData.ped then
+            src = NetworkGetEntityFromNetworkId(src)
+        end
+        if not src then
+            origin = door.textCoords
+        elseif src == ESX.PlayerData.ped then
+            origin = playerCoords
+        else
+            origin = NetworkGetPlayerCoords(src)
+        end
+        local distance = #(playerCoords - origin)
+        if distance < 10 then
+            if not door.audioLock then
+                if door.audioRemote then
+                    door.audioLock = {
+                        ['file'] = 'garage-lock.ogg',
+                        ['volume'] = 0.5
+                    }
+                    door.audioUnlock = {
+                        ['file'] = 'garage-lock.ogg',
+                        ['volume'] = 0.5
+                    }
+                else
+                    door.audioLock = {
+                      ['file'] = 'door-bolt-4.ogg',
+                      ['volume'] = 0.0
+                    }
+                    door.audioUnlock = {
+                        ['file'] = 'door-bolt-4.ogg',
+                        ['volume'] = 0.0
+                    }
+                end
+            end
+            local sfx_level = GetProfileSetting(300)
+            if door.locked then
+                SendNUIMessage({
+                    type = 'audio',
+                    audio = door.audioLock,
+                    distance = distance,
+                    sfx = sfx_level
+                })
+            else
+                SendNUIMessage({
+                    type = 'audio',
+                    audio = door.audioUnlock,
+                    distance = distance,
+                    sfx = sfx_level
+                })
+            end
+        end
+    end
+
+    RegisterNetEvent('nui_doorlock:setState')
+    AddEventHandler('nui_doorlock:setState', function(sid, doorID, locked, src)
         local serverid = GetPlayerServerId(PlayerId())
         if sid == serverid then
             dooranim()
         end
-
         if Config.DoorList[doorID] then
             Config.DoorList[doorID].locked = locked
-            updateDoors(doorID)
+            UpdateDoors(doorID)
             while true do
-                Citizen.Wait(0)
+                Citizen.Wait(5)
                 if Config.DoorList[doorID].doors then
                     for k, v in pairs(Config.DoorList[doorID].doors) do
                         if not IsDoorRegisteredWithSystem(v.doorHash) then
@@ -55,14 +333,14 @@ AddEventHandler('nui_doorlock:setState', function(sid, doorID, locked, src)
                                 DoorSystemSetDoorState(v.doorHash, 1, false, false) -- Set to locked
                                 DoorSystemSetAutomaticDistance(v.doorHash, 0.0, false, false)
                                 if k == 2 then
-                                    playSound(Config.DoorList[doorID], src)
+                                    PlaySound(Config.DoorList[doorID], src)
                                     return
                                 end -- End the loop
                             else
                                 DoorSystemSetDoorState(v.doorHash, 0, false, false) -- Set to unlocked
                                 DoorSystemSetAutomaticDistance(v.doorHash, 30.0, false, false)
                                 if k == 2 then
-                                    playSound(Config.DoorList[doorID], src)
+                                    PlaySound(Config.DoorList[doorID], src)
                                     return
                                 end -- End the loop
                             end
@@ -72,7 +350,7 @@ AddEventHandler('nui_doorlock:setState', function(sid, doorID, locked, src)
                             end
                             DoorSystemSetDoorState(v.doorHash, 1, false, false) -- Set to locked
                             if Config.DoorList[doorID].doors[1].doorState == Config.DoorList[doorID].doors[2].doorState then
-                                playSound(Config.DoorList[doorID], src)
+                                PlaySound(Config.DoorList[doorID], src)
                                 return
                             end -- End the loop
                         elseif not Config.DoorList[doorID].locked then
@@ -81,7 +359,7 @@ AddEventHandler('nui_doorlock:setState', function(sid, doorID, locked, src)
                             end
                             DoorSystemSetDoorState(v.doorHash, 0, false, false) -- Set to unlocked
                             if Config.DoorList[doorID].doors[1].doorState == Config.DoorList[doorID].doors[2].doorState then
-                                playSound(Config.DoorList[doorID], src)
+                                PlaySound(Config.DoorList[doorID], src)
                                 return
                             end -- End the loop
                         else
@@ -100,12 +378,12 @@ AddEventHandler('nui_doorlock:setState', function(sid, doorID, locked, src)
                         if Config.DoorList[doorID].locked then
                             DoorSystemSetDoorState(Config.DoorList[doorID].doorHash, 1, false, false) -- Set to locked
                             DoorSystemSetAutomaticDistance(Config.DoorList[doorID].doorHash, 0.0, false, false)
-                            playSound(Config.DoorList[doorID], src)
+                            PlaySound(Config.DoorList[doorID], src)
                             return -- End the loop
                         else
                             DoorSystemSetDoorState(Config.DoorList[doorID].doorHash, 0, false, false) -- Set to unlocked
                             DoorSystemSetAutomaticDistance(Config.DoorList[doorID].doorHash, 30.0, false, false)
-                            playSound(Config.DoorList[doorID], src)
+                            PlaySound(Config.DoorList[doorID], src)
                             return -- End the loop
                         end
                     elseif Config.DoorList[doorID].locked and (Config.DoorList[doorID].doorState == 4) then
@@ -113,14 +391,14 @@ AddEventHandler('nui_doorlock:setState', function(sid, doorID, locked, src)
                             FreezeEntityPosition(Config.DoorList[doorID].object, true)
                         end
                         DoorSystemSetDoorState(Config.DoorList[doorID].doorHash, 1, false, false) -- Set to locked
-                        playSound(Config.DoorList[doorID], src)
+                        PlaySound(Config.DoorList[doorID], src)
                         return -- End the loop
                     elseif not Config.DoorList[doorID].locked then
                         if Config.DoorList[doorID].oldMethod then
                             FreezeEntityPosition(Config.DoorList[doorID].object, false)
                         end
                         DoorSystemSetDoorState(Config.DoorList[doorID].doorHash, 0, false, false) -- Set to unlocked
-                        playSound(Config.DoorList[doorID], src)
+                        PlaySound(Config.DoorList[doorID], src)
                         return -- End the loop
                     else
                         if round(Config.DoorList[doorID].currentHeading, 0) ==
@@ -132,712 +410,388 @@ AddEventHandler('nui_doorlock:setState', function(sid, doorID, locked, src)
             end
         end
     end)
-end)
 
-function playSound(door, src)
-    local origin
-    if src and src ~= playerPed then
-        src = NetworkGetEntityFromNetworkId(src)
+    function loadAnimDict(dict)
+        while (not HasAnimDictLoaded(dict)) do
+            RequestAnimDict(dict)
+            Citizen.Wait(5)
+        end
     end
-    if not src then
-        origin = door.textCoords
-    elseif src == playerPed then
-        origin = playerCoords
-    else
-        origin = NetworkGetPlayerCoords(src)
+
+    function dooranim()
+        Citizen.CreateThread(function()
+            loadAnimDict("anim@heists@keycard@")
+            TaskPlayAnim(ESX.PlayerData.ped, "anim@heists@keycard@", "exit", 8.0, 1.0, -1, 16, 0, 0, 0, 0)
+            Citizen.Wait(550)
+            ClearPedTasks(ESX.PlayerData.ped)
+        end)
     end
-    local distance = #(playerCoords - origin)
-    -- print(origin)
-    if distance < 10 then
-        if not door.audioLock then
-            if door.audioRemote then
-                door.audioLock = {
-                    ['file'] = 'garage-lock.ogg',
-                    ['volume'] = 0.4
-                }
-                door.audioUnlock = {
-                    ['file'] = 'garage-lock.ogg',
-                    ['volume'] = 0.4
-                }
-            else
-                door.audioLock = {
-                    ['file'] = 'door-bolt-4.ogg',
-                    ['volume'] = 0.0
-                }
-                door.audioUnlock = {
-                    ['file'] = 'door-bolt-4.ogg',
-                    ['volume'] = 0.0
-                }
+
+    function debug(doorID, data)
+        if GetDistanceBetweenCoords(playerCoords, data.textCoords) < 3 then
+            for k, v in pairs(data) do
+                print(('%s = %s'):format(k, v))
             end
-        end
-        local sfx_level = GetProfileSetting(300)
-        if door.locked then
-            SendNUIMessage({
-                type = 'audio',
-                audio = door.audioLock,
-                distance = distance,
-                sfx = sfx_level
-            })
-        else
-            SendNUIMessage({
-                type = 'audio',
-                audio = door.audioUnlock,
-                distance = distance,
-                sfx = sfx_level
-            })
-        end
-    end
-end
-
-AddEventHandler('esx:onPlayerDeath', function(data)
-    isDead = true
-end)
-
-AddEventHandler('playerSpawned', function(spawn)
-    isDead = false
-end)
-
-AddEventHandler('esx:onPlayerSpawn', function(spawn)
-    isDead = false
-end)
-
-RegisterNetEvent('esx_policejob:handcuff')
-AddEventHandler('esx_policejob:handcuff', function()
-    isCuffed = not isCuffed
-end)
-
-RegisterNetEvent('esx_policejob:unrestrain')
-AddEventHandler('esx_policejob:unrestrain', function()
-    isCuffed = false
-end)
-
-local last_x, last_y, lasttext, isDrawing
-function Draw3dNUI(coords, text)
-    local paused = false
-    if IsPauseMenuActive() then
-        paused = true
-    end
-    local onScreen, _x, _y = GetScreenCoordFromWorldCoord(coords.x, coords.y, coords.z)
-    if _x ~= last_x or _y ~= last_y or text ~= lasttext or paused then
-        isDrawing = true
-        if paused then
-            SendNUIMessage({
-                type = "hide"
-            })
-        else
-            SendNUIMessage({
-                type = "display",
-                x = _x,
-                y = _y,
-                text = text
-            })
-        end
-        last_x, last_y, lasttext = _x, _y, text
-        Citizen.Wait(0)
-    end
-end
-
-function Draw3dText(coords, text) -- You can revert to text if you want - it has higher average performance cost but lower spikes
-    local onScreen, _x, _y = World3dToScreen2d(coords.x, coords.y, coords.z)
-    local px, py, pz = table.unpack(GetGameplayCamCoords())
-    if onScreen then
-        SetTextScale(0.35, 0.35)
-        SetTextFont(4)
-        SetTextProportional(1)
-        SetTextColour(255, 255, 255, 215)
-        SetTextDropShadow(0, 0, 0, 55)
-        SetTextEdge(0, 0, 0, 150)
-        SetTextDropShadow()
-        SetTextOutline()
-        SetTextEntry("STRING")
-        SetTextCentre(1)
-        AddTextComponentString(text)
-        DrawText(_x, _y)
-    end
-end
-
-function loadAnimDict(dict)
-    while (not HasAnimDictLoaded(dict)) do
-        RequestAnimDict(dict)
-        Citizen.Wait(5)
-    end
-end
-
-function dooranim()
-    Citizen.CreateThread(function()
-        loadAnimDict("anim@heists@keycard@")
-        TaskPlayAnim(playerPed, "anim@heists@keycard@", "exit", 8.0, 1.0, -1, 16, 0, 0, 0, 0)
-        Citizen.Wait(550)
-        ClearPedTasks(playerPed)
-    end)
-end
-
-function round(num, decimal)
-    local mult = 10 ^ (decimal)
-    return math.floor(num * mult + 0.5) / mult
-end
-
-function debug(doorID, data)
-    if GetDistanceBetweenCoords(playerCoords, data.textCoords) < 3 then
-        for k, v in pairs(data) do
-            print(('%s = %s'):format(k, v))
-        end
-        if data.doors then
-            for k, v in pairs(data.doors) do
-                print('\nCurrent Heading ' .. k .. ': ' .. GetEntityHeading(v.object))
-                print('Current Coords ' .. k .. ': ' .. GetEntityCoords(v.object))
-            end
-        else
-            print('\nCurrent Heading: ' .. GetEntityHeading(data.object))
-            print('Current Coords: ' .. GetEntityCoords(data.object))
-        end
-    end
-end
-
-function setTextCoords(data)
-    local minDimension, maxDimension = GetModelDimensions(data.objHash)
-    local dimensions = maxDimension - minDimension
-    local dx, dy = tonumber(dimensions.x), tonumber(dimensions.y)
-    if dy <= -1 or dy >= 1 then
-        dx = dy
-    end
-    if data.fixText then
-        return GetOffsetFromEntityInWorldCoords(data.object, dx / 2, 0, 0)
-    else
-        return GetOffsetFromEntityInWorldCoords(data.object, -dx / 2, 0, 0)
-    end
-end
-
-function updateDoors(specificDoor)
-    playerCoords = GetEntityCoords(PlayerPedId())
-    for doorID, data in ipairs(Config.DoorList) do
-        if (not specificDoor or doorID == specificDoor) then
             if data.doors then
-                for k, v in ipairs(data.doors) do
-                    if #(playerCoords - v.objCoords) < 100 then
-                        v.object = GetClosestObjectOfType(v.objCoords, 1.0, v.objHash, false, false, false)
-                        if data.delete then
-                            SetEntityAsMissionEntity(v.object, 1, 1)
-                            DeleteObject(v.object)
-                            v.object = nil
-                        end
-                        if v.object then
-                            v.doorHash = 'doorlock_' .. doorID .. '_' .. k
-                            if not IsDoorRegisteredWithSystem(v.doorHash) then
-                                AddDoorToSystem(v.doorHash, v.objHash, v.objCoords, false, false, false)
-                                if data.locked then
-                                    DoorSystemSetDoorState(v.doorHash, 4, false, false)
-                                    DoorSystemSetDoorState(v.doorHash, 1, false, false)
-                                else
-                                    DoorSystemSetDoorState(v.doorHash, 0, false, false)
-                                    if data.oldMethod then
-                                        FreezeEntityPosition(v.object, false)
-                                    end
-                                end
-                            end
-                        end
-                    elseif v.object then
-                        RemoveDoorFromSystem(v.doorHash)
-                    end
-                end
-            elseif not data.doors then
-                if #(playerCoords - data.objCoords) < 100 then
-                    if data.slides then
-                        data.object = GetClosestObjectOfType(data.objCoords, 5.0, data.objHash, false, false, false)
-                    else
-                        data.object = GetClosestObjectOfType(data.objCoords, 1.0, data.objHash, false, false, false)
-                    end
-                    if data.delete then
-                        SetEntityAsMissionEntity(data.object, 1, 1)
-                        DeleteObject(data.object)
-                        data.object = nil
-                    end
-                    if data.object then
-                        data.doorHash = 'doorlock_' .. doorID
-                        if not IsDoorRegisteredWithSystem(data.doorHash) then
-                            AddDoorToSystem(data.doorHash, data.objHash, data.objCoords, false, false, false)
-                            if data.locked then
-                                DoorSystemSetDoorState(data.doorHash, 4, false, false)
-                                DoorSystemSetDoorState(data.doorHash, 1, false, false)
-                            else
-                                DoorSystemSetDoorState(data.doorHash, 0, false, false)
-                                if data.oldMethod then
-                                    FreezeEntityPosition(data.object, false)
-                                end
-                            end
-                        end
-                    end
-                elseif data.object then
-                    RemoveDoorFromSystem(data.doorHash)
-                end
-            end
-            -- set text coords
-            if not data.setText and data.doors then
-                for k, v in ipairs(data.doors) do
-                    if k == 1 and DoesEntityExist(v.object) then
-                        data.textCoords = v.objCoords
-                    elseif k == 2 and DoesEntityExist(v.object) and data.textCoords then
-                        local textDistance = data.textCoords - v.objCoords
-                        data.textCoords = (data.textCoords - (textDistance / 2))
-                        data.setText = true
-                    end
-                    if k == 2 and data.textCoords and data.slides then
-                        if GetEntityHeightAboveGround(v.object) < 1 then
-                            data.textCoords = vector3(data.textCoords.x, data.textCoords.y, data.textCoords.z + 1.2)
-                        end
-                    end
-                end
-            elseif not data.setText and not data.doors and DoesEntityExist(data.object) then
-                if data.garage == true then
-                    data.textCoords = data.objCoords
-                    data.setText = true
-                else
-                    data.textCoords = setTextCoords(data)
-                    data.setText = true
-                end
-                if data.slides then
-                    if GetEntityHeightAboveGround(data.object) < 1 then
-                        data.textCoords = vector3(data.textCoords.x, data.textCoords.y, data.textCoords.z + 1.6)
-                    end
-                end
-            end
-        end
-    end
-    doorCount = DoorSystemGetSize()
-    -- if doorCount ~= 0 then print(('%s doors are loaded'):format(doorCount)) end
-end
-
-Citizen.CreateThread(function()
-    while playerNotActive do
-        Citizen.Wait(100)
-    end
-    lastCoords = playerCoords
-    while playerCoords do
-        local distance = #(playerCoords - lastCoords)
-        if distance > 30 then
-            updateDoors()
-            lastCoords = playerCoords
-        end
-        Citizen.Wait(500)
-        if doorCount == 0 then
-            Citizen.Wait(500)
-        end
-    end
-end)
-
-local doorSleep = 500
-Citizen.CreateThread(function()
-    while not playerCoords do
-        Citizen.Wait(0)
-    end
-    while true do
-        Citizen.Wait(0)
-        if doorCount then
-            while true do
-                if not closestDistance then
-                    break
-                end
-                Citizen.Wait(10)
-            end
-            local distance
-            for k, v in pairs(Config.DoorList) do
-                if v.setText and v.textCoords then
-                    distance = #(v.textCoords - playerCoords)
-                    if v.setText and distance < v.maxDistance then
-                        closestDoor, closestV, closestDistance = k, v, distance
-                    end
-                end
-            end
-            Citizen.Wait(doorSleep)
-        else
-            Citizen.Wait(1000)
-        end
-    end
-end)
-
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
-        playerPed = PlayerPedId()
-        playerCoords = GetEntityCoords(playerPed)
-        if doorCount ~= nil and doorCount ~= 0 and closestDistance and closestV.setText then
-            closestDistance = #(closestV.textCoords - playerCoords)
-            if closestDistance < closestV.maxDistance then
-                if not closestV.doors then
-                    local doorState = DoorSystemGetDoorState(closestV.doorHash)
-                    if closestV.locked and doorState ~= 1 then
-                        Draw3dNUI(closestV.textCoords, '')
-                    elseif not closestV.locked then
-                        if Config.ShowUnlockedText then
-                            Draw3dNUI(closestV.textCoords, '')
-                            TriggerEvent('cd_drawtextui:ShowUI', 'show', "<span class='outline'>[E]</span> Unlocked", "green",
-                            "green")
-                        else
-                            if isDrawing then
-                                TriggerEvent('cd_drawtextui:HideUI')
-                                isDrawing = false
-                            end
-                        end
-                    else
-                        Draw3dNUI(closestV.textCoords, '')
-                        TriggerEvent('cd_drawtextui:ShowUI', 'show', "<span class='outline'>[E]</span> Locked", "red",
-                            "red")
-                    end
-                else
-                    local door = {}
-                    local state = {}
-                    door[1] = closestV.doors[1]
-                    door[2] = closestV.doors[2]
-                    state[1] = DoorSystemGetDoorState(door[1].doorHash)
-                    state[2] = DoorSystemGetDoorState(door[2].doorHash)
-
-                    if closestV.locked and (state[1] ~= 1 or state[2] ~= 1) then
-                        Draw3dNUI(closestV.textCoords, '')
-                    elseif not closestV.locked then
-                        if Config.ShowUnlockedText then
-                            Draw3dNUI(closestV.textCoords, '')
-                            TriggerEvent('cd_drawtextui:ShowUI', 'show', "<span class='outline'>[E]</span> Unlocked", "green",
-                            "green")
-                        else
-                            if isDrawing then
-                              TriggerEvent('cd_drawtextui:HideUI')
-                              isDrawing = false
-                            end
-                        end
-                    else
-                        Draw3dNUI(closestV.textCoords, '')
-                        TriggerEvent('cd_drawtextui:ShowUI', 'show', "<span class='outline'>[E]</span> Locked", "red",
-                            "red")
-                    end
+                for k, v in pairs(data.doors) do
+                    print('\nCurrent Heading ' .. k .. ': ' .. GetEntityHeading(v.object))
+                    print('Current Coords ' .. k .. ': ' .. GetEntityCoords(v.object))
                 end
             else
-                if closestDistance > closestV.maxDistance and isDrawing then
-                    SendNUIMessage({
-                        type = "hide"
-                    })
-                    TriggerEvent('cd_drawtextui:HideUI')
-                    isDrawing = false
-                end
-                closestDoor, closestV, closestDistance = nil, nil, nil
+                print('\nCurrent Heading: ' .. GetEntityHeading(data.object))
+                print('Current Coords: ' .. GetEntityCoords(data.object))
             end
         end
-
-        if doorCount == 0 then
-            doorSleep = 1000
-            Citizen.Wait(1000)
-        end
     end
-end)
 
-exports('updateDoors', updateDoors)
--- Use this export if doors do not load after a teleport event (such as /tp, /setcoords, /jail, etc)
--- `exports.nui_doorlock:updateDoors()`
+    RegisterNetEvent('esx_policejob:handcuff')
+    AddEventHandler('esx_policejob:handcuff', function()
+        isCuffed = not isCuffed
+    end)
 
-RegisterCommand('doorlock', function()
-    if not isDead and not isCuffed and closestDoor then
-        if IsControlPressed(0, 86) or IsControlReleased(0, 86) then
-            key = 'e'
-        end
-        local veh = GetVehiclePedIsIn(playerPed)
-        if veh and key == 'e' then
-            Citizen.CreateThread(function()
-                local counter = 0
-                local siren = IsVehicleSirenOn(veh)
-                repeat
-                    DisableControlAction(0, 86, true)
-                    SetHornEnabled(veh, false)
-                    if not siren then
-                        SetVehicleSiren(veh, false)
-                    end
-                    counter = counter + 1
-                    Citizen.Wait(0)
-                until (counter == 100)
-                SetHornEnabled(veh, true)
-            end)
-        end
-        local locked = not closestV.locked
-        -- debug(closestDoor, closestV)
-        if closestV.audioRemote then
-            src = NetworkGetNetworkIdFromEntity(playerPed)
-        else
-            src = nil
-        end
-        TriggerServerEvent('nui_doorlock:updateState', closestDoor, locked, src) -- Broadcast new state of the door to everyone
-    end
-end)
-RegisterKeyMapping('doorlock', Config.KeybingText, 'keyboard', 'e')
+    RegisterNetEvent('esx_policejob:unrestrain')
+    AddEventHandler('esx_policejob:unrestrain', function()
+        isCuffed = false
+    end)
 
-RegisterNetEvent('esx_lockpick:onUse') -- Modify for whichever lockpick you're using
-AddEventHandler('esx_lockpick:onUse', function()
-    if not isDead and not isCuffed and closestDoor and closestV.lockpick then
-        TaskTurnPedToFaceCoord(playerPed, closestV.textCoords, 0)
-        Citizen.Wait(300)
-        local count = 0
-        while GetIsTaskActive(playerPed, 225) do
-            Citizen.Wait(10)
-            count = count + 1
-            if count == 150 then
-                break
+    RegisterCommand('doorlock', function()
+        if closestDoor.id and not ESX.PlayerData.dead and not isCuffed then
+            local veh = GetVehiclePedIsIn(ESX.PlayerData.ped)
+            if veh then
+                Citizen.CreateThread(function()
+                    local counter = 0
+                    local siren = IsVehicleSirenOn(veh)
+                    repeat
+                        DisableControlAction(0, 86, true)
+                        SetHornEnabled(veh, false)
+                        if not siren then
+                            SetVehicleSiren(veh, false)
+                        end
+                        counter = counter + 1
+                        Citizen.Wait(0)
+                    until (counter == 100)
+                    SetHornEnabled(veh, true)
+                end)
             end
+            local locked = not closestDoor.data.locked
+            if closestDoor.data.audioRemote then
+                src = NetworkGetNetworkIdFromEntity(ESX.PlayerData.ped)
+            else
+                src = nil
+            end
+            TriggerServerEvent('nui_doorlock:updateState', closestDoor.id, locked, src) -- Broadcast new state of the door to everyone
         end
-        Citizen.Wait(1800)
-        local locked = not closestV.locked
-        TriggerServerEvent('nui_doorlock:updateState', closestDoor, locked, nil, true) -- Broadcast new state of the door to everyone
-    end
-end)
+    end)
+    TriggerEvent("chat:removeSuggestion", "/doorlock")
+    RegisterKeyMapping('doorlock', '[Doorlock] Interact with doorlock~', 'keyboard', 'e')
 
-function closeNUI()
-    SetNuiFocus(false, false)
-    SendNUIMessage({
-        type = "newDoorSetup",
-        enable = false
-    })
-    receivedDoorData = nil
-end
+    --[[RegisterNetEvent('nui_doorlock:lockpick') -- Set up your own lockpick event here
+	AddEventHandler('nui_doorlock:lockpick', function(data)
+		local locked = not closestDoor.data.locked
+		TriggerServerEvent('nui_doorlock:updateState', closestDoor.id, locked, nil, true) -- Broadcast new state of the door to everyone
+	end)]]
 
-RegisterNUICallback('newDoor', function(data, cb)
-    receivedDoorData = true
-    arg = data
-    closeNUI()
-end)
-
-RegisterNUICallback('close', function(data, cb)
-    closeNUI()
-end)
-
-RegisterCommand('-nui', function(playerId, args, rawCommand)
-    closeNUI()
-end, false)
-
-RegisterNetEvent('nui_doorlock:newDoorSetup')
-AddEventHandler('nui_doorlock:newDoorSetup', function(args)
-    if not args[1] then
-        receivedDoorData = false
-        SetNuiFocus(true, true)
+    function closeNUI()
+        SetNuiFocus(false, false)
         SendNUIMessage({
             type = "newDoorSetup",
-            enable = true
+            enable = false
         })
-        while receivedDoorData == false do
-            Citizen.Wait(5)
-            DisableAllControlActions(0)
-        end
+        receivedDoorData = nil
     end
-    -- if not args[1] then print('/newdoor [doortype] [locked] [jobs]\nDoortypes: door, sliding, garage, double, doublesliding\nLocked: true or false\nJobs: Up to four can be added with the command') return end
-    if arg then
-        doorType = arg.doortype
-    else
-        doorType = args[1]
-    end
-    if arg then
-        doorLocked = arg.doorlocked
-    else
-        doorLocked = not not args[1]
-    end
-    local validTypes = {
-        ['door'] = true,
-        ['sliding'] = true,
-        ['garage'] = true,
-        ['double'] = true,
-        ['doublesliding'] = true
-    }
-    if not validTypes[doorType] then
-        print(doorType .. ' is not a valid doortype')
-        return
-    end
-    if arg and arg.item == '' and arg.job1 == '' then
-        print('You must enter either a job or item for lock authorisation')
-        return
-    end
-    if args[7] then
-        print('You can only set four authorised jobs - if you want more, add them to the config later')
-        return
-    end
-    if doorType == 'door' or doorType == 'sliding' or doorType == 'garage' then
-        local entity, coords, heading, model = nil, nil, nil, nil
-        local result = false
-        print('Aim at your desired door and press left mouse button')
-        while true do
-            Citizen.Wait(0)
-            if IsPlayerFreeAiming(PlayerId()) then
-                result, entity = GetEntityPlayerIsFreeAimingAt(PlayerId())
-                coords = GetEntityCoords(entity)
-                model = GetEntityModel(entity)
-                heading = GetEntityHeading(entity)
-            end
-            if result then
-                DrawInfos("Coordinates: " .. coords .. "\nHeading: " .. heading .. "\nHash: " .. model)
-            else
-                DrawInfos("Aim at your desired door and shoot")
-            end
-            if IsControlJustPressed(0, 24) then
-                break
-            end
-        end
-        if not model or model == 0 then
-            print('Did not receive a model hash\nIf the door is transparent, make sure you aim at the frame')
-            return
-        end
-        local jobs = {}
-        if args[3] then
-            jobs[1] = args[3]
-            jobs[2] = args[4]
-            jobs[3] = args[5]
-            jobs[4] = args[6]
-        else
-            if arg.job1 ~= '' then
-                jobs[1] = arg.job1
-            end
-            if arg.job2 ~= '' then
-                jobs[2] = arg.job2
-            end
-            if arg.job3 ~= '' then
-                jobs[3] = arg.job3
-            end
-            if arg.job4 ~= '' then
-                jobs[4] = arg.job4
-            end
-            if arg.item ~= '' then
-                item = arg.item
-            end
-        end
-        local maxDistance, slides, garage = 2.0, false, false
-        if doorType == 'sliding' then
-            slides = true
-        elseif doorType == 'garage' then
-            slides, garage = 6.0, true, true
-        end
-        if slides then
-            maxDistance = 6.0
-        end
-        local doorHash = 'doorlock_' .. #Config.DoorList + 1
-        AddDoorToSystem(doorHash, model, coords, false, false, false)
-        DoorSystemSetDoorState(doorHash, 4, false, false)
-        coords = GetEntityCoords(entity)
-        heading = GetEntityHeading(entity)
-        RemoveDoorFromSystem(doorHash)
-        if arg then
-            doorname = arg.doorname
-        end
-        TriggerServerEvent('nui_doorlock:newDoorCreate', arg.configname, model, heading, coords, jobs, item, doorLocked,
-            maxDistance, slides, garage, false, doorname)
-        print('Successfully sent door data to the server')
-    elseif doorType == 'double' or doorType == 'doublesliding' then
-        local entity, coords, heading, model = {}, {}, {}, {}
-        local result = false
-        print('Aim at each desired door and press left mouse button')
-        while true do
-            Citizen.Wait(0)
-            if IsPlayerFreeAiming(PlayerId()) then
-                result, entity[1] = GetEntityPlayerIsFreeAimingAt(PlayerId())
-                coords[1] = GetEntityCoords(entity[1])
-                model[1] = GetEntityModel(entity[1])
-                heading[1] = GetEntityHeading(entity[1])
-            end
-            if result then
-                DrawInfos("Coordinates: " .. coords[1] .. "\nHeading: " .. heading[1] .. "\nHash: " .. model[1])
-            else
-                DrawInfos("Aim at your desired door and shoot")
-            end
-            if IsControlJustPressed(0, 24) then
-                break
-            end
-        end
-        result = false
-        while true do
-            Citizen.Wait(0)
-            if IsPlayerFreeAiming(PlayerId()) then
-                result, entity[2] = GetEntityPlayerIsFreeAimingAt(PlayerId())
-                coords[2] = GetEntityCoords(entity[2])
-                model[2] = GetEntityModel(entity[2])
-                heading[2] = GetEntityHeading(entity[2])
-            end
-            if result then
-                DrawInfos("Coordinates: " .. coords[2] .. "\nHeading: " .. heading[2] .. "\nHash: " .. model[2])
-            else
-                DrawInfos("Aim at your desired door and shoot")
-            end
-            if IsControlJustPressed(0, 24) then
-                break
-            end
-        end
-        if not model[1] or model[1] == 0 or not model[2] or model[2] == 0 then
-            print('Did not receive a model hash\nIf the door is transparent, make sure you aim at the frame')
-            return
-        end
-        if entity[1] == entity[2] then
-            print('Can not add double door if entities are the same')
-            return
-        end
-        local jobs = {}
-        if args[3] then
-            jobs[1] = args[3]
-            jobs[2] = args[4]
-            jobs[3] = args[5]
-            jobs[4] = args[6]
-        else
-            if arg.job1 ~= '' then
-                jobs[1] = arg.job1
-            end
-            if arg.job2 ~= '' then
-                jobs[2] = arg.job2
-            end
-            if arg.job3 ~= '' then
-                jobs[3] = arg.job3
-            end
-            if arg.job4 ~= '' then
-                jobs[4] = arg.job4
-            end
-            if arg.item ~= '' then
-                item = arg.item
-            end
-        end
-        local maxDistance, slides, garage = 2.5, false, false
-        if doorType == 'sliding' or doorType == 'doublesliding' then
-            slides = true
-        end
-        if slides then
-            maxDistance = 6.0
-        end
 
-        local doors = #Config.DoorList + 1
-        local doorHash = {}
-        doorHash[1] = 'doorlock_' .. doors .. '_' .. '1'
-        doorHash[2] = 'doorlock_' .. doors .. '_' .. '2'
-        for i = 1, #doorHash do
-            AddDoorToSystem(doorHash[i], model[i], coords[i], false, false, false)
-            DoorSystemSetDoorState(doorHash[i], 4, false, false)
-            coords[i] = GetEntityCoords(entity[i])
-            heading[i] = GetEntityHeading(entity[i])
-            RemoveDoorFromSystem(doorHash[i])
+    RegisterNUICallback('newDoor', function(data, cb)
+        receivedDoorData = true
+        arg = data
+        closeNUI()
+    end)
+
+    RegisterNUICallback('close', function(data, cb)
+        closeNUI()
+    end)
+
+    RegisterCommand('-nui', function(playerId, args, rawCommand)
+        closeNUI()
+    end, false)
+
+    local Raycast = function()
+        local offset = GetOffsetFromEntityInWorldCoords(GetCurrentPedWeaponEntityIndex(ESX.PlayerData.ped), 0, 0, -0.01)
+        local direction = GetGameplayCamRot()
+        direction = vector2(direction.x * math.pi / 180.0, direction.z * math.pi / 180.0)
+        local num = math.abs(math.cos(direction.x))
+        direction = vector3((-math.sin(direction.y) * num), (math.cos(direction.y) * num), math.sin(direction.x))
+        local destination = vector3(offset.x + direction.x * 30, offset.y + direction.y * 30,
+            offset.z + direction.z * 30)
+        local rayHandle, result, hit, endCoords, surfaceNormal, entityHit =
+            StartShapeTestLosProbe(offset, destination, -1, ESX.PlayerData.ped, 0)
+        repeat
+            result, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)
+            Citizen.Wait(0)
+        until result ~= 1
+        if GetEntityType(entityHit) == 3 then
+            return hit, entityHit
+        else
+            return false
+        end
+    end
+
+    RegisterNetEvent('nui_doorlock:newDoorSetup')
+    AddEventHandler('nui_doorlock:newDoorSetup', function(args)
+        if not args[1] then
+            receivedDoorData = false
+            SetNuiFocus(true, true)
+            SendNUIMessage({
+                type = "newDoorSetup",
+                enable = true
+            })
+            while receivedDoorData == false do
+                Citizen.Wait(5)
+                DisableAllControlActions(0)
+            end
+        end
+        -- if not args[1] then print('/newdoor [doortype] [locked] [jobs]\nDoortypes: door, sliding, garage, double, doublesliding\nLocked: true or false\nJobs: Up to four can be added with the command') return end
+        if arg then
+            doorType = arg.doortype
+        else
+            doorType = args[1]
         end
         if arg then
-            doorname = arg.doorname
+            doorLocked = arg.doorlocked
+        else
+            doorLocked = not not args[1]
         end
-        TriggerServerEvent('nui_doorlock:newDoorCreate', arg.configname, model, heading, coords, jobs, item, doorLocked,
-            maxDistance, slides, garage, true, doorname)
-        print('Successfully sent door data to the server')
-        arg = nil
-    end
-end)
+        local validTypes = {
+            ['door'] = true,
+            ['sliding'] = true,
+            ['garage'] = true,
+            ['double'] = true,
+            ['doublesliding'] = true
+        }
+        if not validTypes[doorType] then
+            print(doorType .. ' is not a valid doortype')
+            return
+        end
+        if arg and arg.item == '' and arg.job1 == '' then
+            print('You must enter either a job or item for lock authorisation')
+            return
+        end
+        if args[7] then
+            print('You can only set four authorised jobs - if you want more, add them to the config later')
+            return
+        end
+        if doorType == 'door' or doorType == 'sliding' or doorType == 'garage' then
+            local entity, coords, heading, model = nil, nil, nil, nil
+            local result = false
+            print('Aim at your desired door and press left mouse button')
+            while true do
+                if IsPlayerFreeAiming(PlayerId()) then
+                    local result, object = Raycast()
+                    if result and object ~= entity then
+                        SetEntityDrawOutline(entity, false)
+                        SetEntityDrawOutline(object, true)
+                        entity = object
+                        coords = GetEntityCoords(entity)
+                        model = GetEntityModel(entity)
+                        heading = GetEntityHeading(entity)
+                    end
+                else
+                    Citizen.Wait(0)
+                end
+                if result then
+                    DrawInfos("Coordinates: " .. coords .. "\nHeading: " .. heading .. "\nHash: " .. model)
+                else
+                    DrawInfos("Aim at your desired door and shoot")
+                end
+                if entity and IsControlPressed(0, 24) then
+                    break
+                end
+            end
+            SetEntityDrawOutline(entity, false)
+            if not model or model == 0 then
+                print('Did not receive a model hash\nIf the door is transparent, make sure you aim at the frame')
+                return
+            end
+            local result, door = DoorSystemFindExistingDoor(coords.x, coords.y, coords.z, model)
+            if result then
+                return print('This door is already registered')
+            end
+            local jobs = {}
+            if args[3] then
+                jobs[1] = args[3]
+                jobs[2] = args[4]
+                jobs[3] = args[5]
+                jobs[4] = args[6]
+            else
+                if arg.job1 ~= '' then
+                    jobs[1] = arg.job1
+                end
+                if arg.job2 ~= '' then
+                    jobs[2] = arg.job2
+                end
+                if arg.job3 ~= '' then
+                    jobs[3] = arg.job3
+                end
+                if arg.job4 ~= '' then
+                    jobs[4] = arg.job4
+                end
+                if arg.item ~= '' then
+                    item = arg.item
+                end
+            end
+            local maxDistance, slides, garage = 2.0, false, false
+            if doorType == 'sliding' then
+                slides = true
+            elseif doorType == 'garage' then
+                maxDistance, slides, garage = 6.0, true, true
+            end
+            if slides then
+                maxDistance = 6.0
+            end
+            local doorHash = 'l_' .. #Config.DoorList + 1
+            AddDoorToSystem(doorHash, model, coords, false, false, false)
+            DoorSystemSetDoorState(doorHash, 4, false, false)
+            coords = GetEntityCoords(entity)
+            heading = GetEntityHeading(entity)
+            RemoveDoorFromSystem(doorHash)
+            if arg then
+                doorname = arg.doorname
+            end
+            TriggerServerEvent('nui_doorlock:newDoorCreate', arg.configname, model, heading, coords, jobs, item,
+                doorLocked, maxDistance, slides, garage, false, doorname)
+            print('Successfully sent door data to the server')
+        elseif doorType == 'double' or doorType == 'doublesliding' then
+            local entity, coords, heading, model = {}, {}, {}, {}
+            local result = false
+            print('Aim at each desired door and press left mouse button')
+            for i = 1, 2 do
+                while true do
+                    if IsPlayerFreeAiming(PlayerId()) then
+                        local result, object = Raycast()
+                        if result and object ~= entity[i] then
+                            SetEntityDrawOutline(entity[i], false)
+                            SetEntityDrawOutline(object, true)
+                            entity[i] = object
+                            coords[i] = GetEntityCoords(object)
+                            model[i] = GetEntityModel(object)
+                            heading[i] = GetEntityHeading(object)
+                        end
+                    else
+                        Citizen.Wait(0)
+                    end
+                    if result then
+                        DrawInfos("Coordinates: " .. coords[i] .. "\nHeading: " .. heading[i] .. "\nHash: " .. model[i])
+                    else
+                        DrawInfos("Aim at your desired door and shoot")
+                    end
+                    if entity[i] and IsControlPressed(0, 24) then
+                        break
+                    end
+                end
+                Citizen.Wait(200)
+            end
+            SetEntityDrawOutline(entity[1], false)
+            SetEntityDrawOutline(entity[2], false)
+            if not model[1] or model[1] == 0 or not model[2] or model[2] == 0 then
+                print('Did not receive a model hash\nIf the door is transparent, make sure you aim at the frame')
+                return
+            end
+            if entity[1] == entity[2] then
+                print('Can not add double door if entities are the same')
+                return
+            end
+            for i = 1, 2 do
+                local result, door = DoorSystemFindExistingDoor(coords[i].x, coords[i].y, coords[i].z, model[i])
+                if result then
+                    return print('This door is already registered')
+                end
+            end
+            local jobs = {}
+            if args[3] then
+                jobs[1] = args[3]
+                jobs[2] = args[4]
+                jobs[3] = args[5]
+                jobs[4] = args[6]
+            else
+                if arg.job1 ~= '' then
+                    jobs[1] = arg.job1
+                end
+                if arg.job2 ~= '' then
+                    jobs[2] = arg.job2
+                end
+                if arg.job3 ~= '' then
+                    jobs[3] = arg.job3
+                end
+                if arg.job4 ~= '' then
+                    jobs[4] = arg.job4
+                end
+                if arg.item ~= '' then
+                    item = arg.item
+                end
+            end
+            local maxDistance, slides, garage = 2.5, false, false
+            if doorType == 'sliding' or doorType == 'doublesliding' then
+                slides = true
+            end
+            if slides then
+                maxDistance = 6.0
+            end
 
-function DrawInfos(text)
-    SetTextColour(255, 255, 255, 255) -- Color
-    SetTextFont(4) -- Font
-    SetTextScale(0.4, 0.4) -- Scale
-    SetTextWrap(0.0, 1.0) -- Wrap the text
-    SetTextCentre(false) -- Align to center(?)
-    SetTextDropshadow(0, 0, 0, 0, 255) -- Shadow. Distance, R, G, B, Alpha.
-    SetTextEdge(50, 0, 0, 0, 255) -- Edge. Width, R, G, B, Alpha.
-    SetTextOutline() -- Necessary to give it an outline.
-    SetTextEntry("STRING")
-    AddTextComponentString(text)
-    DrawText(0.015, 0.71) -- Position
+            local doors = #Config.DoorList + 1
+            local doorHash = {}
+            doorHash[1] = 'l_' .. doors .. '_' .. '1'
+            doorHash[2] = 'l_' .. doors .. '_' .. '2'
+            for i = 1, #doorHash do
+                AddDoorToSystem(doorHash[i], model[i], coords[i], false, false, false)
+                DoorSystemSetDoorState(doorHash[i], 4, false, false)
+                coords[i] = GetEntityCoords(entity[i])
+                heading[i] = GetEntityHeading(entity[i])
+                RemoveDoorFromSystem(doorHash[i])
+            end
+            if arg then
+                doorname = arg.doorname
+            end
+            TriggerServerEvent('nui_doorlock:newDoorCreate', arg.configname, model, heading, coords, jobs, item,
+                doorLocked, maxDistance, slides, garage, true, doorname)
+            print('Successfully sent door data to the server')
+            arg = nil
+        end
+    end)
+
+    function DrawInfos(text)
+        SetTextColour(255, 255, 255, 255) -- Color
+        SetTextFont(4) -- Font
+        SetTextScale(0.4, 0.4) -- Scale
+        SetTextWrap(0.0, 1.0) -- Wrap the text
+        SetTextCentre(false) -- Align to center(?)
+        SetTextDropshadow(0, 0, 0, 0, 255) -- Shadow. Distance, R, G, B, Alpha.
+        SetTextEdge(50, 0, 0, 0, 255) -- Edge. Width, R, G, B, Alpha.
+        SetTextOutline() -- Necessary to give it an outline.
+        SetTextEntry("STRING")
+        AddTextComponentString(text)
+        DrawText(0.015, 0.71) -- Position
+    end
+
+    RegisterNetEvent('nui_doorlock:newDoorAdded')
+    AddEventHandler('nui_doorlock:newDoorAdded', function(newDoor, doorID, locked)
+        Config.DoorList[doorID] = newDoor
+        UpdateDoors()
+        TriggerEvent('nui_doorlock:setState', GetPlayerServerId(PlayerId()), doorID, locked)
+    end)
+
+    RegisterNetEvent('esx:playerLoaded')
+    AddEventHandler('esx:playerLoaded', function(playerData)
+        ESX.PlayerLoaded = true
+        ESX.PlayerData = playerData
+        Citizen.CreateThread(DoorLoop)
+    end)
+
+    RegisterNetEvent('esx:onPlayerLogout')
+    AddEventHandler('esx:onPlayerLogout', function(playerData)
+        ESX.PlayerLoaded = false
+        ESX.PlayerData = {}
+    end)
+
+    if ESX.PlayerLoaded then
+        Citizen.CreateThread(DoorLoop)
+    end
 end
-
-RegisterNetEvent('nui_doorlock:newDoorAdded')
-AddEventHandler('nui_doorlock:newDoorAdded', function(newDoor, doorID, locked)
-    Config.DoorList[doorID] = newDoor
-    updateDoors()
-    TriggerEvent('nui_doorlock:setState', GetPlayerServerId(PlayerId()), doorID, locked)
-end)

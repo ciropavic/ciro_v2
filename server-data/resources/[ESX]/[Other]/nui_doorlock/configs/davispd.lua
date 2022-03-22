@@ -413,3 +413,60 @@ table.insert(Config.DoorList, {
 	-- audioUnlock = {['file'] = 'metallic-creak.ogg', ['volume'] = 0.7},
 	-- autoLock = 1000
 })
+
+-- right_gate
+table.insert(Config.DoorList, {
+	objHash = 1286535678,
+	maxDistance = 6.0,
+	slides = true,
+	garage = false,
+	fixText = false,
+	authorizedJobs = { ['police']=0, ['bcso']=0 },
+	lockpick = false,
+	audioRemote = false,
+	objCoords = vector3(397.8851, -1607.386, 28.34166),
+	objHeading = 139.98545837402,
+	locked = true,			
+		-- oldMethod = true,
+  audioLock = {['file'] = 'garage-lock.ogg', ['volume'] = 0.5},
+  audioUnlock = {['file'] = 'garage-lock.ogg', ['volume'] = 0.5},
+		-- autoLock = 1000
+})
+
+-- left_gate
+table.insert(Config.DoorList, {
+	objHash = -1483471451,
+	maxDistance = 6.0,
+	slides = true,
+	garage = false,
+	fixText = false,
+	authorizedJobs = { ['police']=0, ['bcso']=0 },
+	lockpick = false,
+	audioRemote = false,
+	objCoords = vector3(413.3649, -1620.036, 28.34509),
+	objHeading = 140.01405334473,
+	locked = true,			
+		-- oldMethod = true,
+  audioLock = {['file'] = 'garage-lock.ogg', ['volume'] = 0.5},
+  audioUnlock = {['file'] = 'garage-lock.ogg', ['volume'] = 0.5},
+		-- autoLock = 1000
+})
+
+-- left_gate2
+table.insert(Config.DoorList, {
+	objHash = -1483471451,
+	maxDistance = 6.0,
+	slides = true,
+	garage = false,
+	fixText = false,
+	authorizedJobs = { ['police']=0, ['bcso']=0 },
+	lockpick = false,
+	audioRemote = false,
+	objCoords = vector3(418.2896, -1651.396, 28.2951),
+	objHeading = 50.75407409668,
+	locked = true,			
+		-- oldMethod = true,
+  audioLock = {['file'] = 'garage-lock.ogg', ['volume'] = 0.5},
+  audioUnlock = {['file'] = 'garage-lock.ogg', ['volume'] = 0.5},
+		-- autoLock = 1000
+})
