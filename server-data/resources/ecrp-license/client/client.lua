@@ -60,7 +60,7 @@ AddEventHandler('ecrp:changeplate', function ()
   local newPlate = nil
   local ped = 0
   local keyboard = exports["nh-keyboard"]:KeyboardInput({
-    header = "Change Plate", 
+    header = "Change Plate ($2000)", 
     rows = {
         {
             id = 0, 
@@ -91,9 +91,29 @@ AddEventHandler('ecrp:changeplate', function ()
       ped = keyboard[1].input
       oldPlate = keyboard[2].input
       newPlate = keyboard[3].input
-      plateCheck(ped, newPlate, oldPlate)
+
+      TriggerEvent('ecrp:plate:confirmprice', ped, newPlate, oldPlate)
+      -- plateCheck(ped, newPlate, oldPlate)
   end
 end)
+
+RegisterNetEvent('ecrp:plate:confirmprice', function(ped, newPlate, oldPlate)
+    local keyboard = exports["nh-keyboard"]:KeyboardInput({
+        header = "New Plate: " .. newPlate .. ' for $2000',
+        rows = {{
+            id = 0,
+            txt = "Confirm Price (y/n)"
+        }}
+    })
+
+    if keyboard ~= nil then
+      if keyboard[1].input == "y" then
+        plateCheck(ped, newPlate, oldPlate)
+      end
+      exports['mythic_notify']:DoHudText('error', 'Not confirmed')
+  end
+end)
+
 
 function plateCheck(ped, plate, oldPlate) -- Check if requested plate is duplicate/valid.
   -- local ped = GetPlayerPed(-1)
