@@ -58,44 +58,48 @@ RegisterNetEvent('ecrp:changeplate')
 AddEventHandler('ecrp:changeplate', function ()
   local oldPlate = nil
   local newPlate = nil
+  local ped = 0
   local keyboard = exports["nh-keyboard"]:KeyboardInput({
     header = "Change Plate", 
     rows = {
         {
             id = 0, 
-            txt = "Current Plate"
+            txt = "Player ID"
         },
         {
             id = 1, 
+            txt = "Current Plate"
+        },
+        {
+            id = 2, 
             txt = "New Plate (Max 8 Characters)"
         }
     }
   })
 
   if keyboard ~= nil then
-      if keyboard[1].input == nil or keyboard[2].input == nil then 
+      if keyboard[1].input == nil or keyboard[2].input == nil or keyboard[3].input == nil then 
         exports['mythic_notify']:DoHudText('error', 'Inputs must be filled')
         return
       end
 
-      if #keyboard[2].input > 8 then
+      if #keyboard[3].input > 8 then
         exports['mythic_notify']:DoHudText('error', 'License plate too long')
         return
       end
 
-      oldPlate = keyboard[1].input
-      newPlate = keyboard[2].input
-      print('Old Plate: ' .. oldPlate)
-      print('New Plate: ' .. newPlate)
-      plateCheck(newPlate, oldPlate)
+      ped = keyboard[1].input
+      oldPlate = keyboard[2].input
+      newPlate = keyboard[3].input
+      plateCheck(ped, newPlate, oldPlate)
   end
 end)
 
-function plateCheck(plate, oldPlate) -- Check if requested plate is duplicate/valid.
-  local ped = GetPlayerPed(-1)
+function plateCheck(ped, plate, oldPlate) -- Check if requested plate is duplicate/valid.
+  -- local ped = GetPlayerPed(-1)
   ESX.TriggerServerCallback('ecrp_licenseplates:update', function( cb ) -- Check on server side to access database
       if cb == 'confirm' then -- Plate Valid
-          SetVehicleNumberPlateText(GetVehiclePedIsIn(ped, false), plate)
+          -- SetVehicleNumberPlateText(GetVehiclePedIsIn(ped, false), plate)
           exports['mythic_notify']:DoHudText('success', 'Vehicle license plate changed to: ' .. plate)
           SendNUIMessage({
               type = "valid"
@@ -109,6 +113,8 @@ function plateCheck(plate, oldPlate) -- Check if requested plate is duplicate/va
           exports['mythic_notify']:DoHudText('error', 'The plate: ' .. plate .. ' is valid but you cannot afford it')
       elseif cb == 'unowned' then -- Vehicle isn't owned by player
           exports['mythic_notify']:DoHudText('error', 'You cannot purchase a license plate for a vehicle you don\'t own')
+      elseif cb == 'noply' then -- Vehicle isn't owned by player
+          exports['mythic_notify']:DoHudText('error', 'Player not in city')
       end
-    end, oldPlate, plate)
+    end, ped, oldPlate, plate)
 end
