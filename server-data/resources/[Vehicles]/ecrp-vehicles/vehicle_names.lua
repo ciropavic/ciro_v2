@@ -13,7 +13,7 @@ Citizen.CreateThread(function()
 	AddTextEntry("0x2D306CF9", "Audi A4")
 	AddTextEntry("0x52B6A1A6", "Audi e-tron GT")
 	AddTextEntry("0xD0A7A0E9", "Audi R8")
-	AddTextEntry("0x43234BA2", "Audi R8 Custom")
+	AddTextEntry("0x43234BA2", "Audi R8 Hycade")
 	AddTextEntry("0x8C262984", "Audi RS5")
 	AddTextEntry("0xADC1CDA9", "Audi RS6")
   -- Bentley --

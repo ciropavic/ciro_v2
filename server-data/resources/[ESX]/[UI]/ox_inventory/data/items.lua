@@ -31,6 +31,11 @@ return {
 		label = 'Dirty Money',
 	},
 
+	['7709_key'] = {
+		label = 'Key Fob',
+    description = '7709 Great Ocean Highway'
+	},
+
 	['firstaid'] = {
 		label = 'First Aid Kit',
 		weight = 2,
@@ -398,7 +403,7 @@ return {
 	['greenlaptop'] = {
 		label = 'green laptop',
 		weight = 6,
-		stack = true,
+		stack = false,
 		close = true,
 		description = ''
 	},
@@ -454,7 +459,7 @@ return {
 	['redlaptop'] = {
 		label = 'red laptop',
 		weight = 6,
-		stack = true,
+		stack = false,
 		close = true,
 		description = ''
 	},

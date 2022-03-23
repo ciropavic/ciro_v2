@@ -209,14 +209,6 @@ table.insert(Config.DoorList, {
     objHash = -53345114, -- gabz_mrpd_cells_door
     maxDistance = 2,
     locked = true,
-    audioLock = {
-        ['file'] = 'metal-locker.ogg',
-        ['volume'] = '0.35'
-    },
-    audioUnlock = {
-        ['file'] = 'metallic-creak.ogg',
-        ['volume'] = '0.7'
-    },
     authorizedJobs = {
         ['police'] = 0,
         ['bcso'] = 0,
@@ -230,14 +222,6 @@ table.insert(Config.DoorList, {
     objHash = -53345114, -- gabz_mrpd_cells_door
     maxDistance = 2,
     locked = true,
-    audioLock = {
-        ['file'] = 'metal-locker.ogg',
-        ['volume'] = '0.35'
-    },
-    audioUnlock = {
-        ['file'] = 'metallic-creak.ogg',
-        ['volume'] = '0.7'
-    },
     authorizedJobs = {
         ['police'] = 0,
         ['bcso'] = 0,
@@ -251,14 +235,6 @@ table.insert(Config.DoorList, {
     objHash = -53345114, -- gabz_mrpd_cells_door
     maxDistance = 2,
     locked = true,
-    audioLock = {
-        ['file'] = 'metal-locker.ogg',
-        ['volume'] = '0.35'
-    },
-    audioUnlock = {
-        ['file'] = 'metallic-creak.ogg',
-        ['volume'] = '0.7'
-    },
     authorizedJobs = {
         ['police'] = 0,
         ['bcso'] = 0,
@@ -272,14 +248,6 @@ table.insert(Config.DoorList, {
     objHash = -53345114, -- gabz_mrpd_cells_door
     maxDistance = 2,
     locked = true,
-    audioLock = {
-        ['file'] = 'metal-locker.ogg',
-        ['volume'] = '0.35'
-    },
-    audioUnlock = {
-        ['file'] = 'metallic-creak.ogg',
-        ['volume'] = '0.7'
-    },
     authorizedJobs = {
         ['police'] = 0,
         ['bcso'] = 0,
@@ -293,14 +261,6 @@ table.insert(Config.DoorList, {
     objHash = -53345114, -- gabz_mrpd_cells_door
     maxDistance = 2,
     locked = true,
-    audioLock = {
-        ['file'] = 'metal-locker.ogg',
-        ['volume'] = '0.35'
-    },
-    audioUnlock = {
-        ['file'] = 'metallic-creak.ogg',
-        ['volume'] = '0.7'
-    },
     authorizedJobs = {
         ['police'] = 0,
         ['bcso'] = 0,
@@ -314,14 +274,6 @@ table.insert(Config.DoorList, {
     objHash = -53345114, -- gabz_mrpd_cells_door
     maxDistance = 2,
     locked = true,
-    audioLock = {
-        ['file'] = 'metal-locker.ogg',
-        ['volume'] = '0.35'
-    },
-    audioUnlock = {
-        ['file'] = 'metallic-creak.ogg',
-        ['volume'] = '0.7'
-    },
     authorizedJobs = {
         ['police'] = 0,
         ['bcso'] = 0,
@@ -335,14 +287,6 @@ table.insert(Config.DoorList, {
     objHash = -53345114, -- gabz_mrpd_cells_door
     maxDistance = 2,
     locked = true,
-    audioLock = {
-        ['file'] = 'metal-locker.ogg',
-        ['volume'] = '0.35'
-    },
-    audioUnlock = {
-        ['file'] = 'metallic-creak.ogg',
-        ['volume'] = '0.7'
-    },
     authorizedJobs = {
         ['police'] = 0,
         ['bcso'] = 0,
