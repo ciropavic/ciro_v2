@@ -67,7 +67,7 @@ AddEventHandler('ecrp:changeplate', function ()
         },
         {
             id = 1, 
-            txt = "New Plate"
+            txt = "New Plate (Max 8 Characters)"
         }
     }
   })
@@ -78,7 +78,10 @@ AddEventHandler('ecrp:changeplate', function ()
         return
       end
 
-      print(#keyboard[2].input)
+      if #keyboard[2].input > 8 then
+        exports['mythic_notify']:DoHudText('error', 'License plate too long')
+        return
+      end
 
       oldPlate = keyboard[1].input
       newPlate = keyboard[2].input
