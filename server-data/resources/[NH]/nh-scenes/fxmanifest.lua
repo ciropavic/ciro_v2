@@ -1,10 +1,13 @@
 fx_version "cerulean"
-game "common"
+game "gta5"
 
 name "Interactive Scenes"
-description "Interactive Scene Creator for RedM & FiveM"
+description "Interactive Scene Creator for FiveM"
 author "NeroHiro"
 
-client_script "cl_main.lua"
-server_script "sv_main.lua"
+client_scripts {
+    "client.lua",
+    "functions.lua"
+}
 
+server_script "server.lua"

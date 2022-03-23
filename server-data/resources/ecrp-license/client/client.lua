@@ -59,7 +59,7 @@ AddEventHandler('ecrp:changeplate', function ()
   local oldPlate = nil
   local newPlate = nil
   local keyboard = exports["nh-keyboard"]:KeyboardInput({
-    header = "Add Items", 
+    header = "Change Plate", 
     rows = {
         {
             id = 0, 
