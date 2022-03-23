@@ -359,3 +359,22 @@ table.insert(Config.DoorList, {
 		-- audioUnlock = {['file'] = 'metallic-creak.ogg', ['volume'] = 0.7},
 		-- autoLock = 1000
 })
+
+-- front gate person
+table.insert(Config.DoorList, {
+	objHeading = 30.000001907349,
+	objHash = -1156020871,
+	maxDistance = 2.0,
+	garage = false,
+	lockpick = false,
+	objCoords = vector3(1845.407, 3677.485, 34.61195),
+	fixText = false,
+	slides = false,
+	locked = true,
+	authorizedJobs = { ['police']=0, ['bcso']=0 },
+	audioRemote = false,			
+		-- oldMethod = true,
+		-- audioLock = {['file'] = 'metal-locker.ogg', ['volume'] = 0.6},
+		-- audioUnlock = {['file'] = 'metallic-creak.ogg', ['volume'] = 0.7},
+		-- autoLock = 1000
+})

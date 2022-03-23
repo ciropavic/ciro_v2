@@ -479,7 +479,7 @@ Citizen.CreateThread(function()
 						if not IsPauseMenuActive() then
 						
 							-- TOG DFLT SRN LIGHTS
-							if IsDisabledControlJustReleased(0, 85) or IsDisabledControlJustReleased(0, 246) then
+							if IsDisabledControlJustReleased(0, 85) then
 								if IsVehicleSirenOn(veh) then
 									TriggerEvent("lux_vehcontrol:ELSClick", "Off", 0.2) -- Off
 									SetVehicleSiren(veh, false)
