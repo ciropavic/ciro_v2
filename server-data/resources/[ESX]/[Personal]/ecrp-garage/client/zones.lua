@@ -122,6 +122,10 @@ local spawner = {
 {x = 1956.1104736328, y = 3762.8000488281, z = 31.716785430908, h = 210.00016784668},
 {x = 1953.0041503906, y = 3761.1364746094, z = 31.719333648682, h = 210.00016784668},
 {x = 1949.7108154297, y = 3758.9450683594, z = 31.721240997314, h = 210.00016784668},
+-- 7709 Great Ocean
+{x = -3204.6110839844, y = 842.99536132813, z = 8.5178918838501, h = 122.69799041748},
+{x = -3201.236328125, y = 836.24212646484, z = 8.5171890258789, h = 123.64179992676},
+{x = -3196.5444335938, y = 830.3974609375, z = 8.5168533325195, h = 212.95384216309},
 }
 
 -- PolyZones
@@ -197,21 +201,50 @@ local sandyParking = BoxZone:Create(vector3(1956.43, 3762.33, 32.2), 18.4, 5.0, 
   maxZ=35.2
 })
 
+-- 7709 Great Ocean Highway
+local parking7709 = BoxZone:Create(vector3(-3200.31, 835.91, 8.93), 23.8, 8.0, {
+  name="parking7709",
+  heading=212,
+  --debugPoly=true,
+  minZ=7.93,
+  maxZ=11.33
+})
 
 local parkingZones = ComboZone:Create({apartmentsParking, pinkCageParking, casinoParking, mirrorParking, paletoParking, uwuParking1, uwuParking2, pierParking, sandyParking}, {
     -- debugPoly = true
 })
 
 local insideGarage = false
-parkingZones:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, point)
-    if isPointInside then
-        TriggerEvent('cd_drawtextui:ShowUI', 'show', '<B>Parking</B>', 'blue', 'blue')
-        insideGarage = true
-    else
-        TriggerEvent('cd_drawtextui:HideUI')
-        insideGarage = false
-    end
+
+Citizen.CreateThread(function ()
+  while true do
+    Citizen.Wait(0)
+    key7709 = exports.ox_inventory:Search(2, '7709_key')
+  end
 end)
+
+parkingZones:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, point)
+  if isPointInside then
+    TriggerEvent('cd_drawtextui:ShowUI', 'show', '<B>Parking</B>', 'blue', 'blue')
+    insideGarage = true
+  else
+    TriggerEvent('cd_drawtextui:HideUI')
+    insideGarage = false
+  end
+end)
+
+parking7709:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, point)
+  if isPointInside then
+    if key7709 == 1 then
+      TriggerEvent('cd_drawtextui:ShowUI', 'show', '<B>Parking</B>', 'blue', 'blue')
+      insideGarage = true
+    end
+  else
+    TriggerEvent('cd_drawtextui:HideUI')
+    insideGarage = false
+  end
+end)
+
 
 function InGarage()
   if insideGarage then

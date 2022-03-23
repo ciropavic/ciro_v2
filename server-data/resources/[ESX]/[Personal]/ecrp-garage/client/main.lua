@@ -79,11 +79,13 @@ AddEventHandler('ecrp-garage:openGarage', function()
             -- Menu display
             for k, v in pairs(cb) do
                 local vehName = GetLabelText(GetDisplayNameFromVehicleModel(v.vehicle.model))
+                local vehPlate = v.vehicle.plate
 
                 if v.stored == 1 then
                     table.insert(vehMenu, {
                         header = vehName,
-                        context = '<span style="color: green;">Stored</span>',
+                        context = "Plate: " .. vehPlate,
+                        footer = '<span style="color: green;">Stored</span>',
                         event = "ecrp:personalVehSpawn",
                         id = "4",
                         args = {v.vehicle.model, v.vehicle.plate, v.vehicle}
@@ -91,7 +93,8 @@ AddEventHandler('ecrp-garage:openGarage', function()
                 else
                     table.insert(vehMenu, {
                         header = vehName,
-                        context = '<span style="color: red;">Out</span>'
+                        context = "Plate: " .. vehPlate,
+                        footer = '<span style="color: red;">Out</span>'
                     })
                 end
             end

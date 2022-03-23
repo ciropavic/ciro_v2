@@ -11,6 +11,7 @@ client_scripts {
   '@PolyZone/ComboZone.lua',
   'client/main.lua',
   'client/zones.lua',
+  'client/impound.lua',
 }
 
 server_scripts {

@@ -78,6 +78,8 @@ AddEventHandler('ecrp:changeplate', function ()
         return
       end
 
+      print(#keyboard[2].input)
+
       oldPlate = keyboard[1].input
       newPlate = keyboard[2].input
       print('Old Plate: ' .. oldPlate)
