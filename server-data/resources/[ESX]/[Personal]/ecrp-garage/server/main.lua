@@ -20,7 +20,7 @@ ESX.RegisterServerCallback("ecrp-garage:validCar", function(source, cb)
     local src = source
     local playerPed = GetPlayerPed(src)
     local playerVeh = GetVehiclePedIsIn(playerPed, false)
-    local plate = GetVehicleNumberPlateText(playerVeh)
+    local plate = ltrim(GetVehicleNumberPlateText(playerVeh))
     local xPlayerIdentifier = ESX.GetPlayerFromId(src).getIdentifier()
 
     MySQL.scalar('SELECT COUNT(owner) FROM owned_vehicles WHERE owner=@identifier AND plate=@plate', {
@@ -40,11 +40,10 @@ ESX.RegisterServerCallback("ecrp-garage:saveVehicle", function(source, cb, vehpr
     local src = source
     local playerPed = GetPlayerPed(src)
     local playerVeh = GetVehiclePedIsIn(playerPed, false)
-    local plate = GetVehicleNumberPlateText(playerVeh)
+    local plate = ltrim(GetVehicleNumberPlateText(playerVeh))
     local xPlayerIdentifier = ESX.GetPlayerFromId(src).getIdentifier()
 
     local vehJson = json.encode(vehprop)
-    print(vehprop.fuelLevel)
 
     MySQL.update(
         "UPDATE owned_vehicles SET vehicle=@vehdata, owned_vehicles.stored=1 WHERE owner=@identifier AND plate=@plate",
@@ -100,3 +99,7 @@ ESX.RegisterServerCallback("ecrp-garage:changeStatus", function(source, cb, plat
       end
   end)
 end)
+
+function ltrim(s)
+  return s:match'^%s*(.*)'
+end

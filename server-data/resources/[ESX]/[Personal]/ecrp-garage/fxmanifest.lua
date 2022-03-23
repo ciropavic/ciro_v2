@@ -10,7 +10,7 @@ client_scripts {
   '@PolyZone/CircleZone.lua',
   '@PolyZone/ComboZone.lua',
   'client/main.lua',
-  'names.lua'
+  'client/zones.lua',
 }
 
 server_scripts {

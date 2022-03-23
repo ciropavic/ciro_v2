@@ -1,14 +1,11 @@
-# Required nh-keyboard for wasabi scripts using nh-context. I may update to latest version soon when I update my personal server.
-
 # nh-keyboard
-Dynamic Keyboard Input NUI for FiveM
+Dynamic Keyboard Input NUI for RedM & FiveM
 
 # Information
 I created this resource because I couldn't find any good looking NUI resources to input text and have it return back for use, the menu is very dynamic and allows as many options as the screen allows, it's also Open source so feel free to pull request if you have any improvements.
 
-![ShowCase](https://lithi.io/file/PpLF.png)
-![ShowCase](https://lithi.io/file/STrt.png)
-![ShowCase](https://lithi.io/file/aPqX.png)
+![ShowCase](https://lithi.io/file/oqdY.png)
+![ShowCase](https://lithi.io/file/VXJG.png)
 
 
 # Setup
@@ -21,40 +18,28 @@ in your server.cfg.
 # Examples
 If you want to have only one selection simply do something like this:
 ```
-local keyboard = exports["nh-keyboard"]:KeyboardInput({
-    header = "Add Item", 
-    rows = {
-        {
-            id = 0, 
-            txt = "Spawn Name"
-        }
-    }
-})
-if keyboard ~= nil then
-    if keyboard[1].input == nil then return end
-    TriggerEvent('additem', keyboard[1].input)
-end
+    local keyboard, item = exports["nh-keyboard"]:Keyboard({
+        header = "Add Item", 
+        rows = {"Spawn Name"}
+    })
+    if keyboard then
+        if name then
+            TriggerEvent('additem', name)
+        end
+    end
 ```
 You can also add multiple listing and it would look something like this
 ```
-local keyboard = exports["nh-keyboard"]:KeyboardInput({
-    header = "Add Items", 
-    rows = {
-        {
-            id = 0, 
-            txt = "Spawn Name"
-        },
-        {
-            id = 1, 
-            txt = "Amount"
-        }
-    }
-})
+    local keyboard, item, amount = exports["nh-keyboard"]:Keyboard({
+        header = "Add Items", 
+        rows = {"Spawn Name", "Amount"}
+    })
 
-if keyboard ~= nil then
-    if keyboard[1].input == nil or keyboard[2].input == nil then return end
-    TriggerEvent('additem', keyboard[1].input, keyboard[2].input)
-end
+    if keyboard then
+        if item and tonumber(amount) then
+            TriggerEvent('additem', item, tonumber(amount))
+        end
+    end
 ```
 
 # Known Bugs

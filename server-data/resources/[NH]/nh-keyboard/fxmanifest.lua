@@ -1,16 +1,17 @@
 fx_version "cerulean"
-game "gta5"
+game "common"
 
 name "NUI Text Input"
-description "A modular, clean keyboard input for FiveM"
+description "A modular, clean keyboard input for RedM & FiveM"
 author "NeroHiro"
 
-ui_page "./ui/index.html"
+ui_page "./UI/index.html"
 
 files{
-    "./ui/index.html",
-    "./ui/main.css",
-    "./ui/main.js",
+    "./UI/index.html",
+    "./UI/main.css",
+    "./UI/main.js",
 }
 
 client_script "client.lua"
+
