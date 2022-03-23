@@ -154,7 +154,7 @@ else
             UpdateDoors()
             while ESX.PlayerLoaded do
                 playerCoords = GetEntityCoords(ESX.PlayerData.ped)
-                local doorSleep = 1000
+                local doorSleep = 0
                 if not closestDoor.id then
                     local distance = #(playerCoords - lastCoords)
                     if distance > 30 then
@@ -188,7 +188,7 @@ else
                             })
                             paused = true
                         elseif paused then
-                            Citizen.Wait(20)
+                            Citizen.Wait(0)
                             if not IsPauseMenuActive() then
                                 lasttext, paused = '', false
                             end
@@ -245,11 +245,11 @@ else
                                 end
                                 break
                             end
-                            Citizen.Wait(5)
+                            Citizen.Wait(0)
                         end
                     end
                     closestDoor = {}
-                    doorSleep = 5
+                    doorSleep = 0
                 end
                 Citizen.Wait(doorSleep)
             end

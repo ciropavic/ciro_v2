@@ -69,7 +69,8 @@ table.insert(Config.DoorList, {
     objHeading = 0,
     maxDistance = 2,
     authorizedJobs = {
-        ['police'] = 0
+        ['police'] = 0,
+        ['bcso'] = 0,
     }
 })
 
@@ -535,4 +536,24 @@ table.insert(Config.DoorList, {
         ['police'] = 0,
         ['bcso'] = 0,
     }
+})
+
+
+-- captains_office
+table.insert(Config.DoorList, {
+	locked = true,
+	objCoords = vector3(458.6543, -990.6498, 30.82319),
+	fixText = false,
+	slides = false,
+	maxDistance = 2.0,
+	authorizedJobs = { ['police']=0, ['bcso']=0 },
+	lockpick = false,
+	audioRemote = false,
+	objHeading = 270.00003051758,
+	objHash = -96679321,
+	garage = false,			
+		-- oldMethod = true,
+		-- audioLock = {['file'] = 'metal-locker.ogg', ['volume'] = 0.6},
+		-- audioUnlock = {['file'] = 'metallic-creak.ogg', ['volume'] = 0.7},
+		-- autoLock = 1000
 })

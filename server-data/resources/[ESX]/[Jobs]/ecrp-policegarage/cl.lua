@@ -66,13 +66,13 @@ local spawner = {
   },
   -- Sandy Sheriff Office
   {
-    x = 1847.2551269531, y = 3672.3464355469, z = 33.009578704834, h = 29.539262771606
+    x = 1865.0950927734, y = 3692.6799316406, z = 33.784606933594, h = 119.47701263428
   },
   {
-    x = 1850.3159179688, y = 3674.3615722656, z = 33.06819152832, h = 31.949659347534
+    x = 1863.1651611328, y = 3696.0288085938, z = 33.783260345459, h = 119.88526153564
   },
   {
-    x = 1853.7175292969, y = 3676.0043945313, z = 33.05313873291, h = 30.272062301636
+    x = 1861.3941650391, y = 3699.3337402344, z = 33.783264160156, h = 120.08471679688
   }
 }
 
@@ -108,12 +108,12 @@ local parking2PBSO = BoxZone:Create(vector3(-434.66, 6025.36, 31.34), 10.2, 5.4,
   maxZ=34.34
 })
 
-local parkingSSO = BoxZone:Create(vector3(1850.27, 3674.65, 33.78), 4.8, 11.4, {
+local parkingSSO = BoxZone:Create(vector3(1863.45, 3696.1, 33.97), 11.8, 6.4, {
   name="parkingSSO",
   heading=30,
   --debugPoly=true,
-  minZ=32.78,
-  maxZ=36.78
+  minZ=31.97,
+  maxZ=35.97
 })
 
 local policeSpawn = ComboZone:Create({parking1MRPD, parking2MRPD, parkingPBSO, parking2PBSO, parkingSSO}, {

@@ -175,7 +175,7 @@ local recentlysat = false
 RegisterNetEvent('animation:Chair2');
 AddEventHandler('animation:Chair2', function()
 	local ped = PlayerPedId()
-		if recentlysat or exports["isPed"]:isPed("disabled") or IsPedInAnyVehicle(PlayerPedId(), false) then
+		if recentlysat or IsPedInAnyVehicle(PlayerPedId(), false) then
 			return
 		end
 		recentlysat = true
@@ -198,6 +198,10 @@ AddEventHandler('animation:Chair2', function()
 		recentlysat = false
 end)
 
+RegisterCommand('sitchair', function ()
+  TriggerEvent("animation:Chair2")
+end)
+
 RegisterNetEvent("Fuckmylife2")
 AddEventHandler("Fuckmylife2", function(object,bearing)
 	local ped = PlayerPedId()
@@ -206,40 +210,39 @@ AddEventHandler("Fuckmylife2", function(object,bearing)
 		AttachEntityToEntity(ped, object, 20, 0.0, 0.0, -0.5, 0.0, 0.0, 0.0, false, false, false, false, 1, true)
 		SetEntityHeading(ped, bearing)
 		Citizen.Wait(0)
-		if IsControlJustReleased(1,96) then
+		if IsControlJustReleased(1,96) then --numpad-/scrollwheel up
 			local pos = GetOffsetFromEntityInWorldCoords(object, 0.0, 0.0, 0.05)
 			if pos.z < (posend.z+1) then
 				SetEntityCoords(object, pos.x, pos.y, pos.z)
 			end
 		end
-		if IsControlJustReleased(1,97) then
+		if IsControlJustReleased(1,97) then --numpa+/scrollwheel down
 			local pos = GetOffsetFromEntityInWorldCoords(object, 0.0, 0.0, -0.05)
 			if pos.z > (posend.z-1) then
 				SetEntityCoords(object, pos.x, pos.y, pos.z)
 			end
 		end
 
- 
-		if IsControlJustReleased(1,61) then
+		if IsControlJustReleased(1,32) then -- W
 			local pos = GetOffsetFromEntityInWorldCoords(object, 0.0, 0.05, 0.0)
 			if pos.y < (posend.y+1) then
 				SetEntityCoords(object, pos.x, pos.y, pos.z)
 			end
 		end
-		if IsControlJustReleased(1,60) then
+		if IsControlJustReleased(1,33) then -- S
 			local pos = GetOffsetFromEntityInWorldCoords(object, 0.0, -0.05, 0.0)
 			if pos.y > (posend.y-1) then
 				SetEntityCoords(object, pos.x, pos.y, pos.z)
 			end
 		end
 
-		if IsControlJustReleased(1,107) then
+		if IsControlJustReleased(1,34) then -- A
 			local pos = GetOffsetFromEntityInWorldCoords(object, 0.05, 0.0, 0.0)
 			if pos.x < (posend.x+1) then
 				SetEntityCoords(object, pos.x, pos.y, pos.z)
 			end
 		end
-		if IsControlJustReleased(1,108) then
+		if IsControlJustReleased(1,35) then -- D
 			local pos = GetOffsetFromEntityInWorldCoords(object, -0.05, 0.0, 0.0)
 			if pos.x > (posend.x-1) then
 				SetEntityCoords(object, pos.x, pos.y, pos.z)
@@ -248,133 +251,7 @@ AddEventHandler("Fuckmylife2", function(object,bearing)
 
 	end
 
-
-	
 	if DoesEntityExist(object) then
 		DeleteObject(object)
 	end
-end)	
-
-
-RegisterNetEvent('animation:Chair');
-
-AddEventHandler('animation:Chair', function()
-
-	local objects = {}
-	for k,v in pairs(Config.Sitable) do
-		table.insert(objects, v.prop)
-	end
-	
-	local ped = PlayerPedId()
-	local list = {}
-	for k,v in pairs(objects) do
-		local obj = GetClosestObjectOfType(GetEntityCoords(ped).x, GetEntityCoords(ped).y, GetEntityCoords(ped).z, 3.0, GetHashKey(v), false, true ,true)
-		local dist = #(GetEntityCoords(ped) - GetEntityCoords(obj))
-		list[#list+1]= {object = obj, distance = dist, name = v}
-	end
-
-	local closest = list[1]
-	for k,v in pairs(list) do
-		if v.distance < closest.distance then
-			closest = v
-		end
-	end
-
-	local distance = closest.distance
-	local object = closest.object
-	local name = closest.name
-
-	if distance < Config.MaxDistance and DoesEntityExist(object) then
-		SetEntityInvincible(object, true)
-		sit(object)
-	end
-
-end)
-
-function quickmafs(dir)
-	local x = 0.0
-	local y = 0.0
-	local dir = dir
-	if dir >= 0.0 and dir <= 90.0 then
-		local factor = (dir/9.2) / 10
-		x = -1.0 + factor
-		y = 0.0 - factor
-	end
-
-	if dir > 90.0 and dir <= 180.0 then
-		dirp = dir - 90.0
-		local factor = (dirp/9.2) / 10
-		x = 0.0 + factor
-		y = -1.0 + factor
-	end
-
-	if dir > 180.0 and dir <= 270.0 then
-		dirp = dir - 180.0
-		local factor = (dirp/9.2) / 10
-		x = 1.0 - factor
-		y = 0.0 + factor
-	end
-
-	if dir > 270.0 and dir <= 360.0 then
-		dirp = dir - 270.0
-		local factor = (dirp/9.2) / 10	
-		x = 0.0 - factor
-		y = 1.0 - factor
-	end
-	return x,y
-end
-RegisterNetEvent("startCoaster")
-AddEventHandler("startCoaster",function(object)
-	Citizen.Trace("Starting Coaster")
-
-	FreezeEntityPosition(object, false)
-
-	
-
-	local coasterscript = "rollercoaster"
-	RequestScript(coasterscript)
-
-	while not HasScriptLoaded(coasterscript) do
-		Citizen.Wait(0)
-	end
-	StartNewScript(coasterscript)
-	SetScriptAsNoLongerNeeded(coasterscript)
-	Citizen.Trace("Starting Done")
-end)
-
-
-function sit(object)
-
-	local ped = PlayerPedId()
-	lastPos = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 0.0, -1.0)
-	currentSitObj = object
-	FreezeEntityPosition(object, true)
-	local objinfo = {}
-	for k,v in pairs(Config.Sitable) do
-		if tostring(GetHashKey(v.prop)) == tostring(GetEntityModel(object)) then
-			objinfo = v
-		end
-	end
-	local objloc = GetEntityCoords(object)
-
-	sitting = true
-
-	TaskStartScenarioAtPosition(ped, objinfo.scenario, objloc.x, objloc.y, objloc.z+(1.0+objinfo.verticalOffset), GetEntityHeading(object)+180.0, 0, true, true)
-
-	local ped = PlayerPedId()
-	while sitting do
-		AttachEntityToEntity(ped, object, 20, 0.0, 0.0, 1.0+objinfo.verticalOffset, 0.0, 0.0, 180.0, false, false, false, false, 1, true)
-
-		Citizen.Wait(0)
-	end
-	ClearPedTasks(ped)
-	Citizen.Wait(1400)
-	SetEntityCoords(ped,lastPos)
-end
---AttachEntityToEntity(entity1, entity2, boneIndex, x, y, z, xRot, yRot, zRot, p9, useSoftPinning, collision, isPed, vertexIndex, fixedRot)
---AttachEntityToEntity(entity1, entity2, boneIndex, x, y, z, xRot, yRot, zRot, p9, isRel, ignoreUpVec, allowRotation, unk, p14)
-
-RegisterNetEvent("turnoffsitting")
-AddEventHandler("turnoffsitting", function()
-	sitting = false
 end)
