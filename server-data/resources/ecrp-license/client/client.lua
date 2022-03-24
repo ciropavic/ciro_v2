@@ -107,10 +107,14 @@ RegisterNetEvent('ecrp:plate:confirmprice', function(ped, newPlate, oldPlate)
     })
 
     if keyboard ~= nil then
+      if keyboard[1].input == nil or keyboard[1].input == "n" then 
+        exports['mythic_notify']:DoHudText('error', 'Not confirmed')
+        return
+      end
+
       if keyboard[1].input == "y" then
         plateCheck(ped, newPlate, oldPlate)
       end
-      exports['mythic_notify']:DoHudText('error', 'Not confirmed')
   end
 end)
 
@@ -119,16 +123,18 @@ function plateCheck(ped, plate, oldPlate) -- Check if requested plate is duplica
   -- local ped = GetPlayerPed(-1)
   ESX.TriggerServerCallback('ecrp_licenseplates:update', function( cb ) -- Check on server side to access database
       if cb == 'confirm' then -- Plate Valid
-          -- SetVehicleNumberPlateText(GetVehiclePedIsIn(ped, false), plate)
+          local veh = GetVehiclePedIsIn(PlayerPedId(), true)
+          local vehPlate = ltrim(GetVehicleNumberPlateText(veh))
+          local trimPlate = rtrim(vehPlate)
+          oldPlate = string.upper(oldPlate)
+          if trimPlate == oldPlate then
+            SetVehicleNumberPlateText(veh, plate)
+          else
+            exports['mythic_notify']:DoHudText('error', 'Vehicle plate not found')
+          end
           exports['mythic_notify']:DoHudText('success', 'Vehicle license plate changed to: ' .. plate)
-          SendNUIMessage({
-              type = "valid"
-          })
       elseif cb == 'error' then -- Plate invalid
           exports['mythic_notify']:DoHudText('error', 'The plate: ' .. plate .. ' is currently not available')
-          SendNUIMessage({
-              type = "notValid"
-          })
       elseif cb == 'money' then -- Cannot afford plate
           exports['mythic_notify']:DoHudText('error', 'The plate: ' .. plate .. ' is valid but you cannot afford it')
       elseif cb == 'unowned' then -- Vehicle isn't owned by player
@@ -137,4 +143,12 @@ function plateCheck(ped, plate, oldPlate) -- Check if requested plate is duplica
           exports['mythic_notify']:DoHudText('error', 'Player not in city')
       end
     end, ped, oldPlate, plate)
+end
+
+function ltrim(s)
+  return s:match'^%s*(.*)'
+end
+
+function rtrim(s)
+  return s:match'^(.*%S)%s*$'
 end

@@ -81,6 +81,19 @@ Item('phone', function(data, slot)
 	exports.npwd:setPhoneVisible(not exports.npwd:isPhoneVisible())
 end)
 
+Item('lockpick', function(data, slot)
+  local veh = IsPedInAnyVehicle(PlayerPedId(), false)
+  if veh then
+    ox_inventory:useItem(data, function(data)
+      if data then
+        TriggerEvent('onyx:checkForKeys')
+      end
+    end)
+  else
+    exports['mythic_notify']:DoHudText('error', 'Not in vehicle')
+  end
+end)
+
 -----------------------------------------------------------------------------------------------
 
 exports('Items', GetItem)

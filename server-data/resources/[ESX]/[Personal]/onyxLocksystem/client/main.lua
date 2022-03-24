@@ -101,7 +101,7 @@ RegisterCommand("givekeys", function(source, args, rawCommand)
     local player, distance = ESX.Game.GetClosestPlayer()
   
     if distance ~= -1 and distance <= 3.0 then
-      exports["onyxLocksystem_lock"]:givePlayerKeys(plate)GetPlayerServerId(PlayerId())GetPlayerServerId(player)
+      givePlayerKeys(plate)GetPlayerServerId(PlayerId())GetPlayerServerId(player)
     else
       exports['mythic_notify']:DoHudText('error', 'No player nearby')
     end
