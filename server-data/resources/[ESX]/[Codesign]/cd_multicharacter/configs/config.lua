@@ -63,6 +63,8 @@ Config.DatabaseTables = {
     {table_name = 'npwd_phone_gallery', column_name = 'identifier'},
     {table_name = 'npwd_twitter_profiles', column_name = 'identifier'},
     {table_name = 'npwd_twitter_tweets', column_name = 'identifier'},
+    {table_name = 'boosting_users', column_name = 'identifier'},
+    {table_name = 'boosting', column_name = 'identifier'},
     --
     {table_name = 'character_current', column_name = 'steamid'},
     {table_name = 'character_face', column_name = 'steamid'},

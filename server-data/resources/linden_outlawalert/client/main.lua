@@ -361,6 +361,14 @@ AddEventHandler('ecrp:officerdowned', function(streetName)
     TriggerServerEvent('wf-alerts:svNotify', dispatchData)
 end)
 
+RegisterNetEvent('ecrp:vehicleboost')
+AddEventHandler('ecrp:vehicleboost', function(streetName)
+    local data = {displayCode = '10-99', description = 'Stolen Vehicle', isImportant = 0, recipientList = {'police', 'bcso'}, length = '10000', 
+		blipSprite = 523, blipColour = 3, blipScale = 1.5, info = 'Boost in proogress', infoM = 'fas fa-car'}
+    local dispatchData = {dispatchData = data, caller = '', street = streetName, coords = playerCoords}
+    TriggerServerEvent('wf-alerts:svNotify', dispatchData)
+end)
+
 RegisterNetEvent('ecrp:officerdownedE')
 AddEventHandler('ecrp:officerdownedE', function(streetName)
     local data = {displayCode = '10-13A', description = 'Officer Down URGENT', isImportant = 1, recipientList = {'police', 'bcso', 'ambulance'}, length = '10000', 

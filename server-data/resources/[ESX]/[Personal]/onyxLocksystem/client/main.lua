@@ -2,9 +2,18 @@ ESX = nil
 
 local vehicles = {}
 local searchedVehicles = {}
-local pickedVehicled = {}
+local pickedVehicle = nil
 local hasCheckedOwnedVehs = false
 local lockDisable = false
+
+CustomMinigame = function()
+  local game = exports["taskbarskill"]:taskBar(1200,7)
+  if game == 100 then
+      return true  
+  else
+      return false  
+  end
+end
 
 Citizen.CreateThread(function()
   while ESX == nil do
@@ -40,7 +49,7 @@ function playLockAnim(vehicle)
         Citizen.Wait(0)
     end
 
-    if not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
+    if not IsPedInAnyVehicle(PlayerPedId(), true) then
         TaskPlayAnim(PlayerPedId(), dict, "fob_click_fp", 8.0, 8.0, -1, 48, 1, false, false, false)
     end
 end
@@ -73,7 +82,7 @@ function toggleLock(vehicle)
             playLockAnim()
             hasToggledLock()
         end
-        if not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
+        if not IsPedInAnyVehicle(PlayerPedId(), true) then
             Wait(500)
             local flickers = 0
             while flickers < 2 do
@@ -89,32 +98,46 @@ end
 
 RegisterNetEvent('onyx:pickDoor')
 AddEventHandler('onyx:pickDoor', function()
-    -- TODO: Lockpicking vehicle doors to gain access
-end)
-
-RegisterCommand("givekeys", function(source, args, rawCommand)
-    -- Wait for next frame just to be safe
-    Citizen.Wait(0)
-    local player = GetPlayerPed(-1)
-    local curVeh = GetVehiclePedIsIn(player, false)
-    local plate = GetVehicleNumberPlateText(curVeh)
-    local player, distance = ESX.Game.GetClosestPlayer()
-  
-    if distance ~= -1 and distance <= 3.0 then
-      givePlayerKeys(plate)GetPlayerServerId(PlayerId())GetPlayerServerId(player)
+    local IsAlredyContract = exports["ps-boosting"]:IsAlredyContract()
+    if IsAlredyContract then
+        TriggerEvent('boosting:lockpick')
+        return
     else
-      exports['mythic_notify']:DoHudText('error', 'No player nearby')
+        local Player = PlayerPedId()
+        local pos = GetEntityCoords(Player)
+        local entityWorld = GetOffsetFromEntityInWorldCoords(Player, 0.0, 20.0, 0.0)
+        local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10,
+            Player, 0)
+        local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
+        if vehicleHandle ~= nil and vehicleHandle ~= 0 then
+            RequestAnimDict('anim@amb@clubhouse@tutorial@bkr_tut_ig3@')
+            while not HasAnimDictLoaded('anim@amb@clubhouse@tutorial@bkr_tut_ig3@') do
+                Citizen.Wait(0)
+            end
+            TaskPlayAnim(Player, 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@', 'machinic_loop_mechandplayer', 8.0, -8.0,
+                -1, 1, 0, false, false, false)
+            if CustomMinigame() == true then
+                ClearPedTasksImmediately(Player)
+                SetVehicleDoorsLocked(vehicleHandle, 0)
+                pickedVehicle = GetVehicleNumberPlateText(vehicleHandle)
+                exports['mythic_notify']:DoHudText('inform', 'Lockpicked')
+            else
+                ClearPedTasksImmediately(Player)
+                exports['mythic_notify']:DoHudText('inform', 'Lockpick failed!')
+            end
+        end
     end
-  end, false)
+end)
 
 -- Locking vehicles
 Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
-        local pos = GetEntityCoords(GetPlayerPed(-1))
+  while true do
+    Citizen.Wait(0)
+        local NewPickVeh = exports["ps-boosting"]:NewPickVeh()
+        local pos = GetEntityCoords(PlayerPedId())
         if IsControlJustReleased(0, 182) then
-            if IsPedInAnyVehicle(GetPlayerPed(-1), false) then
-                local veh = GetVehiclePedIsIn(GetPlayerPed(-1), false)
+            if IsPedInAnyVehicle(PlayerPedId(), false) then
+                local veh = GetVehiclePedIsIn(PlayerPedId(), false)
                 toggleLock(veh)
             else
                 local veh = GetClosestVehicle(pos.x, pos.y, pos.z, 3.0, 0, 70)
@@ -125,12 +148,16 @@ Citizen.CreateThread(function()
         end
 
         -- TODO: Unable to gain access to vehicles without a lockpick or keys
-        -- local enteringVeh = GetVehiclePedIsTryingToEnter(GetPlayerPed(-1))
-        -- local enteringPlate = GetVehicleNumberPlateText(enteringVeh)
+        local enteringVeh = GetVehiclePedIsTryingToEnter(PlayerPedId())
+        local enteringPlate = GetVehicleNumberPlateText(enteringVeh)
 
-        -- if not hasKeys(entertingPlate) then
-        --     SetVehicleDoorsLocked(enteringVeh, 2)
-        -- end
+        if not pickedVehicle or not pickedVehicle == enteringPlate then
+            SetVehicleDoorsLocked(enteringVeh, 2)
+        end
+
+        if pickedVehicle == enteringPlate or NewPickVeh == enteringPlate then
+          SetVehicleDoorsLocked(enteringVeh, 0)
+        end
     end
 end)
 
@@ -141,20 +168,14 @@ local isHotwiring = false
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
-        local ped = GetPlayerPed(-1)
+        local ped = PlayerPedId()
         if IsPedInAnyVehicle(ped, false) then
             local veh = GetVehiclePedIsIn(ped)
             local driver = GetPedInVehicleSeat(veh, -1)
             local plate = GetVehicleNumberPlateText(veh)
             if driver == ped then
                 if not hasKeys(plate) and not isHotwiring and not isSearching then
-                    -- local pos = GetEntityCoords(ped)
-                    -- DrawText3Ds(pos.x, pos.y, pos.z + 0.2, 'Press ~y~[H] ~w~to hotwire')
                     SetVehicleEngineOn(veh, false, true, true)
-                    -- -- Hotwiring
-                    -- if IsControlJustReleased(0, 74) and not isHotwiring then -- E
-                    --     TriggerServerEvent('onyx:reqHotwiring', plate)
-                    -- end
                 end
             end
         end
@@ -163,7 +184,7 @@ end)
 
 RegisterNetEvent('onyx:checkForKeys')
 AddEventHandler('onyx:checkForKeys', function ()
-    local ped = GetPlayerPed(-1)
+    local ped = PlayerPedId()
     if IsPedInAnyVehicle(ped, false) then
         local veh = GetVehiclePedIsIn(ped)
         local driver = GetPedInVehicleSeat(veh, -1)
@@ -179,7 +200,7 @@ end)
 
 RegisterNetEvent('onyx:slimjim')
 AddEventHandler('onyx:slimjim', function ()
-    local ped = GetPlayerPed(-1)
+    local ped = PlayerPedId()
     if IsPedInAnyVehicle(ped, false) then
         local veh = GetVehiclePedIsIn(ped)
         local driver = GetPedInVehicleSeat(veh, -1)
@@ -214,7 +235,7 @@ end)
 
 RegisterNetEvent('onyx:beginHotwire')
 AddEventHandler('onyx:beginHotwire', function(plate)
-    local veh = GetVehiclePedIsIn(GetPlayerPed(-1), false)
+    local veh = GetVehiclePedIsIn(PlayerPedId(), false)
     RequestAnimDict("veh@std@ds@base")
 
     while not HasAnimDictLoaded("veh@std@ds@base") do
@@ -236,42 +257,18 @@ AddEventHandler('onyx:beginHotwire', function(plate)
         end
     end
 
-    local finished = exports["tgiann-skillbar"]:taskBar(math.random(500,8000))
-    if not finished then
+    if CustomMinigame() == true then
       isHotwiring = false
+      ClearPedSecondaryTask(playerPed)
+      table.insert(vehicles, vehPlate)
+      StopAnimTask(PlayerPedId(), 'veh@std@ds@base', 'hotwire', 1.0)
+      SetVehicleEngineOn(veh, true, true, false)
     else
-        local finished2 = exports["tgiann-skillbar"]:taskBar(math.random(500,8000))
-        if not finished2 then
-          isHotwiring = false
-        else
-            local finished3 = exports["tgiann-skillbar"]:taskBar(math.random(500,8000))
-            if not finished3 then
-              isHotwiring = false
-            else
-                local finished4 = exports["tgiann-skillbar"]:taskBar(math.random(500,8000))
-                if not finished4 then
-                  isHotwiring = false
-                else
-                    local finished5 = exports["tgiann-skillbar"]:taskBar(math.random(500,8000))
-                    if not finished5 then
-                      isHotwiring = false
-                    else
-                      local finished5 = exports["tgiann-skillbar"]:taskBar(math.random(500,8000))
-                      if not finished5 then
-                        isHotwiring = false
-                      else
-                          ClearPedSecondaryTask(playerPed)
-                          isHotwiring = false
-                          table.insert(vehicles, vehPlate)
-                          StopAnimTask(PlayerPedId(), 'veh@std@ds@base', 'hotwire', 1.0)
-                          SetVehicleEngineOn(veh, true, true, false)
-                      end
-                    end
-                end
-            end
-        end
+      isHotwiring = false
+      return false  
     end
 end)
+
 
 local isRobbing = false
 local canRob = false
@@ -283,7 +280,7 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
         local foundEnt, aimingEnt = GetEntityPlayerIsFreeAimingAt(PlayerId())
         local entPos = GetEntityCoords(aimingEnt)
-        local pos = GetEntityCoords(GetPlayerPed(-1))
+        local pos = GetEntityCoords(PlayerPedId())
         local dist = GetDistanceBetweenCoords(pos.x, pos.y, pos.z, entPos.x, entPos.y, entPos.z, true)
 
         if foundEnt and prevPed ~= aimingEnt and IsPedInAnyVehicle(aimingEnt, false) and IsPedArmed(PlayerPedId(), 7) and
@@ -376,6 +373,12 @@ AddEventHandler('onyx:returnSearchedVehTable', function(plate)
     table.insert(searchedVehicles, vehPlate)
 end)
 
+RegisterNetEvent('onyx:returnPickedVehTable')
+AddEventHandler('onyx:returnPickedVehTable', function(plate)
+    local vehPlate = plate
+    table.insert(pickedVehicle, vehPlate)
+end)
+
 function hasKeys(plate)
     local vehPlate = plate
     for k, v in ipairs(vehicles) do
@@ -401,3 +404,18 @@ function DrawText3Ds(x, y, z, text)
     DrawText(_x, _y)
     DrawRect(_x, _y + 0.0115, 0.02 + factor, 0.027, 28, 28, 28, 95)
 end
+
+RegisterCommand("givekeys", function(source, args, rawCommand)
+  -- Wait for next frame just to be safe
+  Citizen.Wait(0)
+  local player = PlayerPedId()
+  local curVeh = GetVehiclePedIsIn(player, false)
+  local plate = GetVehicleNumberPlateText(curVeh)
+  local player, distance = ESX.Game.GetClosestPlayer()
+
+  if distance ~= -1 and distance <= 3.0 then
+    givePlayerKeys(plate)GetPlayerServerId(PlayerId())GetPlayerServerId(player)
+  else
+    exports['mythic_notify']:DoHudText('error', 'No player nearby')
+  end
+end, false)

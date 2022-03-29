@@ -90,7 +90,7 @@ Item('lockpick', function(data, slot)
       end
     end)
   else
-    exports['mythic_notify']:DoHudText('error', 'Not in vehicle')
+    TriggerEvent('onyx:pickDoor')
   end
 end)
 

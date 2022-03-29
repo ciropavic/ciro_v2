@@ -1,20 +1,20 @@
 return {
-	['testburger'] = {
-		label = 'Test Burger',
-		weight = 220,
-		degrade = 60,
-		limit = 3,
-		client = {
-			status = { hunger = 200000 },
-			anim = 'eating',
-			prop = 'burger',
-			usetime = 2500,
-			export = 'ox_inventory_examples.testburger'
-		},
-		server = {
-			test = 'what an amazingly delicious burger, amirite?'
-		}
-	},
+	-- ['testburger'] = {
+	-- 	label = 'Test Burger',
+	-- 	weight = 220,
+	-- 	degrade = 60,
+	-- 	limit = 3,
+	-- 	client = {
+	-- 		status = { hunger = 200000 },
+	-- 		anim = 'eating',
+	-- 		prop = 'burger',
+	-- 		usetime = 2500,
+	-- 		export = 'ox_inventory_examples.testburger'
+	-- 	},
+	-- 	server = {
+	-- 		test = 'what an amazingly delicious burger, amirite?'
+	-- 	}
+	-- },
 
 	-- ['firstaid'] = {
 	-- 	label = 'First Aid Kit',
@@ -107,9 +107,29 @@ return {
 
 	['lockpick'] = {
 		label = 'Lockpick',
-		weight = 3,
+		weight = 5,
 		consume = 0,
-    degrade = 60,
+    degrade = 360000,
+    stack = true,
+    close = true,
+	},
+
+	['advanced_lockpick'] = {
+		label = 'Advanced Lockpick',
+		weight = 6,
+		consume = 0,
+    degrade = 360000,
+    stack = true,
+    close = true,
+	},
+
+	['hacking_device'] = {
+		label = 'Hacking Device',
+		weight = 6,
+		consume = 0,
+    degrade = 360000,
+    stack = false,
+    close = true,
 	},
 
 	['phone'] = {
@@ -406,6 +426,30 @@ return {
 		stack = false,
 		close = true,
 		description = ''
+	},
+
+	['laptop'] = {
+		label = 'Laptop',
+		weight = 6,
+		stack = false,
+		close = true,
+		description = ''
+	},
+
+	['fake_plate'] = {
+		label = 'Fake Plate',
+		weight = 5,
+		stack = true,
+		close = true,
+		description = 'Hide your real plates'
+	},
+
+	['racing_usb'] = {
+		label = 'Racing Dongle',
+		weight = 3,
+		stack = true,
+		close = true,
+		description = 'Vroom Vroom'
 	},
 
 	['icetea'] = {

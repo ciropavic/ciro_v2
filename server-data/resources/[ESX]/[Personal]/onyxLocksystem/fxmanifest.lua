@@ -13,4 +13,6 @@ client_scripts {
     'client/main.lua',
 }
 
+dependency 'ps-boosting'
+
 export "givePlayerKeys"

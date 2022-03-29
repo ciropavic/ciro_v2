@@ -1,0 +1,25 @@
+[Vin Scratch Script]
+Discord Link : https://discord.gg/MR3Ud7xuRr Community and Support :D
+
+Events:
+    [Lockpick Event]
+    TriggerEvent("boosting:lockpick")
+    TriggerClientEvent("boosting:lockpick", source)
+
+    [AntiRadar Event]
+    TriggerEvent("boosting:antiPolice")
+    TriggerClientEvent("boosting:antiPolice", source)
+
+    [ChangePlate Event] (Only in Vin)
+    TriggerEvent("boosting:ChangePlate")
+    TriggerClientEvent("boosting:ChangePlate", source)
+
+    [ChangePlate Event] (Only in Vin)
+    TriggerEvent("boosting:changeVehicleState")
+    TriggerClientEvent("boosting:changeVehicleState", source)
+
+
+Now if you want to use qbcore or esx you will need to change Config.Framework
+And in client_config and server_config you need to comment or uncomment some lines to work
+If you need help to install it let me know 
+Palacios :D
