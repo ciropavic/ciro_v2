@@ -108,16 +108,6 @@ return {
 	['lockpick'] = {
 		label = 'Lockpick',
 		weight = 5,
-		consume = 0,
-    degrade = 360000,
-    stack = true,
-    close = true,
-	},
-
-	['advanced_lockpick'] = {
-		label = 'Advanced Lockpick',
-		weight = 6,
-		consume = 0,
     degrade = 360000,
     stack = true,
     close = true,
@@ -436,20 +426,13 @@ return {
 		description = ''
 	},
 
-	['fake_plate'] = {
-		label = 'Fake Plate',
+	['plates_change'] = {
+		label = 'Change Plate',
 		weight = 5,
 		stack = true,
 		close = true,
-		description = 'Hide your real plates'
-	},
-
-	['racing_usb'] = {
-		label = 'Racing Dongle',
-		weight = 3,
-		stack = true,
-		close = true,
-		description = 'Vroom Vroom'
+    consume = 1,
+		description = 'Change vin scratch plates'
 	},
 
 	['icetea'] = {

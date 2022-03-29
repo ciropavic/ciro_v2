@@ -180,35 +180,35 @@ Config.probabilityTracker = 80
 
 --Bennys
 Config.ConsumableItems = { --Set Consumable Items In Bennys App
-    {label = 'Hacker USB', item = 'racing_usb', price = 125, icon = 'https://i.imgur.com/t9vIiuS.png'},
-    {label = 'Police Jammer', item = 'antipolice', price = 125, icon =   'https://i.imgur.com/a9WnI87.png'},
+    -- {label = 'Hacker USB', item = 'racing_usb', price = 125, icon = 'https://i.imgur.com/t9vIiuS.png'},
     -- {label = 'Boosting Lockpick', item = 'lockpickboosting', price = 125, icon = 'https://imgur.com/tNi4CND.png'},
-    {label = 'Plate Change', item = 'fake_plate', price = 125, icon = 'https://i.imgur.com/P32BkrM.png'},
+    {label = 'Hacking USB', item = 'hacking_usb', price = 125, icon =   'https://i.imgur.com/HXyOw0r.png'},
+    {label = 'Plate Change', item = 'plates_change', price = 125, icon = 'https://i.imgur.com/P32BkrM.png'},
 
 }
 
 Config.PerformanceObject = { --Set Performance Items In Bennys App
-    {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Performance', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
 }
 
 Config.CosmeticObject =  {  --Set Cosmetic Items In Bennys App
-    {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
-    {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
+    -- {label = 'Item Cosmetic', item = 'item', price = 125, icon = 'https://imgur.com/UxYwiKC.png'},
 }
 
 CustomNotification = function(msg)
@@ -235,4 +235,4 @@ ScratchProgress = function()
   else
       return false
   end
-en
+end
