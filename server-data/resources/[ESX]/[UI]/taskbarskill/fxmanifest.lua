@@ -15,4 +15,3 @@ client_script {
 
 export "taskBar"
 export "closeGuiFail"
-dependency '/assetpacks'

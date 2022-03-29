@@ -15,4 +15,3 @@ files {
 ui_page 'ui/index.html'
 
 export 'Open'
-dependency '/assetpacks'
