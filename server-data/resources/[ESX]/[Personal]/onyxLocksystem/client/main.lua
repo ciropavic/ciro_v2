@@ -151,12 +151,12 @@ Citizen.CreateThread(function()
         local enteringVeh = GetVehiclePedIsTryingToEnter(PlayerPedId())
         local enteringPlate = GetVehicleNumberPlateText(enteringVeh)
 
-        if not pickedVehicle or not pickedVehicle == enteringPlate then
-            SetVehicleDoorsLocked(enteringVeh, 2)
-        end
+        -- if not pickedVehicle or not pickedVehicle == enteringPlate then
+        --     SetVehicleDoorsLocked(enteringVeh, 2) --locked
+        -- end
 
         if pickedVehicle == enteringPlate or NewPickVeh == enteringPlate then
-          SetVehicleDoorsLocked(enteringVeh, 0)
+          SetVehicleDoorsLocked(enteringVeh, 0) --unlocked
         end
     end
 end)

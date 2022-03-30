@@ -1,6 +1,6 @@
 ControlForPursuitMode = 172
 
-local npolchal, npolvette, npolstang, npolvic, npolexp, npolchar = "npolchal", "npolvette", "npolstang", "npolvic", "npolexp", "npolchar"
+local npolchal, npolvette, npolstang, npolvic, npolexp, npolchar, pollambo = "npolchal", "npolvette", "npolstang", "npolvic", "npolexp", "npolchar", "pollambo"
 
 local pursuitEnabled = false
 
@@ -22,7 +22,7 @@ AddEventHandler("police:Ghost:Pursuit:A", function()
 
         if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or
             IsVehicleModel(veh, npolstang) or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or
-            IsVehicleModel(veh, npolchar) then
+            IsVehicleModel(veh, npolchar) or IsVehicleModel(veh, pollambo) then
             SetVehicleModKit(veh, 0)
             SetVehicleMod(veh, 11, 1, false)
             SetVehicleMod(veh, 12, 2, false)
@@ -42,7 +42,7 @@ AddEventHandler("police:Ghost:Pursuit:A:Plus", function()
         local Driver = GetPedInVehicleSeat(veh, -1)
         local fInitialDriveForce = GetVehicleHandlingFloat(veh, 'CHandlingData', 'fInitialDriveForce')
 
-        if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or IsVehicleModel(veh, npolstang) or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) then
+        if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or IsVehicleModel(veh, npolstang) or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) or IsVehicleModel(veh, pollambo) then
             SetVehicleModKit(veh, 0)
             SetVehicleMod(veh, 11, 3, false)
             SetVehicleMod(veh, 12, 2, false)
@@ -64,7 +64,7 @@ AddEventHandler("police:Ghost:Pursuit:S", function()
 
         if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or
             IsVehicleModel(veh, npolstang) -- Vehicle Checks
-        or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) then
+        or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) or IsVehicleModel(veh, pollambo) then
             SetVehicleModKit(veh, 0)
             SetVehicleMod(veh, 11, 4, false)
             SetVehicleMod(veh, 12, 2, false)
@@ -85,7 +85,7 @@ AddEventHandler("police:Ghost:Pursuit:Off", function()
         local fInitialDriveForce = GetVehicleHandlingFloat(veh, 'CHandlingData', 'fInitialDriveForce')
 
         if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or IsVehicleModel(veh, npolstang)
-        or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) then
+        or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) or IsVehicleModel(veh, pollambo) then
             SetVehicleModKit(veh, 0)
             SetVehicleMod(veh, 11, -1, false)
             SetVehicleMod(veh, 12, -1, false)
@@ -105,7 +105,7 @@ Citizen.CreateThread(function()
         local ped = PlayerPedId()
         local veh = GetVehiclePedIsIn(PlayerPedId(), false)
         if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or IsVehicleModel(veh, npolstang)
-        or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) then
+        or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) or IsVehicleModel(veh, pollambo) then
             if (not IsPauseMenuActive()) and (IsDisabledControlJustPressed(0, ControlForPursuitMode)) and InPursuitModeA == false then
                 InPursuitModeA = true
                 TriggerEvent('police:Ghost:Pursuit:A')

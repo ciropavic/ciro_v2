@@ -110,7 +110,8 @@ return {
 		weight = 5,
     degrade = 360000,
     stack = true,
-    close = true,
+    close = false,
+    consume = 0
 	},
 
 	['hacking_device'] = {
