@@ -1,15 +1,87 @@
 ---------------------------------------------------------------------------------- PDM
 Citizen.CreateThread(function()
-  exports.qtarget:AddTargetModel({-1589423867}, {
-    options = {{
-      event = "dealership:open",
-      icon = "far fa-clipboard",
-      label = "Browse Catalog"
-    }},
-    distance = 2.5
+  exports.qtarget:AddBoxZone("pdmCatalog1", vector3(-40.26, -1094.47, 27.27), 0.4, 0.85, {
+    name="pdmCatalog1",
+    heading=295,
+    -- debugPoly=true,
+    minZ=27.22,
+    maxZ=27.82
+    }, {
+      options = {
+        {
+          event = "dealership:open",
+          icon = "far fa-clipboard",
+          label = "Browse Catalog"
+        },
+      },
+      distance = 2.0
+  })
+  exports.qtarget:AddBoxZone("pdmCatalog2", vector3(-38.96, -1100.29, 27.27), 0.4, 0.85, {
+    name="pdmCatalog2",
+    heading=293,
+    --debugPoly=true,
+    minZ=27.17,
+    maxZ=27.77
+    }, {
+      options = {
+        {
+          event = "dealership:open",
+          icon = "far fa-clipboard",
+          label = "Browse Catalog"
+        },
+      },
+      distance = 2.0
+  })
+  exports.qtarget:AddBoxZone("pdmCatalog3", vector3(-46.95, -1095.38, 27.27), 0.4, 0.85, {
+    name="pdmCatalog3",
+    heading=11,
+    --debugPoly=true,
+    minZ=27.17,
+    maxZ=27.77
+    }, {
+      options = {
+        {
+          event = "dealership:open",
+          icon = "far fa-clipboard",
+          label = "Browse Catalog"
+        },
+      },
+      distance = 2.0
+  })
+  exports.qtarget:AddBoxZone("pdmCatalog4", vector3(-51.78, -1095.1, 27.27), 0.4, 0.85, {
+    name="pdmCatalog4",
+    heading=300,
+    --debugPoly=true,
+    minZ=27.17,
+    maxZ=27.77
+    }, {
+      options = {
+        {
+          event = "dealership:open",
+          icon = "far fa-clipboard",
+          label = "Browse Catalog"
+        },
+      },
+      distance = 2.0
+  })
+  exports.qtarget:AddBoxZone("pdmCatalog5", vector3(-51.08, -1086.91, 27.3), 0.4, 0.85, {
+    name="pdmCatalog5",
+    heading=338,
+    --debugPoly=true,
+    minZ=27.1,
+    maxZ=27.9
+    }, {
+      options = {
+        {
+          event = "dealership:open",
+          icon = "far fa-clipboard",
+          label = "Browse Catalog"
+        },
+      },
+      distance = 2.0
   })
 end)
----------------------------------------------------------------------------------- PDM
+---------------------------------------------------------------------------------- ATM
 local atms = {
   -1126237515,
   506770882,
@@ -30,8 +102,8 @@ end)
 
 ---------------------------------------------------------------------------------- Burgershot Trays
 
+Citizen.CreateThread(function()
   -- Right Tray
-  Citizen.CreateThread(function()
       exports.qtarget:AddBoxZone("BurgershotTray1", vector3(-1195.32, -892.33, 14.02), 0.50, 0.35, {
           name = "BurgershotTray1",
           heading = "35.0",
@@ -46,25 +118,24 @@ end)
           }},
           distance = 2.0
       })
-  end)
 
   -- Left Tray
-  Citizen.CreateThread(function()
       exports.qtarget:AddBoxZone("BurgershotTray2", vector3(-1194.03, -894.24, -894.24), 0.50, 0.35, {
-          name = "BurgershotTray2",
-          heading = "35.0",
-          -- debugPoly = true,
-          minZ = 14.0,
-          maxZ = 14.1,
-      }, {
-          options = {{
-              event = 'openBSTray2',
-              icon = 'fas fa-hamburger',
-              label = "Open Tray"
-          }},
-          distance = 2.0
-      })
+        name = "BurgershotTray2",
+        heading = "35.0",
+        -- debugPoly = true,
+        minZ = 14.0,
+        maxZ = 14.1,
+    }, {
+        options = {{
+            event = 'openBSTray2',
+            icon = 'fas fa-hamburger',
+            label = "Open Tray"
+        }},
+        distance = 2.0
+    })
   end)
+
 
 ---------------------------------------------------------------------------------- Casino Elevator
 -- Lobby

@@ -151,6 +151,15 @@ AddEventHandler('dealership:open', function()
     OpenVehicleShop()
 end)
 
+Citizen.CreateThread(function ()
+  while true do
+    Citizen.Wait(0)
+    if inTheShop then
+      NetworkOverrideClockTime(00, 00, 00)
+    end
+  end
+end)
+
 function OpenVehicleShop()
     inTheShop = true
     local ped = PlayerPedId()
@@ -440,6 +449,7 @@ function CloseNui()
         if lastSelectedVehicleEntity ~= nil then
             DeleteVehicle(lastSelectedVehicleEntity)
         end
+        NetworkClearClockTimeOverride()
         RenderScriptCams(false)
         DestroyAllCams(true)
         SetFocusEntity(GetPlayerPed(PlayerId())) 
