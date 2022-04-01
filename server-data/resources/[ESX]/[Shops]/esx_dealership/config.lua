@@ -12,9 +12,3 @@ Config.TestDriveTime = 30   -- TIME in SEC
 Config.Build2060 = true
 
 Config.Locale = 'en'
-
-Config.npc = 'a_m_y_business_03'
-
-Config.Spawn = {
-    {npcSpawn = vector3(-31.67, -1099.07, 26.27), h = 72.23}  ---- npc spawn location
-}

@@ -97,68 +97,19 @@ AddEventHandler('vehicleshop.vehiclesInfos', function(tableVehicles)
     end
 end)
 
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(1000)
-		for k, v in pairs(Config.Spawn) do
-			local npcSpawnped = GetEntityCoords(PlayerPedId())	
-			local dist = #(v.npcSpawn - npcSpawnped)
-			
-			if dist < 31 and pedspawneado == false then
-				TriggerEvent('dealership:npc',v.npcSpawn,v.h)
-				pedspawneado = true
-			end
-			if dist >= 30  then
-				pedspawneado = false
-        SetEntityAlpha(tunpc, 1, false)
-				DeletePed(tunpc)
-
-			end
-		end
-	end
-end)
-
-RegisterNetEvent('dealership:npc')
-AddEventHandler('dealership:npc',function(coords,heading)
-	local hash = GetHashKey(Config.npc)  --- change the npc to your liking
-	if not HasModelLoaded(hash) then
-		RequestModel(hash)
-		Wait(10)
-	end
-	while not HasModelLoaded(hash) do 
-		Wait(10)
-	end
-
-    pedspawneado = true
-	tunpc = CreatePed(5, hash, coords, heading, false, false)
-	FreezeEntityPosition(tunpc, true)
-  SetEntityInvincible(tunpc, true)
-    SetBlockingOfNonTemporaryEvents(tunpc, true)
-	loadAnimDict("amb@world_human_seat_wall_tablet@female@base")  ---- change the npc animation
-	while not TaskPlayAnim(tunpc, "amb@world_human_seat_wall_tablet@female@base", "base", 8.0, 1.0, -1, 17, 0, 0, 0, 0) do
-	Wait(1000)
-	end
-
-    if ipad == nil then
-        ipad = CreateObject(GetHashKey("prop_cs_tablet"), 0, 0, 0, true, true, true) -- creates object
-    end			
-    AttachEntityToEntity(ipad, tunpc, GetPedBoneIndex(tunpc, 28422), 0.0, 0.0, 0.03, 0.0, 0.0, 0.0, 1, 1, 0, 1, 0, 1) -- object is attached to right hand    
-
-end)
-
 RegisterNetEvent('dealership:open')
 AddEventHandler('dealership:open', function()
     OpenVehicleShop()
 end)
 
-Citizen.CreateThread(function ()
-  while true do
-    Citizen.Wait(0)
-    if inTheShop then
-      NetworkOverrideClockTime(00, 00, 00)
-    end
-  end
-end)
+-- Citizen.CreateThread(function ()
+--   while true do
+--     Citizen.Wait(0)
+--     if inTheShop then
+--       NetworkOverrideClockTime(00, 00, 00)
+--     end
+--   end
+-- end)
 
 function OpenVehicleShop()
     inTheShop = true
@@ -183,13 +134,13 @@ function OpenVehicleShop()
     --SetEntityVisible(ped, false, 0)
     --SetEntityCoords(ped, 404.90, -949.58, -99.71, 0, 0, 0, false)
 
-    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -954.49, -3537.35, 15.00, 317.16, 0.00, 0.00, 60.00, false, 0)
-    PointCamAtCoord(cam, -949.51440429688, -3532.888671875, 13.883902549744)
+    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -34.17, -1049.00, -41.80, 0.00, 0.00, 0.00, 60.00, false, 0)
+    PointCamAtCoord(cam, -37.47, -1054.39, -43.53)
 
     SetCamActive(cam, true)
     RenderScriptCams(true, true, 1, true, true)
         
-    SetFocusPosAndVel(-953.04, -3538.72, 14.62, 329.41, 0.0, 0.0, 0.0)
+    SetFocusPosAndVel(-37.47, -1054.39, -43.53, 280.27, 0.0, 0.0, 0.0)
 
     DisplayHud(false)
     DisplayRadar(false)
@@ -220,7 +171,7 @@ function updateSelectedVehicle(model)
     end
   --  lastSelectedVehicleEntity = CreateVehicle(hash, 404.99, -949.60, -99.98, 50.117, 0, 1)
     
-  lastSelectedVehicleEntity = CreateVehicle(hash, -949.51440429688, -3532.888671875, 13.883902549744, 89.5, 0, 1)
+  lastSelectedVehicleEntity = CreateVehicle(hash, -37.47, -1054.39, -43.53, 280.27, 0, 1)
 
 
     local vehicleData = {}
@@ -255,7 +206,7 @@ function updateSelectedVehicle(model)
     SetVehicleCustomPrimaryColour(lastSelectedVehicleEntity,  math.ceil(rgbColorSelected[1]), math.ceil(rgbColorSelected[2]), math.ceil(rgbColorSelected[3]))
     SetVehicleCustomSecondaryColour(lastSelectedVehicleEntity,  math.ceil(rgbSecondaryColorSelected[1]), math.ceil(rgbSecondaryColorSelected[2]), math.ceil(rgbSecondaryColorSelected[3]))
 
-    SetEntityHeading(lastSelectedVehicleEntity, 89.5)
+    SetEntityHeading(lastSelectedVehicleEntity, 280.27)
 end
 
 
