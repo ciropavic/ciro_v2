@@ -16,7 +16,7 @@ Citizen.CreateThread(function ()
       local ped = GetEntityCoords(PlayerPedId())
       local dist = #(v.vehSpawn - ped)
       
-      if dist < 31 and vehicleSpawned == false then
+      if dist < 51 and vehicleSpawned == false then
         vehicle = CreateVehicle(hash, v.vehSpawn, v.h, true, false)
         SetEntityAsMissionEntity(vehicle, true, true)
         SetVehicleDirtLevel(vehicle, 0.0)
@@ -24,7 +24,7 @@ Citizen.CreateThread(function ()
         SetVehicleDoorsLocked(vehicle, 2)
         vehicleSpawned = true
       end
-      if dist >= 31 then
+      if dist >= 51 then
         if DoesEntityExist(vehicle) then
           SetEntityAsMissionEntity(vehicle, true, true)
           SetEntityAlpha(vehicle, 1, false)
@@ -54,7 +54,7 @@ Citizen.CreateThread(function ()
       local ped = GetEntityCoords(PlayerPedId())
       local dist = #(v.vehSpawn - ped)
       
-      if dist < 31 and vehicle2Spawned == false then
+      if dist < 51 and vehicle2Spawned == false then
         vehicle2 = CreateVehicle(hash, v.vehSpawn, v.h, true, false)
         SetEntityAsMissionEntity(vehicle2, true, true)
         SetVehicleDirtLevel(vehicle2, 0.0)
@@ -62,7 +62,7 @@ Citizen.CreateThread(function ()
         SetVehicleDoorsLocked(vehicle2, 2)
         vehicle2Spawned = true
       end
-      if dist >= 31 then
+      if dist >= 51 then
         if DoesEntityExist(vehicle2) then
           SetEntityAsMissionEntity(vehicle2, true, true)
           SetEntityAlpha(vehicle2, 1, false)
@@ -92,7 +92,7 @@ Citizen.CreateThread(function ()
       local ped = GetEntityCoords(PlayerPedId())
       local dist = #(v.vehSpawn - ped)
       
-      if dist < 31 and vehicle3Spawned == false then
+      if dist < 51 and vehicle3Spawned == false then
         vehicle3 = CreateVehicle(hash, v.vehSpawn, v.h, true, false)
         SetEntityAsMissionEntity(vehicle3, true, true)
         SetVehicleDirtLevel(vehicle3, 0.0)
@@ -100,7 +100,7 @@ Citizen.CreateThread(function ()
         SetVehicleDoorsLocked(vehicle3, 2)
         vehicle3Spawned = true
       end
-      if dist >= 31 then
+      if dist >= 51 then
         if DoesEntityExist(vehicle3) then
           SetEntityAsMissionEntity(vehicle3, true, true)
           SetEntityAlpha(vehicle3, 1, false)
@@ -130,7 +130,7 @@ Citizen.CreateThread(function ()
       local ped = GetEntityCoords(PlayerPedId())
       local dist = #(v.vehSpawn - ped)
       
-      if dist < 31 and vehicle4Spawned == false then
+      if dist < 51 and vehicle4Spawned == false then
         vehicle4 = CreateVehicle(hash, v.vehSpawn, v.h, true, false)
         SetEntityAsMissionEntity(vehicle4, true, true)
         SetVehicleDirtLevel(vehicle4, 0.0)
@@ -138,7 +138,7 @@ Citizen.CreateThread(function ()
         SetVehicleDoorsLocked(vehicle4, 2)
         vehicle4Spawned = true
       end
-      if dist >= 31 then
+      if dist >= 51 then
         if DoesEntityExist(vehicle4) then
           SetEntityAsMissionEntity(vehicle4, true, true)
           SetEntityAlpha(vehicle4, 1, false)
@@ -168,7 +168,7 @@ Citizen.CreateThread(function ()
       local ped = GetEntityCoords(PlayerPedId())
       local dist = #(v.vehSpawn - ped)
       
-      if dist < 31 and vehicle5Spawned == false then
+      if dist < 51 and vehicle5Spawned == false then
         vehicle5 = CreateVehicle(hash, v.vehSpawn, v.h, true, false)
         SetEntityAsMissionEntity(vehicle5, true, true)
         SetVehicleDirtLevel(vehicle5, 0.0)
@@ -176,7 +176,7 @@ Citizen.CreateThread(function ()
         SetVehicleDoorsLocked(vehicle5, 2)
         vehicle5Spawned = true
       end
-      if dist >= 31 then
+      if dist >= 51 then
         if DoesEntityExist(vehicle5) then
           SetEntityAsMissionEntity(vehicle5, true, true)
           SetEntityAlpha(vehicle5, 1, false)

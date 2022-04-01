@@ -1,8 +1,8 @@
 local isDriving = false;
 local isUnderwater = false;
 local dev = false
-local npolchal, npolvette, npolstang, npolvic, npolexp, npolchar = "npolchal", "npolvette", "npolstang", "npolvic",
-    "npolexp", "npolchar"
+local npolchal, npolvette, npolstang, npolvic, npolexp, npolchar, pollambo = "npolchal", "npolvette", "npolstang", "npolvic",
+    "npolexp", "npolchar", "pollambo"
 
 ESX = nil
 Citizen.CreateThread(function()
@@ -52,7 +52,7 @@ Citizen.CreateThread(function ()
   while true do
     Citizen.Wait(1000)
     local veh = GetVehiclePedIsIn(PlayerPedId(), false)
-    if IsPedSittingInAnyVehicle(PlayerId()) and IsVehicleModel(veh, _) or IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or IsVehicleModel(veh, npolstang) or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) then
+    if IsPedSittingInAnyVehicle(PlayerId()) and IsVehicleModel(veh, _) or IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or IsVehicleModel(veh, npolstang) or IsVehicleModel(veh, npolvic) or IsVehicleModel(veh, npolexp) or IsVehicleModel(veh, npolchar) or IsVehicleModel(veh, pollambo) then
         SendNUIMessage({showPursuit = true})
       elseif not IsPedInAnyVehicle(PlayerId(), false) then
         SendNUIMessage({showPursuit = false})
