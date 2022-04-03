@@ -807,9 +807,9 @@ AddEventHandler("boosting:lockpick", function()
   end
 end)
 
-RegisterCommand('testboost', function ()
-  TriggerEvent('ecrp:vehicleboost')
-end)
+-- RegisterCommand('testboost', function ()
+--   TriggerEvent('ecrp:vehicleboost')
+-- end)
 
 function NewPickVeh()
   if pickedVehicle == nil then

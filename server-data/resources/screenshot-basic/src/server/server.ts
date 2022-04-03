@@ -1,12 +1,12 @@
 import { setHttpCallback } from '@citizenfx/http-wrapper';
 
-import { v4 } from 'uuid/v4';
+import { v4 } from 'uuid';
 import * as fs from 'fs';
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
 import * as koaBody from 'koa-body';
 import * as mv from 'mv';
-import { Fields, File } from 'formidable' 
+import { File } from 'formidable';
 
 const app = new Koa();
 const router = new Router();
@@ -71,7 +71,7 @@ router.post('/upload/:token', async (ctx) => {
 
 app.use(koaBody({
         patchKoa: true,
-        multipart: true
+        multipart: true,
     }))
    .use(router.routes())
    .use(router.allowedMethods());

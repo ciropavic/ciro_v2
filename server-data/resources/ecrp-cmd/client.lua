@@ -20,8 +20,4 @@ RegisterCommand('evidence', function ()
   exports.ox_inventory:openInventory('policeevidence')
 end)
 
-RegisterCommand('tpshowroom', function ()
-  SetEntityCoords(PlayerPedId(), -37.64443, -1054.396, -40.00031, 0, 0, 0, false)
-end)
-
 RegisterKeyMapping('noclip', '(Dev) Noclip','keyboard', '')

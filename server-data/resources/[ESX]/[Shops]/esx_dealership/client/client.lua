@@ -68,13 +68,13 @@ AddEventHandler('vehicleshop.vehiclesInfos', function(tableVehicles)
         local brandName
 
         if Config.Build2060 then
-            brandName = GetLabelText(Citizen.InvokeNative(0xF7AF4F159FF99F97, vehicleModel, Citizen.ResultAsString()))    
+          brandName = GetLabelText(Citizen.InvokeNative(0xF7AF4F159FF99F97, vehicleModel, Citizen.ResultAsString()))    
         else
-            brandName = nil
+          brandName = nil
         end
 
         if brandName == nil then
-            brandName = 'Custom'
+          brandName = 'Custom'
         end    
 
         local vehicleName   
@@ -87,11 +87,11 @@ AddEventHandler('vehicleshop.vehiclesInfos', function(tableVehicles)
 
         provisoryObject = 
         {
-            brand = brandName,
-            name = vehicleName,
-            price = value.price,
-            model = value.model,
-            qtd = value.stock
+          brand = brandName,
+          name = vehicleName,
+          price = value.price,
+          model = value.model,
+          qtd = value.stock
         }
         table.insert(vehiclesTable[value.category], provisoryObject)
     end
@@ -113,6 +113,7 @@ end)
 
 function OpenVehicleShop()
     inTheShop = true
+    LoadArena()
     local ped = PlayerPedId()
 
     TriggerServerEvent("vehicleshop.requestInfo")
@@ -154,6 +155,14 @@ function OpenVehicleShop()
         DeleteEntity(lastSelectedVehicleEntity)
     end
 
+end
+
+function LoadArena()
+  RequestIpl("np_showroom_milo_")
+end
+
+function UnloadArena()
+  RemoveIpl('np_showroom_milo_')
 end
 
 function updateSelectedVehicle(model)
@@ -396,6 +405,7 @@ function CloseNui()
         }
     )
     SetNuiFocus(false, false)
+    UnloadArena()
     if inTheShop then
         if lastSelectedVehicleEntity ~= nil then
             DeleteVehicle(lastSelectedVehicleEntity)
