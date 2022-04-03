@@ -938,16 +938,6 @@ AddEventHandler("playerSpawned", function()
     end)
 end)
 
--- RegisterCommand("try", function(source, args, rawCommand)
---     TriggerEvent('disc-inventoryhud:useWeapon')
---     TriggerServerEvent('drp-framework:updatearmour', GetPedArmour(PlayerPedId()))
---     exports["t0sic_loadingbar"]:StartDelayedFunction('Trying my best...', 1000, function()
---         TriggerServerEvent("clothing:checkIfNew")
---     end)
---     TriggerServerEvent('drp-framework:loadArmour')
--- end, false)
-
-
 RegisterNetEvent("betrayed_skins:inService")
 AddEventHandler("betrayed_skins:inService", function(service)
     isService = service

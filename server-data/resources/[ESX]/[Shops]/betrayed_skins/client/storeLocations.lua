@@ -3,87 +3,88 @@ local inBarber = true
 local inTattoo = true
 
 -- Clothing Stores
-local strawberry = BoxZone:Create(vector3(73.73, -1391.96, 29.38), 10.0, 7.8, {
+local strawberry = BoxZone:Create(vector3(72.06, -1397.23, 29.38), 8.0, 1.8, {
   name="strawberry",
   heading=0,
   --debugPoly=true,
-  minZ=28.18,
-  maxZ=31.98
+  minZ=28.73,
+  maxZ=31.53
 })
 
-local lagunas = BoxZone:Create(vector3(-165.91, -300.71, 39.74), 7.2, 13.2, {
+local lagunas = BoxZone:Create(vector3(-161.17, -295.67, 39.73), 6.2, 3.4, {
   name="lagunas",
-  heading=340,
+  heading=251,
   --debugPoly=true,
-  minZ=38.74,
-  maxZ=42.74
+  minZ=38.78,
+  maxZ=42.18
 })
 
-local sinner = BoxZone:Create(vector3(426.97, -807.79, 29.49), 9.8, 8.0, {
+local sinner = BoxZone:Create(vector3(428.93, -801.92, 29.49), 8.0, 1.8, {
   name="sinner",
   heading=0,
   --debugPoly=true,
-  minZ=28.29,
-  maxZ=32.29
+  minZ=28.49,
+  maxZ=32.49
 })
 
-local NRockford = BoxZone:Create(vector3(-1191.52, -769.92, 17.32), 10.0, 7.8, {
+local NRockford = BoxZone:Create(vector3(-1190.74, -769.43, 17.32), 11.2, 3.4, {
   name="NRockford",
-  heading=35,
+  heading=37,
   --debugPoly=true,
   minZ=16.32,
   maxZ=20.32
 })
 
-local portola = BoxZone:Create(vector3(-706.35, -152.52, 37.42), 7.2, 13.2, {
+local portola = BoxZone:Create(vector3(-705.78, -159.69, 37.42), 6.4, 4.4, {
   name="portola",
-  heading=208,
+  heading=300,
   --debugPoly=true,
   minZ=36.42,
   maxZ=40.42
 })
 
-local grapeseed = BoxZone:Create(vector3(1695.45, 4821.46, 42.06), 9.8, 8, {
+
+local grapeseed = BoxZone:Create(vector3(1696.67, 4827.58, 42.07), 8, 1.8, {
   name="grapeseed",
-  heading=7,
+  heading=8,
   --debugPoly=true,
-  minZ=41.06,
-  maxZ=45.06
+  minZ=41.07,
+  maxZ=45.07
 })
 
-local hawick = BoxZone:Create(vector3(122.8, -223.11, 54.56), 10, 7.8, {
+local hawick = BoxZone:Create(vector3(122.86, -223.8, 54.55), 11.0, 3.4, {
   name="hawick",
   heading=250,
   --debugPoly=true,
-  minZ=53.56,
-  maxZ=57.56
+  minZ=53.55,
+  maxZ=57.55
 })
 
-local route68hwy = BoxZone:Create(vector3(-1101.32, 2712.74, 19.11), 9.8, 8, {
+local route68hwy = BoxZone:Create(vector3(1192.34, 2713.53, 38.23), 8, 1.8, {
+  name="route68hwy",
+  heading=270,
+  --debugPoly=true,
+  minZ=37.23,
+  maxZ=41.23
+})
+
+local greatOcean = BoxZone:Create(vector3(-3173.25, 1043.88, 20.86), 11, 3.4, {
+  name="greatOcean",
+  heading=245,
+  --debugPoly=true,
+  minZ=19.86,
+  maxZ=23.86
+})
+
+local route68 = BoxZone:Create(vector3(-1106.97, 2710.07, 19.11), 8, 1.8, {
   name="route68",
-  heading=312,
+  heading=311,
   --debugPoly=true,
   minZ=18.11,
   maxZ=22.11
 })
 
-local greatOcean = BoxZone:Create(vector3(-3173.22, 1044.26, 20.87), 10, 7.8, {
-  name="greatOcean",
-  heading=246,
-  -- debugPoly=true,
-  minZ=19.86,
-  maxZ=22.86
-})
-
-local route68 = BoxZone:Create(vector3(1198.28, 2711.75, 38.22), 9.8, 8, {
-  name="route68",
-  heading=270,
-  --debugPoly=true,
-  minZ=37.22,
-  maxZ=41.22
-})
-
-local route68Suburban = BoxZone:Create(vector3(616.89, 2763.63, 42.09), 9.8, 8, {
+local route68Suburban = BoxZone:Create(vector3(616.63, 2764.07, 42.09), 11, 3.4, {
   name="route68Suburban",
   heading=275,
   --debugPoly=true,
@@ -91,7 +92,7 @@ local route68Suburban = BoxZone:Create(vector3(616.89, 2763.63, 42.09), 9.8, 8, 
   maxZ=45.09
 })
 
-local paleto = BoxZone:Create(vector3(4.72, 6510.35, 31.88), 9.8, 8, {
+local paleto = BoxZone:Create(vector3(10.24, 6512.88, 31.88), 8, 1.8, {
   name="paleto",
   heading=313,
   --debugPoly=true,
@@ -99,20 +100,20 @@ local paleto = BoxZone:Create(vector3(4.72, 6510.35, 31.88), 9.8, 8, {
   maxZ=34.88
 })
 
-local cougarAve = BoxZone:Create(vector3(-1448.84, -240.45, 49.81), 13.4, 7.8, {
+local cougarAve = BoxZone:Create(vector3(-1455.48, -243.55, 49.81), 6.4, 4.4, {
   name="cougarAve",
-  heading=230,
+  heading=228,
   --debugPoly=true,
   minZ=48.81,
   maxZ=52.81
 })
 
-local palomino = BoxZone:Create(vector3(-821.81, -1071.23, 11.33), 7.4, 9.6, {
+local palomino = BoxZone:Create(vector3(-827.83, -1072.85, 11.69), 8, 1.8, {
   name="palomino",
-  heading=31,
+  heading=300,
   --debugPoly=true,
-  minZ=10.33,
-  maxZ=14.33
+  minZ=10.69,
+  maxZ=14.69
 })
 -- Clothing Stores END
 
