@@ -510,9 +510,9 @@ else
         closeNUI()
     end)
 
-    RegisterCommand('-nui', function(playerId, args, rawCommand)
-        closeNUI()
-    end, false)
+    -- RegisterCommand('-nui', function(playerId, args, rawCommand)
+    --     closeNUI()
+    -- end, false)
 
     local Raycast = function()
         local offset = GetOffsetFromEntityInWorldCoords(GetCurrentPedWeaponEntityIndex(ESX.PlayerData.ped), 0, 0, -0.01)

@@ -321,11 +321,6 @@ AddEventHandler('fuel:startfuel', function(data)
 	end)
 end)
 
-RegisterCommand('lowfuel', function ()
-  local veh = GetVehiclePedIsIn(PlayerPedId(), false)
-  SetFuel(veh, 15.0)
-end)
-
 function StartFuel(vehicle)
   local fuel = GetVehicleFuelLevel(vehicle)
   local fuelTotal = 100 - fuel

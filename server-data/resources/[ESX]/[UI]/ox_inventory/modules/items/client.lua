@@ -23,6 +23,13 @@ local ox_inventory = exports[shared.resource]
 -- Clientside item use functions
 -----------------------------------------------------------------------------------------------
 
+function loadAnimDict(dict)
+  while (not HasAnimDictLoaded(dict)) do
+      RequestAnimDict(dict)
+      Citizen.Wait(5)
+  end
+end
+
 Item('firstaid', function(data, slot)
 	local maxHealth = 200
 	local health = GetEntityHealth(PlayerData.ped)
@@ -81,6 +88,42 @@ Item('phone', function(data, slot)
 	exports.npwd:setPhoneVisible(not exports.npwd:isPhoneVisible())
 end)
 
+local Megaphone = false
+local megaObj = nil
+Item('megaphone', function (data, slot)
+  local animDict = "anim@mp_player_intselfiethumbs_up"
+  local animation = "idle_a"
+  ox_inventory:useItem(data, function(data)
+    if data then
+      if Megaphone == false then
+        Megaphone = true
+        exports['pma-voice']:overrideProximityRange(500.0, true)
+        if megaObj == nil then
+          megaObj = CreateObject(GetHashKey("prop_megaphone_01"), 0, 0, 0, true, true, true)
+        end
+
+        AttachEntityToEntity(megaObj, PlayerPedId(), GetPedBoneIndex(PlayerPedId(), 18905), 0.10, 0.03, 0, 90, 150, 100, true, true, false, true, 0, true)
+        
+        if IsPedArmed(ped, 7) then
+          SetCurrentPedWeapon(ped, 0xA2719263, true)
+        end
+
+        loadAnimDict(animDict)
+        TaskPlayAnim(PlayerPedId(), animDict, animation, 1.0, 4.0, -1, 49, 0, 0, 0, 0)
+      else
+        Megaphone = false
+        ClearPedTasks(PlayerPedId())
+        if megaObj ~= nil then
+          DeleteEntity(megaObj)
+          megaObj = nil
+        end	
+        exports['pma-voice']:clearProximityOverride()
+      end
+    end
+  end)
+end)
+
+
 Item('lockpick', function(data, slot)
   local veh = IsPedInAnyVehicle(PlayerPedId(), false)
   if veh then
@@ -94,6 +137,12 @@ Item('lockpick', function(data, slot)
   end
 end)
 
+AddEventHandler('onResourceStop', function(resourceName)
+  if (GetCurrentResourceName() ~= resourceName) then
+    return
+  end
+  DeleteEntity(megaObj)
+end)
 -----------------------------------------------------------------------------------------------
 
 exports('Items', GetItem)

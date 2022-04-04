@@ -3,11 +3,11 @@ local mutedPlayers = {}
 -- we can't use GetConvarInt because its not a integer, and theres no way to get a float... so use a hacky way it is!
 local volumes = {
 	-- people are setting this to 1 instead of 1.0 and expecting it to work.
-	['radio'] = tonumber(GetConvar('voice_defaultVolume', '0.3')) + 0.0,
-	['phone'] = tonumber(GetConvar('voice_defaultVolume', '0.3')) + 0.0,
+	['radio'] = GetConvarInt('voice_defaultRadioVolume', 30) / 100,
+	['phone'] = GetConvarInt('voice_defaultPhoneVolume', 60) / 100,
 }
 
-radioEnabled, radioPressed, mode = false, false, 2
+radioEnabled, radioPressed, mode = true, false, GetConvarInt('voice_defaultVoiceMode', 2)
 radioData = {}
 callData = {}
 
@@ -17,8 +17,8 @@ callData = {}
 ---@param volumeType string the volume type (currently radio & call) to set the volume of (opt)
 function setVolume(volume, volumeType)
 	type_check({volume, "number"})
-	local volume = volume
-	volume = volume / 100
+	local volume = volume / 100
+	
 	if volumeType then
 		local volumeTbl = volumes[volumeType]
 		if volumeTbl then
@@ -59,19 +59,17 @@ end)
 -- o_freq_lo = 348.0
 -- 0_freq_hi = 4900.0
 
-
 if gameVersion == 'fivem' then
-	-- radio submix
 	radioEffectId = CreateAudioSubmix('Radio')
 	SetAudioSubmixEffectRadioFx(radioEffectId, 0)
-	SetAudioSubmixEffectParamInt(radioEffectId, 0, GetHashKey('default'), 1)
+	SetAudioSubmixEffectParamInt(radioEffectId, 0, `default`, 1)
 	AddAudioSubmixOutput(radioEffectId, 0)
 
 	phoneEffectId = CreateAudioSubmix('Phone')
 	SetAudioSubmixEffectRadioFx(phoneEffectId, 1)
-	SetAudioSubmixEffectParamInt(phoneEffectId, 1, GetHashKey('default'), 1)
-	SetAudioSubmixEffectParamFloat(phoneEffectId, 1, GetHashKey('freq_low'), 300.0)
-	SetAudioSubmixEffectParamFloat(phoneEffectId, 1, GetHashKey('freq_hi'), 6000.0)
+	SetAudioSubmixEffectParamInt(phoneEffectId, 1, `default`, 1)
+	SetAudioSubmixEffectParamFloat(phoneEffectId, 1, `freq_low`, 300.0)
+	SetAudioSubmixEffectParamFloat(phoneEffectId, 1, `freq_hi`, 6000.0)
 	AddAudioSubmixOutput(phoneEffectId, 1)
 end
 
@@ -96,7 +94,7 @@ function toggleVoice(plySource, enabled, moduleType)
 	logger.verbose('[main] Updating %s to talking: %s with submix %s', plySource, enabled, moduleType)
 	if enabled then
 		MumbleSetVolumeOverrideByServerId(plySource, enabled and volumes[moduleType])
-		if GetConvarInt('voice_enableSubmix', 0) == 1 and gameVersion == 'fivem' then
+		if GetConvarInt('voice_enableSubmix', 1) == 1 and gameVersion == 'fivem' then
 			if moduleType then
 				disableSubmixReset[plySource] = true
 				submixFunctions[moduleType](plySource)
@@ -105,7 +103,7 @@ function toggleVoice(plySource, enabled, moduleType)
 			end
 		end
 	else
-		if GetConvarInt('voice_enableSubmix', 0) == 1 and gameVersion == 'fivem' then
+		if GetConvarInt('voice_enableSubmix', 1) == 1 and gameVersion == 'fivem' then
 			-- garbage collect it
 			disableSubmixReset[plySource] = nil
 			SetTimeout(250, function()
@@ -121,6 +119,7 @@ end
 --- function playerTargets
 ---Adds players voices to the local players listen channels allowing
 ---Them to communicate at long range, ignoring proximity range.
+---@diagnostic disable-next-line: undefined-doc-param
 ---@param targets table expects multiple tables to be sent over
 function playerTargets(...)
 	local targets = {...}
@@ -149,10 +148,10 @@ end
 ---plays the mic click if the player has them enabled.
 ---@param clickType boolean whether to play the 'on' or 'off' click. 
 function playMicClicks(clickType)
-	if micClicks ~= 'true' then return end
-	SendNUIMessage({
+	if micClicks ~= 'true' then return logger.verbose("Not playing mic clicks because client has them disabled") end
+	sendUIMessage({
 		sound = (clickType and "audio_on" or "audio_off"),
-		volume = (clickType and (volumes["radio"]) or 0.05)
+		volume = (clickType and volumes["radio"] or 0.05)
 	})
 end
 
@@ -176,7 +175,7 @@ exports('toggleMutePlayer', toggleMutePlayer)
 function setVoiceProperty(type, value)
 	if type == "radioEnabled" then
 		radioEnabled = value
-		SendNUIMessage({
+		sendUIMessage({
 			radioEnabled = value
 		})
 	elseif type == "micClicks" then
@@ -189,6 +188,7 @@ exports('setVoiceProperty', setVoiceProperty)
 -- compatibility
 exports('SetMumbleProperty', setVoiceProperty)
 exports('SetTokoProperty', setVoiceProperty)
+
 
 -- cache their external servers so if it changes in runtime we can reconnect the client.
 local externalAddress = ''

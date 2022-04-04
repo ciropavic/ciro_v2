@@ -205,6 +205,16 @@ AddEventHandler('cl:toggleDev', function (status)
   dev = status
 end)
 
+function DevActive()
+  if dev then
+    return true
+  else
+    return false
+  end
+end
+
+exports('DevActive', DevActive)
+
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)

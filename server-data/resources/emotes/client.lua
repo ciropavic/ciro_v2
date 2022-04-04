@@ -3572,12 +3572,10 @@ anims = {
     end,
 
     ["smoke"] = function(ped)
-        if exports["np-inventory"]:hasEnoughOfItem("ciggy", 1) then
-            ClearPedTasks(PlayerPedId())
-            TaskStartScenarioInPlace(PlayerPedId(), "WORLD_HUMAN_SMOKING", 0, true)
-            TriggerEvent("inventory:removeItem","ciggy", 1)
-            playing_emote = true
-        end
+        ClearPedTasks(PlayerPedId())
+        TaskStartScenarioInPlace(PlayerPedId(), "WORLD_HUMAN_SMOKING", 0, true)
+        TriggerEvent("inventory:removeItem","ciggy", 1)
+        playing_emote = true
     end,
 
     ["smokemale"] = function(ped)
@@ -3625,7 +3623,7 @@ anims = {
     end,
 
     ["cigarette"] = function(ped)
-        if exports["np-inventory"]:hasEnoughOfItem("ciggy", 1) then
+        -- if exports["np-inventory"]:hasEnoughOfItem("ciggy", 1) th
             local animDict = "amb@world_human_smoking@male@male_a@enter"
             local animation = "enter"
             if IsPedArmed(ped, 7) then
@@ -3643,7 +3641,7 @@ anims = {
                 TriggerEvent("attachItem", "cigmouth")
             end
             TriggerEvent("inventory:removeItem","ciggy", 1)
-        end
+        -- end
     end,
 
     ["cigar"] = function(ped)

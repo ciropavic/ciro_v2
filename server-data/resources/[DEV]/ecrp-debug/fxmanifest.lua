@@ -1,13 +1,10 @@
 fx_version 'cerulean'
-
 game 'gta5'
 
-
 client_scripts {
-  'client.lua',
+  'client/client.lua',
 }
 
-exports {
-  'getDebugStatus',
-  'debugPrint'
+server_scripts {
+  'server/server.lua',
 }
