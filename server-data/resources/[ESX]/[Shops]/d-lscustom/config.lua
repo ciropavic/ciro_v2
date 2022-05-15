@@ -6,7 +6,12 @@ Locale = {
 	['prompt'] = "~INPUT_PICKUP~ Open LS Customs"
 }
 
+COMPATIBILITY = {
+	['qb-management'] = false -- enables compatibility layer for qb-management usage instead of qb-bossmenu
+}
+
 Config = {
+	localePath = "locale.json",
 	menuEvent = true, -- exposes event handler to open shop in any place [d-lscustom:openShop]
 	mods = { 
 		performance = {
@@ -49,7 +54,7 @@ Config = {
 			{ label = "ARMOUR", name = "armour", id = 16, parentMenu = "customization" },
 		},
 		cosmetics = {
-			{ name = "EXHAUST", id = 4 },
+			{ label = "EXHAUST", name = "exhaust", id = 4 },
 		}
 	},
 	customLabels = {
@@ -80,6 +85,7 @@ Config = {
 		aerials = { fov = 35.0, x = 3.2, y = 3.5, z = 2.2, rotX = -29.0, rotY = 0.0, rotZ = -135.0 },
 		spoiler = { fov = 30.0, x = -3.0, y = -5.0, z = 1.2, rotX = -8.0, rotY = 0.0, rotZ = 35.0 },
 		seats = { fov = 35.0, x = 2.7, y = 2.8, z = 1.0, rotX = -8.0, rotY = 0.0, rotZ = -135.0 },
+		headlights = { fov = 30.0, x = 2.5, y = 6.5, z = 0.5, rotX = -3.0, rotY = 0.0, rotZ = -160.0 },
 	},
 	shops = {
 		{ 
@@ -96,7 +102,8 @@ Config = {
 	},
 	whitelistedJob = false, -- enables shop access granting for configure jobs
 	-- make sure to define whitelisted jobs on each shop, otherwise the shop will be unaccessible if enabled
-	priceRatios = { -- price ratios for the vehicle mods
+	priceRatios = {
+    -- price ratios for the vehicle mods
 		-- if it's only one value like ([0] = 0.025), for every mod that price will be applied
 		-- if it's a table like this ([11] = { [1] = 0.0, [2] = 0.05, [3] = 0.08, [4] = 0.1, [5] = 0.15 }), and you know that
 		-- it will always have fixed amount of mods for example - engine, you can determine price ratio for each individual mod stage 
@@ -133,6 +140,14 @@ Config = {
 		[44] = 0.025, -- ROOG
 		[48] = 0.005, -- WRAP
 		["plates"] = 0.005, -- PLATES
+		["windowtint"] = 5000, -- WINDOWTINT
+		["neon"] = 3000, -- NEONS
+		["effects"] = 2000, -- TIRE SMOKE
+		["primary_color"] = 5000, --PRIMARY COLOR
+		["secondary_color"] = 3000, --SECONARY COLOR
+		["wheels_color"] = 2000, --WHEELS COLOR
+		["pearlescent_color"] = 4000, --PEARLESCENT COLOR
+		["headlights"] = 1000,
 	},
 	toggleMinimap = true,
 	wheeltypesections = {
@@ -163,7 +178,7 @@ Config = {
 		},]]
 	},
 	stance = {
-		enable = false, -- toggles stance menu [READ INSTRUCTIONS HOW TO ENABLE!]
+		enable = true, -- toggles stance menu [READ INSTRUCTIONS HOW TO ENABLE!]
 		range = {
 			frontWidth = 0.1,
 			rearWidth = 0.1,
@@ -173,7 +188,7 @@ Config = {
 	},
 	society = {
 		enable = false, -- enables paying for mods out of society account
-		enableSavings = true, -- when enabled, the configured part of mod price will go to the society account
+		enableSavings = false, -- when enabled, the configured part of mod price will go to the society account
 		ratio = 0.2, -- (vehicle_price * ratio) this amount will be saved to the society account if enabled
 	},
 	marker = {
@@ -183,7 +198,24 @@ Config = {
 		range = 30.0,
 		color = { r = 255, g = 255, b = 255},
 		alpha = 150
-	}
+	},
+	hornCheckEnable = false,
+	DEBUG = false,
+	hardcodedMods = { 
+		{
+			id = "windowtint",
+			menu = "windowtint"
+		},
+		{
+			id = "neon",
+			menu = "neons"
+		},
+		{
+			id = "effects",
+			menu = "effects"
+		},
+	},
+	paintTypes = {"primary_color", "secondary_color", "pearlescent_color", "wheels_color" }
 }
 
 MenusTemplate = {
@@ -281,25 +313,25 @@ MenusTemplate = {
 	neons = {
 		list = {
 			{ modId = "neon", label = "NO NEONS", type = "upgrade", price = 0 },
-			{ modId = "neon", id = { r = 255, g = 255, b = 255 }, label = "WHITE", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 112, g = 128, b = 144 }, label = "GRAY", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 0, g = 0, b = 255 }, label = "BLUE", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 0, g = 150, b = 255 }, label = "LIGHT BLUE", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 0, g = 0, b = 128 }, label = "NAVY BLUE", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 135, g = 206, b = 235 }, label = "SKY BLUE", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 0, g = 245, b = 255 }, label = "TURQUOISE", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 50, g = 255, b = 155 }, label = "MINT GREEN", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 0, g = 255, b = 0 }, label = "LIME GREEN", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 128, g = 128, b = 0 }, label = "OLIVE", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 255, g = 255, b = 0 }, label = "YELLOW", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 255, g = 215, b = 0 }, label = "GOLD", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 255, g = 165, b = 0 }, label = "ORANGE", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 245, g = 222, b = 179 }, label = "WHEAT", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 255, g = 0, b = 0 }, label = "RED", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 255, g = 161, b = 211 }, label = "PINK", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 255, g = 0, b = 255 }, label = "BRIGHT PINK", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 153, g = 0, b = 153 }, label = "PURPLE", type = "upgrade", price = 5000 },
-			{ modId = "neon", id = { r = 41, g = 36, b = 33 }, label = "IVORY", type = "upgrade", price = 5000 },
+			{ modId = "neon", id = { r = 255, g = 255, b = 255 }, label = "WHITE", type = "upgrade" },
+			{ modId = "neon", id = { r = 112, g = 128, b = 144 }, label = "GRAY", type = "upgrade" },
+			{ modId = "neon", id = { r = 0, g = 0, b = 255 }, label = "BLUE", type = "upgrade" },
+			{ modId = "neon", id = { r = 0, g = 150, b = 255 }, label = "LIGHT BLUE", type = "upgrade" },
+			{ modId = "neon", id = { r = 0, g = 0, b = 128 }, label = "NAVY BLUE", type = "upgrade" },
+			{ modId = "neon", id = { r = 135, g = 206, b = 235 }, label = "SKY BLUE", type = "upgrade" },
+			{ modId = "neon", id = { r = 0, g = 245, b = 255 }, label = "TURQUOISE", type = "upgrade" },
+			{ modId = "neon", id = { r = 50, g = 255, b = 155 }, label = "MINT GREEN", type = "upgrade" },
+			{ modId = "neon", id = { r = 0, g = 255, b = 0 }, label = "LIME GREEN", type = "upgrade" },
+			{ modId = "neon", id = { r = 128, g = 128, b = 0 }, label = "OLIVE", type = "upgrade" },
+			{ modId = "neon", id = { r = 255, g = 255, b = 0 }, label = "YELLOW", type = "upgrade" },
+			{ modId = "neon", id = { r = 255, g = 215, b = 0 }, label = "GOLD", type = "upgrade" },
+			{ modId = "neon", id = { r = 255, g = 165, b = 0 }, label = "ORANGE", type = "upgrade" },
+			{ modId = "neon", id = { r = 245, g = 222, b = 179 }, label = "WHEAT", type = "upgrade" },
+			{ modId = "neon", id = { r = 255, g = 0, b = 0 }, label = "RED", type = "upgrade" },
+			{ modId = "neon", id = { r = 255, g = 161, b = 211 }, label = "PINK", type = "upgrade" },
+			{ modId = "neon", id = { r = 255, g = 0, b = 255 }, label = "BRIGHT PINK", type = "upgrade" },
+			{ modId = "neon", id = { r = 153, g = 0, b = 153 }, label = "PURPLE", type = "upgrade" },
+			{ modId = "neon", id = { r = 41, g = 36, b = 33 }, label = "IVORY", type = "upgrade" },
 		},
 		activeElement = 0,
 		parentMenu = "cosmetics"
@@ -307,25 +339,25 @@ MenusTemplate = {
 	effects = {
 		list = {
 			{ modId = "effects", label = "STOCK", type = "upgrade", price = 0 },
-			{ modId = "effects", id = { r = 255, g = 255, b = 255 }, label = "WHITE", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 112, g = 128, b = 144 }, label = "GRAY", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 0, g = 0, b = 255 }, label = "BLUE", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 0, g = 150, b = 255 }, label = "LIGHT BLUE", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 0, g = 0, b = 128 }, label = "NAVY BLUE", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 135, g = 206, b = 235 }, label = "SKY BLUE", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 0, g = 245, b = 255 }, label = "TURQUOISE", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 50, g = 255, b = 155 }, label = "MINT GREEN", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 0, g = 255, b = 0 }, label = "LIME GREEN", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 128, g = 128, b = 0 }, label = "OLIVE", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 255, g = 255, b = 0 }, label = "YELLOW", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 255, g = 215, b = 0 }, label = "GOLD", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 255, g = 165, b = 0 }, label = "ORANGE", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 245, g = 222, b = 179 }, label = "WHEAT", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 255, g = 0, b = 0 }, label = "RED", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 255, g = 161, b = 211 }, label = "PINK", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 255, g = 0, b = 255 }, label = "BRIGHT PINK", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 153, g = 0, b = 153 }, label = "PURPLE", type = "upgrade", price = 5000 },
-			{ modId = "effects", id = { r = 41, g = 36, b = 33 }, label = "IVORY", type = "upgrade", price = 5000 },
+			{ modId = "effects", id = { r = 255, g = 255, b = 255 }, label = "WHITE", type = "upgrade" },
+			{ modId = "effects", id = { r = 112, g = 128, b = 144 }, label = "GRAY", type = "upgrade" },
+			{ modId = "effects", id = { r = 0, g = 0, b = 255 }, label = "BLUE", type = "upgrade" },
+			{ modId = "effects", id = { r = 0, g = 150, b = 255 }, label = "LIGHT BLUE", type = "upgrade" },
+			{ modId = "effects", id = { r = 0, g = 0, b = 128 }, label = "NAVY BLUE", type = "upgrade" },
+			{ modId = "effects", id = { r = 135, g = 206, b = 235 }, label = "SKY BLUE", type = "upgrade" },
+			{ modId = "effects", id = { r = 0, g = 245, b = 255 }, label = "TURQUOISE", type = "upgrade" },
+			{ modId = "effects", id = { r = 50, g = 255, b = 155 }, label = "MINT GREEN", type = "upgrade" },
+			{ modId = "effects", id = { r = 0, g = 255, b = 0 }, label = "LIME GREEN", type = "upgrade" },
+			{ modId = "effects", id = { r = 128, g = 128, b = 0 }, label = "OLIVE", type = "upgrade" },
+			{ modId = "effects", id = { r = 255, g = 255, b = 0 }, label = "YELLOW", type = "upgrade" },
+			{ modId = "effects", id = { r = 255, g = 215, b = 0 }, label = "GOLD", type = "upgrade" },
+			{ modId = "effects", id = { r = 255, g = 165, b = 0 }, label = "ORANGE", type = "upgrade" },
+			{ modId = "effects", id = { r = 245, g = 222, b = 179 }, label = "WHEAT", type = "upgrade" },
+			{ modId = "effects", id = { r = 255, g = 0, b = 0 }, label = "RED", type = "upgrade" },
+			{ modId = "effects", id = { r = 255, g = 161, b = 211 }, label = "PINK", type = "upgrade" },
+			{ modId = "effects", id = { r = 255, g = 0, b = 255 }, label = "BRIGHT PINK", type = "upgrade" },
+			{ modId = "effects", id = { r = 153, g = 0, b = 153 }, label = "PURPLE", type = "upgrade" },
+			{ modId = "effects", id = { r = 41, g = 36, b = 33 }, label = "IVORY", type = "upgrade" },
 		},
 		activeElement = 0,
 		parentMenu = "cosmetics"
@@ -355,12 +387,12 @@ MenusTemplate = {
 	windowtint = {
 		list = {
 			{ modId = "windowtint", id = 0, label = "NONE", type = "upgrade", price = 0 },
-			{ modId = "windowtint", id = 1, label = "PURE BLACK", type = "upgrade", price = 5000 },
-			{ modId = "windowtint", id = 2, label = "DARK SMOKE", type = "upgrade", price = 5000 },
-			{ modId = "windowtint", id = 3, label = "LIGHT SMOKE", type = "upgrade", price = 5000 },
-			{ modId = "windowtint", id = 4, label = "STOCK", type = "upgrade", price = 5000 },
-			{ modId = "windowtint", id = 5, label = "LIMO", type = "upgrade", price = 5000 },
-			{ modId = "windowtint", id = 6, label = "GREEN", type = "upgrade", price = 5000 },
+			{ modId = "windowtint", id = 1, label = "PURE BLACK", type = "upgrade" },
+			{ modId = "windowtint", id = 2, label = "DARK SMOKE", type = "upgrade" },
+			{ modId = "windowtint", id = 3, label = "LIGHT SMOKE", type = "upgrade" },
+			{ modId = "windowtint", id = 4, label = "STOCK", type = "upgrade" },
+			{ modId = "windowtint", id = 5, label = "LIMO", type = "upgrade" },
+			{ modId = "windowtint", id = 6, label = "GREEN", type = "upgrade" },
 		},
 		activeElement = 0,
 		parentMenu = "cosmetics"
@@ -371,6 +403,7 @@ MenusTemplate = {
 			{ label = "SECTION_2", childMenu = "wheelssection2", icon = "wheels" },
 			{ label = "SECTION_3", childMenu = "wheelssection3", icon = "wheels" },
 			{ label = "EFFECTS", name = "effects", childMenu = "effects" },
+			{ label = "HEADLIGHTS", name = "headlights", childMenu = "headlights" },
 		},
 		activeElement = 0,
 		parentMenu = "cosmetics"

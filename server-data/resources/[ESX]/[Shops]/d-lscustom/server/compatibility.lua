@@ -1,7 +1,6 @@
-FRAMEWORK = GetResourceMetadata(GetCurrentResourceName(), "framework")
+FRAMEWORK = ""
 QBCore = {}
 ESX = {}
--- print('Defined framework: ', FRAMEWORK)
 CreateThread(function()
 	DetectFramework()
 end)
@@ -31,11 +30,12 @@ local func = {
 			local startTime = os.nanotime()
 			for k,v in pairs(QBCore.Shared.Vehicles) do
 				if v.hash == modelName then
+					Log("debug", "Price", "found vehicle price for " .. modelName .. " of " .. v.price .. "$ within " .. (os.nanotime() - startTime) / 1000 .. "ms")
 					--print('took', (os.nanotime() - startTime) / 1000, "ms to fetch vehicle price")
 					return v.price
 				end
 			end
-			
+			Log("debug", "Price", "no vehicle price found for " .. modelName)
 			return 0
 		end,
 		['esx'] = function(modelName)
@@ -48,10 +48,13 @@ local func = {
 				---print("checking ", #result, "results")
 				for i = 1, #result do
 					if GetHashKey(result[i].model) == modelName then
+						Log("debug", "Price", "found vehicle price for " .. modelName .. " of " .. math.ceil(tonumber(result[i].price)) .. "$ within " .. (os.nanotime() - startTime) / 1000 .. "ms")
 						---print('took', (os.nanotime() - startTime) / 1000, "ms to fetch vehicle price")
 						return p:resolve(math.ceil(tonumber(result[i].price)))
 					end
 				end
+
+				Log("debug", "Price", "no vehicle price found for " .. modelName)
 				
 				return p:resolve(0)
 			end)
@@ -82,41 +85,56 @@ local callbacks = {
 			QBCore.Functions.CreateCallback('d-lscustom:server:purchaseMod', function(source, cb, modelName, vehicleProps, modId, id)
 				local Player = QBCore.Functions.GetPlayer(source)
 				local modPrice
+
+				local shopId = GetClosestShop(source)
+
 				if modId == "stance" then
 					
 				else
 					local vehiclePrice = func['GetVehiclePrice'][FRAMEWORK](modelName) * GetShopPriceRatio(source, GetClosestShop(source))
-					local modPriceRatio = 0.01
-					if Config.priceRatios[modId] ~= nil then
-						if type(Config.priceRatios[modId]) == "table" then
-							modPriceRatio = Config.priceRatios[modId][id]
-						else
-							modPriceRatio = Config.priceRatios[modId]
-						end
-					end
-					modPrice = math.ceil(vehiclePrice * modPriceRatio)
+					modPrice = GetModPrice(vehiclePrice, modId, id)
 				end
 			
 				if modPrice then
 					if Config.society.enable then
-						local societyBalance = exports['qb-bossmenu']:GetAccount('mechanic')
-						if societyBalance >= modPrice then
-							TriggerEvent('qb-bossmenu:server:removeAccountMoney', 'mechanic', tonumber(modPrice))
-							func['UpdateVehicleProps'][FRAMEWORK](vehicleProps)
-							if Config.society.enableSavings then
-								TriggerEvent("qb-bossmenu:server:addAccountMoney", "mechanic", tonumber(modPrice) * (Config.society.ratio or 1.0))
+						if COMPATIBILITY['qb-management'] then
+							local societyBalance = exports['qb-management']:GetAccount(Config.shops[shopId].societyName)
+							if societyBalance >= modPrice then
+								exports['qb-management']:RemoveMoney(Config.shops[shopId].societyName, tonumber(modPrice))
+								func['UpdateVehicleProps'][FRAMEWORK](vehicleProps)
+								if Config.society.enableSavings then
+									exports['qb-management']:AddMoney(Config.shops[shopId].societyName, tonumber(modPrice) * (Config.society.ratio or 1.0))
+								end
+								cb('success')
+							else
+								TriggerClientEvent('QBCore:Notify', source, 'Not enough cash in society account', 'error', 5000)
+								cb('error')
 							end
-							cb('success')
 						else
-							TriggerClientEvent('QBCore:Notify', source, 'Not enough cash in society account', 'error', 5000)
-							cb('error')
+							local societyBalance = exports['qb-bossmenu']:GetAccount(Config.shops[shopId].societyName)
+							if societyBalance >= modPrice then
+								TriggerEvent('qb-bossmenu:server:removeAccountMoney', Config.shops[shopId].societyName, tonumber(modPrice))
+								func['UpdateVehicleProps'][FRAMEWORK](vehicleProps)
+								if Config.society.enableSavings then
+									TriggerEvent("qb-bossmenu:server:addAccountMoney", Config.shops[shopId].societyName, tonumber(modPrice) * (Config.society.ratio or 1.0))
+								end
+								cb('success')
+							else
+								TriggerClientEvent('QBCore:Notify', source, 'Not enough cash in society account', 'error', 5000)
+								cb('error')
+							end
 						end
 					else
 						if Player.Functions.GetMoney('cash') >= modPrice then
 							Player.Functions.RemoveMoney('cash', tonumber(modPrice), 'lscustoms')
 							func['UpdateVehicleProps'][FRAMEWORK](vehicleProps)
+							
 							if Config.society.enableSavings then
-								TriggerEvent("qb-bossmenu:server:addAccountMoney", "mechanic", tonumber(modPrice) * (Config.society.ratio or 1.0))
+								if COMPATIBILITY['qb-management'] then
+									exports['qb-management']:AddMoney(Config.shops[shopId].societyName, tonumber(modPrice) * (Config.society.ratio or 1.0))
+								else
+									TriggerEvent("qb-bossmenu:server:addAccountMoney", Config.shops[shopId].societyName, tonumber(modPrice) * (Config.society.ratio or 1.0))
+								end
 							end
 							cb('success')
 						else
@@ -138,33 +156,26 @@ local callbacks = {
 				local vehiclePrice = func['GetVehiclePrice'][FRAMEWORK](modelName) * GetShopPriceRatio(source, GetClosestShop(source))
 				local modPrice
 
+				local shopId = GetClosestShop(source)
+
 				if modId == "stance" then
 
 				else
-					local modPriceRatio = 0.01
-					if Config.priceRatios[modId] ~= nil then
-						if type(Config.priceRatios[modId]) == "table" then
-							modPriceRatio = Config.priceRatios[modId][id]
-						else
-							modPriceRatio = Config.priceRatios[modId]
-						end
-					end
-					modPrice = math.ceil(vehiclePrice * modPriceRatio)
+					modPrice = GetModPrice(vehiclePrice, modId, id)
 				end
 
 				if modPrice then
 					if Config.society.enable then
-						local societyAccount = promise:new()
-						TriggerEvent('esx_addonaccount:getSharedAccount', 'society_mechanic', function(account)
-							promise:resolve(account)
+						local societyPromise = promise:new()
+						TriggerEvent('esx_addonaccount:getSharedAccount', 'society_' .. Config.shops[shopId].societyName, function(account)
+							societyPromise:resolve(account)
 						end)
-						Citizen.Await(societyAccount)
-						if societyAccount.money >= modPrice then
-							societyAccount.removeMoney(tonumber(modPrice))
-							---TriggerEvent('qb-bossmenu:server:removeAccountMoney', 'mechanic', tonumber(modPrice))
+						local accountData = Citizen.Await(societyPromise)
+						if accountData.money >= modPrice then
+							accountData.removeMoney(tonumber(modPrice))
 							func['UpdateVehicleProps'][FRAMEWORK](vehicleProps)
 							if Config.society.enableSavings then
-								societyAccount.addMoney(tonumber(modPrice) * (Config.society.ratio or 1.0))
+								accountData.addMoney(tonumber(modPrice) * (Config.society.ratio or 1.0))
 							end
 							cb('success')
 						else
@@ -177,7 +188,7 @@ local callbacks = {
 							func['UpdateVehicleProps'][FRAMEWORK](vehicleProps)
 
 							if Config.society.enableSavings then
-								TriggerEvent('esx_addonaccount:getSharedAccount', 'society_mechanic', function(account)
+								TriggerEvent('esx_addonaccount:getSharedAccount', 'society_' .. Config.shops[shopId].societyName, function(account)
 									account.addMoney(tonumber(modPrice) * (Config.society.ratio or 1.0))
 								end)
 							end
@@ -196,7 +207,13 @@ local callbacks = {
 		end,
 		function()
 			ESX.RegisterServerCallback('d-lscustom:server:getVehiclePrice', function(source, cb, modelName)
-				cb(func['GetVehiclePrice'][FRAMEWORK](modelName) * GetShopPriceRatio(source, GetClosestShop(source)))
+				local closestShopIndex = GetClosestShop(source)
+				DEBUG.Log("closestShopIndex", closestShopIndex)
+				local shopPriceRatio = GetShopPriceRatio(source, closestShopIndex)
+				DEBUG.Log("shopPriceRatio", shopPriceRatio)
+				local vehiclePrice = func['GetVehiclePrice'][FRAMEWORK](modelName)
+				DEBUG.Log("vehiclePrice", vehiclePrice)
+				cb(vehiclePrice * shopPriceRatio)
 			end)
 		end
 	}
@@ -222,14 +239,33 @@ function GetShopPriceRatio(player, index)
 	return Config.shops[index].jobPrices['default']
 end
 
+function GetModPrice(vehiclePrice, modId, id)
+	local modPriceRatio = 0.01
+	if Config.priceRatios[modId] ~= nil then
+		if type(Config.priceRatios[modId]) == "table" then
+			modPriceRatio = Config.priceRatios[modId][id]
+		else
+		if Config.priceRatios[modId] > 10.0 then
+			return math.ceil(Config.priceRatios[modId])
+		end
+			modPriceRatio = Config.priceRatios[modId]
+		end
+	end
+	return math.ceil(vehiclePrice * modPriceRatio)
+end
 
 function DetectFramework()
 	Wait(1000)
-	if FRAMEWORK == 'qb-core' then
+
+	if GetResourceState("qb-core") == "started" then
+		FRAMEWORK = "qb-core"
 		QBCore = exports['qb-core']:GetCoreObject()
-	elseif FRAMEWORK == 'esx' then
+	elseif GetResourceState("es_extended") == "started" then
+		FRAMEWORK = "esx"
 		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 	end
+
+	print('[^4SETUP^7] ' .. 'Detected framework: ^3' .. FRAMEWORK)
 
 	for i = 1, #callbacks[FRAMEWORK] do
 		callbacks[FRAMEWORK][i]()

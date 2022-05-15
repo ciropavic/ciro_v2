@@ -79,7 +79,24 @@ const mockData = [
     { index: 20, name: 'magnesite'},
 ];
 
-const paintTypes = ['primary', 'secondary', 'pearlescent', 'wheels'];
+const paintTypes = [
+    {
+        id: 'primary_color',
+        label: 'primary'
+    },
+    {
+        id: 'secondary_color',
+        label: 'secondary'
+    },
+    {
+        id: 'pearlescent_color',
+        label: 'pearlescent'
+    },
+    {
+        id: 'wheels_color',
+        label: 'wheels'
+    }
+];
 
 const Paint = () => {
     const currentMenu: string = useSelector((state: any) => state.Menu.activeMenu)
@@ -125,13 +142,13 @@ const Paint = () => {
         setTimeout(() => throttle.current = false, 30)
 
         const state = store.getState();
-        const currentType = paintTypes[type.current]
+        const currentType = paintTypes[type.current].id
 
         if(event.key == "ArrowDown"){
-            store.dispatch({ type: "PAINT_MOVE_DOWN", paintType: paintTypes[type.current] })
+            store.dispatch({ type: "PAINT_MOVE_DOWN", paintType: currentType })
             Nui.post("applyMod", { modId: currentType, id: state.Paint[currentType].list[state.Paint[currentType].activeElement].index })
         } else if(event.key == "ArrowUp"){
-            store.dispatch({ type: "PAINT_MOVE_UP", paintType: paintTypes[type.current] })
+            store.dispatch({ type: "PAINT_MOVE_UP", paintType: currentType })
             Nui.post("applyMod", { modId: currentType, id: state.Paint[currentType].list[state.Paint[currentType].activeElement].index })
         } else if(event.key == "Enter"){
             store.dispatch({
@@ -139,7 +156,7 @@ const Paint = () => {
                 action: "installMod", 
                 label: "BUY AND INSTALL", 
                 header: "COST:", 
-                price: 900,
+                price: state.Paint[currentType].price,
                 modId: currentType, 
                 id: state.Paint[currentType].list[state.Paint[currentType].activeElement].index
             })
@@ -147,18 +164,20 @@ const Paint = () => {
     }
 
     const navLeft = () => {
+        if(store.getState().Menu.activeMenu != "paint") return;
         type.current = type.current - 1 < 0 ? paintTypes.length - 1 : type.current - 1
         setForceUpdate(Date.now());
         const state = store.getState();
-        const currentType = paintTypes[type.current]
+        const currentType = paintTypes[type.current].id
         Nui.post("applyMod", { modId: currentType, id: state.Paint[currentType].list[state.Paint[currentType].activeElement].index })
     }
 
     const navRight = () => {
+        if(store.getState().Menu.activeMenu != "paint") return;
         type.current = type.current + 1 >= paintTypes.length  ? 0 : type.current + 1
         setForceUpdate(Date.now());
         const state = store.getState();
-        const currentType = paintTypes[type.current]
+        const currentType = paintTypes[type.current].id
         Nui.post("applyMod", { modId: currentType, id: state.Paint[currentType].list[state.Paint[currentType].activeElement].index })
     }
 
@@ -166,7 +185,7 @@ const Paint = () => {
         <Container hidden={currentMenu != "paint"}>
             <Nav data={{ navLeft: navLeft, navRight: navRight, activeElement: type, elements: paintTypes }}/>
             <PalleteContainer>
-                {paintTypes.map((x, index) => <VerticalList key={index} data={{ activeTab: type.current == index, tabName: x }} />)}
+                {paintTypes.map((x, index) => <VerticalList key={index} data={{ activeTab: type.current == index, tabName: x.id }} />)}
             </PalleteContainer>
         </Container>
     )

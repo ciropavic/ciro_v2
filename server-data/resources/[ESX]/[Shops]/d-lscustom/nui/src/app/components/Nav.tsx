@@ -79,7 +79,7 @@ const Nav = ({ data }) => {
             <Tab><Btn><BtnLabel>Q</BtnLabel></Btn></Tab>
             {data.elements.map((x, index) => {
                 return (<Tab key={index} style={{ background: (data.activeElement.current == index ? 'rgb(255,255,255)' : '') }}>
-                    <Label style={{ color: (data.activeElement.current == index ? 'rgb(0,0,0)' : '') }}>{x.toUpperCase()}</Label>
+                    <Label style={{ color: (data.activeElement.current == index ? 'rgb(0,0,0)' : '') }}>{x.label.toUpperCase()}</Label>
                 </Tab>)
             })}
             <Tab><Btn><BtnLabel>E</BtnLabel></Btn></Tab>

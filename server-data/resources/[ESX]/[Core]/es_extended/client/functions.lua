@@ -760,10 +760,7 @@ ESX.Game.SetVehicleProperties = function(vehicle, props)
 		end
 
     if props.stance then
-      exports['d-stance']:SetFrontTrackWidth(vehicle, props.stance.frontWidth)
-      exports['d-stance']:SetFrontCamber(vehicle, props.stance.frontCamber)
-      exports['d-stance']:SetRearTrackWidth(vehicle, props.stance.rearWidth)
-      exports['d-stance']:SetRearCamber(vehicle, props.stance.rearCamber)
+      exports['d-stance']:SetWheelsPreset(vehicle, props.stance)
     end
 	end
 end

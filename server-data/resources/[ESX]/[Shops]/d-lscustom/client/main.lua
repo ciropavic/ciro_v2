@@ -1,7 +1,11 @@
 local cameras = {}
 local vehicle = nil
+local activeHorn = false
+currentShop = -1
 local activeCam = 'general'
 vehicleProps = {}
+isInShop = false
+displayingPrompt = false
 
 local GetVehicleDoorAngleRatio = GetVehicleDoorAngleRatio
 local SetVehicleDoorOpen = SetVehicleDoorOpen
@@ -42,10 +46,11 @@ end
 
 function setUiState (state)
 	nuiOpen = state
+	activeHorn = false
 	if Config.toggleMinimap then
 		DisplayRadar(not nuiOpen)
 	end
-	SetNuiFocus(nuiOpen, nuiOpen)
+	SetNuiFocus(nuiOpen, false)
 	func['UpdateCash'][FRAMEWORK]()
 	vehicle = GetVehiclePedIsIn(PlayerPedId())
 	local vehicle <const> = vehicle
@@ -61,6 +66,9 @@ function setUiState (state)
 	    local builtMenusNum = 0
 
 	    local wheelsType = GetVehicleWheelType(vehicle)
+
+
+		local UNKNOWN_LOCALE = U.GetString("unknown") or "UNKNOWN"
 
 	    CreateThread(function()
 			for i = 0, 12 do
@@ -87,7 +95,7 @@ function setUiState (state)
 						modName = GetLabelText(GetModTextLabel(vehicle, 23, j))
 					end
 					if modName == "NULL" then
-						modName = "UNKNOWN_WHEELS_" .. j
+						modName = (U.GetString("UNKNOWN_WHEELS") or "UNKNOWN_WHEELS") .. j
 					end
 					table.insert(modList, {
 						modId = 23,
@@ -110,6 +118,12 @@ function setUiState (state)
 			end
 		end)
 
+		for menuName,menu in pairs(newMenu) do
+			for i = 1, #menu.list do
+				menu.list[i].label = U.GetString(menu.list[i].label) or menu.list[i].label
+			end
+		end
+
 		for category,v in pairs(Config.mods) do
 			for i = 1, #v do
 				menusToBuilt = menusToBuilt + 1
@@ -121,21 +135,21 @@ function setUiState (state)
 						table.insert(modList, {
 							modId = v[i].id,
 							id = -1,
-							label = "STOCK",
+							label = U.GetString("stock") or "STOCK",
 							type = "upgrade",
 							price = 0
 						})
 					end
 
 					for j = 0, amountOfMods - 1 do
-						local modName = string.upper(v[i].name) .. "_" .. j
+						local modName = "UNKNOWN_MOD"
 						if Config.customLabels[v[i].name] ~= nil and Config.customLabels[v[i].name][j] ~= nil then
 							modName = Config.customLabels[v[i].name][j]
 						else
 							modName = GetLabelText(GetModTextLabel(vehicle, v[i].id, j))
 						end
 						if modName == "NULL" then
-							modName = "UNKNOWN_" .. string.upper(v[i].name) .. "_" .. j
+							modName = UNKNOWN_LOCALE .. "_" .. (U.GetString(v[i].name) or string.upper(v[i].name)) .. "_" .. j
 						end
 						table.insert(modList, {
 							modId = v[i].id,
@@ -177,7 +191,7 @@ function setUiState (state)
 				{
 					modId = 18,
 					id = "yes",
-					label = "STREET",
+					label = U.GetString("street") or "STREET",
 					type = "upgrade",
 					price = func['GetModPrice'][FRAMEWORK](vehiclePrice, 18, 0),
 				},
@@ -236,6 +250,133 @@ function setUiState (state)
 			currentMod = GetVehicleNumberPlateTextIndex(vehicle),
 			parentMenu = "misc"
 		}
+		
+		local headlightsIndex = -1
+
+		if IsToggleModOn(vehicle, 22) then
+			headlightsIndex = GetVehicleXenonLightsColor(vehicle)
+		end
+
+		newMenu['headlights'] = {
+			list = {
+				{
+					modId = "headlights",
+					id = -1,
+					label = "Default",
+					type = "upgrade",
+					price = 0,
+				},
+				{
+					modId = "headlights",
+					id = 0,
+					label = "White",
+					type = "upgrade",
+					price = func['GetModPrice'][FRAMEWORK](vehiclePrice, "headlights", 0),
+				},
+				{
+					modId = "headlights",
+					id = 1,
+					label = "Blue",
+					type = "upgrade",
+					price = func['GetModPrice'][FRAMEWORK](vehiclePrice, "headlights", 0),
+				},
+				{
+					modId = "headlights",
+					id = 2,
+					label = "Electric Blue",
+					type = "upgrade",
+					price = func['GetModPrice'][FRAMEWORK](vehiclePrice, "headlights", 0),
+				},
+				{
+					modId = "headlights",
+					id = 3,
+					label = "Mint Green ",
+					type = "upgrade",
+					price = func['GetModPrice'][FRAMEWORK](vehiclePrice, "headlights", 0),
+				},
+				{
+					modId = "headlights",
+					id = 4,
+					label = "Lime Green",
+					type = "upgrade",
+					price = func['GetModPrice'][FRAMEWORK](vehiclePrice, "headlights", 0),
+				},
+				{
+					modId = "headlights",
+					id = 5,
+					label = "Yellow",
+					type = "upgrade",
+					price = func['GetModPrice'][FRAMEWORK](vehiclePrice, "headlights", 0),
+				},
+				{
+					modId = "headlights",
+					id = 6,
+					label = "Golden Shower",
+					type = "upgrade",
+					price = func['GetModPrice'][FRAMEWORK](vehiclePrice, "headlights", 0),
+				},
+				{
+					modId = "headlights",
+					id = 7,
+					label = "Orange",
+					type = "upgrade",
+					price = func['GetModPrice'][FRAMEWORK](vehiclePrice, "headlights", 0),
+				},
+				{
+					modId = "headlights",
+					id = 8,
+					label = "Red",
+					type = "upgrade",
+					price = func['GetModPrice'][FRAMEWORK](vehiclePrice, "headlights", 0),
+				},
+				{
+					modId = "headlights",
+					id = 9,
+					label = "Pony Pink",
+					type = "upgrade",
+					price = func['GetModPrice'][FRAMEWORK](vehiclePrice, "headlights", 0),
+				},
+				{
+					modId = "headlights",
+					id = 10,
+					label = "Hot Pink",
+					type = "upgrade",
+					price = func['GetModPrice'][FRAMEWORK](vehiclePrice, "headlights", 0),
+				},
+				{
+					modId = "headlights",
+					id = 11,
+					label = "Purple",
+					type = "upgrade",
+					price = func['GetModPrice'][FRAMEWORK](vehiclePrice, "headlights", 0),
+				},
+				{
+					modId = "headlights",
+					id = 12,
+					label = "Blacklight",
+					type = "upgrade",
+					price = func['GetModPrice'][FRAMEWORK](vehiclePrice, "headlights", 0),
+				},
+				
+			},
+			activeElement = 0,
+			currentMod = headlightsIndex,
+			parentMenu = "wheeltypes"
+		}
+
+		for i = 1, #Config.hardcodedMods do
+			if #newMenu[Config.hardcodedMods[i].menu].list > 1 then
+				for j = 2, #newMenu[Config.hardcodedMods[i].menu].list do
+					newMenu[Config.hardcodedMods[i].menu].list[j].price = func['GetModPrice'][FRAMEWORK](vehiclePrice, Config.hardcodedMods[i].id, 0)
+				end
+			end
+		end
+
+		local paintPrices = {}
+		for i = 1, #Config.paintTypes do
+			paintPrices[Config.paintTypes[i]] = func['GetModPrice'][FRAMEWORK](vehiclePrice, Config.paintTypes[i], 0)
+		end
+		SendNUIMessage({type = "UPDATE_PAINT_PRICE", payload = { list = paintPrices }})
 
 		SetVehicleWheelType(vehicle, wheelsType)
 		vehicleProps = func['GetVehicleProperties'][FRAMEWORK](vehicle)
@@ -272,16 +413,36 @@ function setUiState (state)
 				exports['d-stance']:SetRearCamber(vehicle, vehicleProps.stance.rearCamber)
 			end)
 			SendNUIMessage({type = "UPDATE_STANCE", payload = stance})
+
+			local paintPrices = {}
+			for i = 1, #Config.paintTypes do
+				paintPrices[Config.paintTypes[i]] = func['GetModPrice'][FRAMEWORK](vehiclePrice, Config.paintTypes[i], 0)
+			end
+			SendNUIMessage({type = "PAINT_UPDATE_PRICES", payload = paintPrices})
 		end
 
 		while builtMenusNum < menusToBuilt do Citizen.Wait(5) end
 	    SendNUIMessage({type = "UPDATE_MENUS", payload = newMenu})
+		--PAINT_UPDATE_PRICES
+
 	else 
 	    SetCamActive(activeCam, false)
 	    RenderScriptCams(false, true, 500, true, true)
 	    destroyCameras()
 	end
+
+	local moneyType = "wallet"
+	if Config.society.enable then
+		moneyType = "society"
+	end
+	
+	SendNUIMessage({type = "SET_MONEY_TYPE", payload = moneyType })
+
 	SendNUIMessage({type = "SHOW", payload = nuiOpen})
+	CreateThread(function()
+		Wait(100)
+		activeHorn = false
+	end)
 end
 
 function ShallowClone(toClone)
@@ -292,6 +453,20 @@ function ShallowClone(toClone)
 	return cloned 
 end
 
+
+SoundVehicleHornThisFrame(vehicle)
+
+RegisterNUICallback('toggleHorn', function(data, cb)
+	if not Config.hornCheckEnable then return end
+	if not nuiOpen then return end
+	StartActiveHornThread()
+	activeHorn = data.state
+end)
+
+RegisterNUICallback('toggleHeadlights', function(data, cb)
+	SetControlNormal(0, 74, 1.0)
+end)
+
 RegisterNUICallback('closeUI', function(data, cb)
 	setUiState(false)
 	func['SetVehicleProperties'][FRAMEWORK](vehicle, vehicleProps)
@@ -300,22 +475,22 @@ end)
 
 RegisterNUICallback('applyMod', function(data, cb)
 	local vehicle = GetVehiclePedIsIn(PlayerPedId())
-	if data.modId == "primary" then
+	if data.modId == "primary_color" then
 		ClearVehicleCustomPrimaryColour(vehicle)
 		ClearVehicleCustomSecondaryColour(vehicle)
 		local colorPrimary, colorSecondary = GetVehicleColours(vehicle)
 	    local pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle)
 	    SetVehicleColours(vehicle, tonumber(data.id), colorSecondary)
-	elseif data.modId == "secondary" then
+	elseif data.modId == "secondary_color" then
 		ClearVehicleCustomPrimaryColour(vehicle)
 		ClearVehicleCustomSecondaryColour(vehicle)
 		local colorPrimary, colorSecondary = GetVehicleColours(vehicle)
 	    local pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle)
 	    SetVehicleColours(vehicle, colorPrimary, tonumber(data.id))
-	elseif data.modId == "wheels" then
+	elseif data.modId == "wheels_color" then
 		local pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle)
 	    SetVehicleExtraColours(vehicle, pearlescentColor, tonumber(data.id))
-	elseif data.modId == "pearlescent" then
+	elseif data.modId == "pearlescent_color" then
 		local pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle)
 	    SetVehicleExtraColours(vehicle, tonumber(data.id), wheelColor)
 	elseif data.modId == "effects" then
@@ -341,9 +516,13 @@ RegisterNUICallback('applyMod', function(data, cb)
 		elseif data.id == "rearwidth" then
 			exports['d-stance']:SetRearTrackWidth(vehicle, tonumber(data.value))
 		end
-		
-		
-		
+	elseif data.modId == "headlights" then
+		if data.id == -1 then
+			ToggleVehicleMod(vehicle, 22, false)
+		else
+			ToggleVehicleMod(vehicle, 22, true)
+			SetVehicleXenonLightsColor(vehicle, tonumber(data.id))
+		end
 		
 		---exports['vstancer']:SetWheelPreset(vehicle, stance[1], stance[2], stance[3], stance[4])
 	else
@@ -436,40 +615,45 @@ CreateThread(function()
 	while true do
 		local playerPed <const> = PlayerPedId()
 		local coords = GetEntityCoords(playerPed, false)
-		local isInShop = false
+		isInShop = false
 		local wait = 300
 		local shopIndex = -1
 		local vehicle <const> = GetVehiclePedIsIn(playerPed)
 		if vehicle ~= 0 and GetPedInVehicleSeat(vehicle, -1) == playerPed then
 			for i = 1, #Config.shops do
 				local dist = #(Config.shops[i].coords - coords)
-				if Config.marker.enable and dist < Config.marker.range then
+				if Config.marker.enable and dist < Config.marker.range and func['IsWhitelisted'][FRAMEWORK](i) then
 					wait = 3
 					DrawMarker(Config.marker.type, Config.shops[i].coords + vector3(0, 0, Config.marker.zOffset), 0, 0, 0, 0, 0, 0, Config.shops[i].range * 2, Config.shops[i].range * 2, Config.shops[i].range * 2, Config.marker.color.r, Config.marker.color.g, Config.marker.color.b, Config.marker.alpha, 0, 0, 0, 0)
 					if dist < Config.shops[i].range then
 						shopIndex = i
 						isInShop = true
-						break
 					end
-					break
 				end
 			end
 		end
 		if isInShop then
 			wait = 3
 			if not nuiOpen then
-				if DisplayPrompt ~= nil then
-					DisplayPrompt()
-				else
+				if not displayingPrompt then
+					displayingPrompt = true
 					func['DisplayPrompt'][FRAMEWORK]()
 				end
 			end
 			EnableControlAction(2, 71, true)
 			if IsControlJustPressed(0, 38) and not nuiOpen then
 				if func['IsWhitelisted'][FRAMEWORK](shopIndex) then
+					currentShop = shopIndex
 					setUiState(true)
 					StartVehicleChecker()
+					displayingPrompt = false
+					func['DisplayPromptEnd'][FRAMEWORK]()
 				end
+			end
+		else
+			if displayingPrompt then
+				displayingPrompt = false
+				func['DisplayPromptEnd'][FRAMEWORK]()
 			end
 		end
 		Wait(wait)
@@ -489,16 +673,44 @@ function StartVehicleChecker()
 				setUiState(false)
 				isInShop = false
 			end
-			Wait(50)
+			Wait(0)
 		end
 		FreezeEntityPosition(vehicle, false)
 	end)
 end
 
-RegisterNetEvent('d-lscustom:openShop', function()
-	setUiState(true)
-	StartVehicleChecker()
-end)
+function StartActiveHornThread()
+	if activeHorn then return end
+	activeHorn = true
+	local vehicle <const> = GetVehiclePedIsIn(PlayerPedId())
+	while activeHorn do
+		Wait(0)
+		SetControlNormal(0, 86, 1.0)
+	end
+end
+
+
+function ToggleHeadlights()
+	local vehicle <const> = GetVehiclePedIsIn(PlayerPedId())
+	local lightsState = CheckHeadlightsState(vehicle)
+	SetVehicleLightsMode(vehicle, 2)
+end
+
+function CheckHeadlightsState(vehicle)
+	local retval, lightsOn, highbeamsOn = GetVehicleLightsState(vehicle)
+    local value
+    if highbeamsOn == 1 then
+    	value = "long_beam"
+    	headlightsState = 2
+    elseif lightsOn == 1 then
+    	value = "short_beam"
+    	headlightsState = 1
+    else
+    	value = "NONE"
+    	headlightsState = 0
+    end
+    return headlightsState, value
+end
 
 if Config.DEBUG then
 	CreateThread(function()
@@ -526,6 +738,14 @@ if Config.DEBUG then
 end
 
 CreateThread(function()
+
+	if Config.menuEvent then
+		RegisterNetEvent('d-lscustom:openShop', function()
+			setUiState(true)
+			StartVehicleChecker()
+		end)
+	end
+
 	for i = 1, #Config.shops do
 		if Config.shops[i].blip then
 			local blip = AddBlipForCoord(Config.shops[i].coords.x, Config.shops[i].coords.y, Config.shops[i].coords.z)

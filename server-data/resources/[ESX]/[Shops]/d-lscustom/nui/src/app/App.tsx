@@ -36,9 +36,19 @@ Nui.onEvent("UPDATE_STANCE", (payload: any) => {
     store.dispatch({ type: "SLIDER_UPDATE", payload: payload })
 })
 
+Nui.onEvent("PAINT_UPDATE_PRICES", (payload: any) => {
+    store.dispatch({ type: "PAINT_UPDATE_PRICES", list: payload })
+})
+
 Nui.onEvent("START_LOADING", (payload: any) => {
     store.dispatch({ type: "SET_LOADING_STATE", state: true })
 })
+
+Nui.onEvent("UPDATE_PAINT_PRICE", (payload: any) => {
+    store.dispatch({ type: "PAINT_UPDATE_PRICES", list: payload.list })
+})
+
+
 
 const Container = styled.div`
     position: absolute;
@@ -58,12 +68,20 @@ const App = () => {
 
     useEffect(() => {
         document.addEventListener("keydown", keyPress, false);
+        document.addEventListener("keyup", keyUp, false);
         if(process.env.NODE_ENV === 'development') initMenus();
 
         return () => {
           document.removeEventListener("keydown", keyPress, false);
+          document.removeEventListener("keyup", keyUp, false);
         };
     }, []);
+
+    const keyUp: void = (event) => {
+        if (event.key == "e"){
+            Nui.post("toggleHorn", { state: false })
+        }
+    }
 
     const keyPress: void = (event) => {
         event.preventDefault();
@@ -73,7 +91,7 @@ const App = () => {
 
         throttle.current = true
         setTimeout(() => throttle.current = false, 20)
-        // console.log(event.key);
+
         var currentMenu = store.getState().Menu.activeMenu
         if(event.key == "ArrowRight"){
             store.dispatch({ type: "MOVE_RIGHT" })
@@ -115,6 +133,12 @@ const App = () => {
             if(!currentState.Dialog.activeDialog) {
                 store.dispatch({type: "DIALOG_SHOW", action: "closeUI", label: "CLOSE SHOP"})
             }
+
+            
+        } else if(event.key == "h"){
+            Nui.post("toggleHeadlights", {})
+        } else if(event.key == "e"){
+            Nui.post("toggleHorn", { state: true })
         }
     }
 

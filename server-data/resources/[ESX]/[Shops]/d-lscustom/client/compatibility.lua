@@ -1,14 +1,16 @@
 local purchasePromise = nil
-FRAMEWORK = GetResourceMetadata(GetCurrentResourceName(), "framework")
+FRAMEWORK = ""
 QBCore = {}
 ESX = {}
 scriptLoaded = false
 
 CreateThread(function()
 	Wait(1000)
-	if FRAMEWORK == 'qb-core' then
+	if GetResourceState("qb-core") == "started" then
+		FRAMEWORK = "qb-core"
 		QBCore = exports['qb-core']:GetCoreObject()
-	elseif FRAMEWORK == 'esx' then
+	elseif GetResourceState("es_extended") == "started" then
+		FRAMEWORK = "esx"
 		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 	end
 	scriptLoaded = true
@@ -16,6 +18,27 @@ end)
 
 
 func = {
+	['DisplayPrompt'] = {
+		['qb-core'] = function()
+			exports['qb-core']:DrawText("[E] Open customs", 'left')
+		end,
+		['esx'] = function()
+			CreateThread(function()
+				while displayingPrompt do
+					Wait(1)
+					ESX.ShowHelpNotification(Locale['prompt'])
+				end
+			end)
+		end
+	},
+	['DisplayPromptEnd'] = {
+		['qb-core'] = function()
+			exports['qb-core']:HideText()
+		end,
+		['esx'] = function()
+
+		end
+	},
 	['GetVehicleProperties'] = {
 		['qb-core'] = function(vehicle)
 			return QBCore.Functions.GetVehicleProperties(vehicle)
@@ -88,6 +111,9 @@ func = {
 				if type(Config.priceRatios[modId]) == "table" then
 					modPriceRatio = Config.priceRatios[modId][id]
 				else
+					if Config.priceRatios[modId] > 10.0 then
+						return math.ceil(Config.priceRatios[modId])
+					end
 					modPriceRatio = Config.priceRatios[modId]
 				end
 			end
@@ -99,6 +125,9 @@ func = {
 				if type(Config.priceRatios[modId]) == "table" then
 					modPriceRatio = Config.priceRatios[modId][id]
 				else
+			if Config.priceRatios[modId] > 10.0 then
+				return math.ceil(Config.priceRatios[modId])
+			end
 					modPriceRatio = Config.priceRatios[modId]
 				end
 			end
@@ -135,28 +164,35 @@ func = {
 	},
 	['UpdateCash'] = {
 		['qb-core'] = function()
-			local data = QBCore.Functions.GetPlayerData()
-			SendNUIMessage({type = "UPDATE_CASH", payload = data.money['cash'] })
+			if Config.society.enable then
+				QBCore.Functions.TriggerCallback('qb-bossmenu:server:GetAccount', function(response)
+					SendNUIMessage({type = "UPDATE_CASH", payload = response })
+				end, Config.shops[currentShop].societyName)
+			else
+				local data = QBCore.Functions.GetPlayerData()
+				SendNUIMessage({type = "UPDATE_CASH", payload = data.money['cash'] })
+			end	
 		end,
 		['esx'] = function()
-			-- for latest ESX versions
-			for k,v in ipairs(ESX.GetPlayerData().accounts) do
-				if v.name == "money" then
-					SendNUIMessage({type = "UPDATE_CASH", payload = v.money })
-					break
+			if Config.society.enable then
+				
+				ESX.TriggerServerCallback('esx_society:getSocietyMoney', function(response)
+					SendNUIMessage({type = "UPDATE_CASH", payload = response })
+				end, Config.shops[currentShop].societyName)
+			else
+				-- for latest ESX versions
+				for k,v in ipairs(ESX.GetPlayerData().accounts) do
+					if v.name == "money" then
+						SendNUIMessage({type = "UPDATE_CASH", payload = v.money })
+						break
+					end
 				end
+
+				--- for older ESX versions
+				-- SendNUIMessage({type = "UPDATE_CASH", payload = ESX.PlayerData.money })
 			end
 		
-			--- for older ESX versions
-			-- SendNUIMessage({type = "UPDATE_CASH", payload = ESX.PlayerData.money })
+			
 		end
 	},
-	['DisplayPrompt'] = {
-		['qb-core'] = function()
-			
-		end,
-		['esx'] = function()
-			ESX.ShowHelpNotification(Locale['prompt'])
-		end
-	}
 }

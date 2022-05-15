@@ -5,8 +5,6 @@ name 'LS Customs'
 description 'LS Customs customization menu based on NFS Heat idea'
 author '.resources'
 
-framework 'esx'
-
 client_scripts {
   '@PolyZone/client.lua',
   '@PolyZone/BoxZone.lua',
@@ -14,6 +12,7 @@ client_scripts {
   '@PolyZone/CircleZone.lua',
   '@PolyZone/ComboZone.lua',
 	'config.lua',
+	'shared/utils.lua',
 	'client/compatibility.lua',
 	'client/main.lua',
   'client/zones.lua',
@@ -21,7 +20,6 @@ client_scripts {
 
 server_scripts {
 	-- esx dependencies
-
 	'@oxmysql/lib/MySQL.lua',
 
 	-------------------------------
@@ -29,7 +27,14 @@ server_scripts {
 	'config.lua',
 	'server/compatibility.lua',
 	'server/main.lua',
+	'shared/utils.lua',
 }
+
+-- for older qb-core use this
+--[[
+shared_scripts { 
+	'@qb-core/import.lua',
+}]]
 
 lua54 'yes'
 
@@ -40,6 +45,7 @@ files {
 	'nui/build/main.js',
 	'nui/build/*.otf',
 	'nui/build/*.png',
+	'locale.json'
 } 
 
 escrow_ignore {
@@ -48,9 +54,4 @@ escrow_ignore {
 	'client/main.lua',
 	'server/compatibility.lua',
 }
-
-exports {
-  'InBennys',
-}
-
 dependency '/assetpacks'

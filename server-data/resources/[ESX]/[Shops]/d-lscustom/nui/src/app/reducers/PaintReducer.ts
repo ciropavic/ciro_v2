@@ -9,6 +9,7 @@ const generateState = () => {
             list: colorsList,
             activeElement: 0,
             scrollElement: 0,
+            price: 1337,
         }
     })
     return obj
@@ -52,6 +53,13 @@ const Paint = (state = initialState, data: any) => {
             for(var menu in obj){
                 obj[menu].activeElement = 0;
                 obj[menu].scrollElement = 0;
+            }
+
+            return { ...obj }
+        case "PAINT_UPDATE_PRICES":
+            var obj = { ...state };
+            for(var menu in data.list){
+                obj[menu].price = data.list[menu];
             }
 
             return { ...obj }

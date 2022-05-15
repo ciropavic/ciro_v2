@@ -24,10 +24,7 @@ To begin with, you need to add lines under *qb-core/client/functions.lua* functi
 [qb-core:setVehicleProps](https://github.com/qbcore-framework/qb-core/blob/6d084b137328522b0b8fd641f795339508ae7d7d/client/functions.lua#L748)
 ```
 if props.stance then
-    exports['d-stance']:SetFrontTrackWidth(vehicle, props.stance.frontWidth)
-    exports['d-stance']:SetFrontCamber(vehicle, props.stance.frontCamber)
-    exports['d-stance']:SetRearTrackWidth(vehicle, props.stance.rearWidth)
-    exports['d-stance']:SetRearCamber(vehicle, props.stance.rearCamber)
+    exports['d-stance']:SetWheelsPreset(vehicle, props.stance)
 end
 ```
 
@@ -247,10 +244,7 @@ function QBCore.Functions.SetVehicleProperties(vehicle, props)
             SetVehicleLivery(vehicle, props.modLivery)
         end
         if props.stance then
-            exports['d-stance']:SetFrontTrackWidth(vehicle, props.stance.frontWidth)
-            exports['d-stance']:SetFrontCamber(vehicle, props.stance.frontCamber)
-            exports['d-stance']:SetRearTrackWidth(vehicle, props.stance.rearWidth)
-            exports['d-stance']:SetRearCamber(vehicle, props.stance.rearCamber)
+            exports['d-stance']:SetWheelsPreset(vehicle, props.stance)
         end
     end
 end
@@ -390,10 +384,7 @@ end
 To begin with, you need to add lines under *es_extended/client/functions.lua* function *ESX.Game.SetVehicleProperties = function(vehicle, props)*
 ```
 if props.stance then
-    exports['d-stance']:SetFrontTrackWidth(vehicle, props.stance.frontWidth)
-    exports['d-stance']:SetFrontCamber(vehicle, props.stance.frontCamber)
-    exports['d-stance']:SetRearTrackWidth(vehicle, props.stance.rearWidth)
-    exports['d-stance']:SetRearCamber(vehicle, props.stance.rearCamber)
+    exports['d-stance']:SetWheelsPreset(vehicle, props.stance)
 end
 ```
 
@@ -489,10 +480,7 @@ ESX.Game.SetVehicleProperties = function(vehicle, props)
 			SetVehicleLivery(vehicle, props.modLivery)
 		end
 		if props.stance then
-            exports['d-stance']:SetFrontTrackWidth(vehicle, props.stance.frontWidth)
-            exports['d-stance']:SetFrontCamber(vehicle, props.stance.frontCamber)
-            exports['d-stance']:SetRearTrackWidth(vehicle, props.stance.rearWidth)
-            exports['d-stance']:SetRearCamber(vehicle, props.stance.rearCamber)
+            exports['d-stance']:SetWheelsPreset(vehicle, props.stance)
         end
 	end
 end
@@ -652,6 +640,7 @@ stance = {
 - Externaly open shop by triggering event handler
 - Price ratios for every mod
 - Configure additional price ratios for jobs
+- If you are using society on the shop, the cash will be indicated with a different color
 
 If you find that there's needed help for you, feel free to contact via discord
 

@@ -24,12 +24,22 @@ const Container = styled.div`
     z-index: 15;
 `;
 
+const colors = {
+    wallet: 'yellow',
+    society: 'lime',
+}
+
 const Cash = () => {
     const [cash, setCash] = useState(500000)
+    const [cashType, setCashType] = useState("society");
 
     useEffect(() => {
         Nui.onEvent("UPDATE_CASH", (payload: any) => {
             setCash(payload)
+        })
+
+        Nui.onEvent("SET_MONEY_TYPE", (payload: any) => {
+            setCashType(payload)
         })
     }, [])
 
@@ -42,7 +52,7 @@ const Cash = () => {
     }
 
     return (
-        <Container>
+        <Container style={{ background: colors[cashType] }}>
         	<img src={icon} style={priceIcon} /> {cash.toLocaleString('en', {useGrouping:true})}
         </Container>
     )

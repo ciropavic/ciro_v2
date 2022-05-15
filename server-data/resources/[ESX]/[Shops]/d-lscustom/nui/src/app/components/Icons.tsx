@@ -42,6 +42,7 @@ import struts from '../../images/icons/struts.png'
 import hydraulics from '../../images/icons/hydraulics.png'
 import misc from '../../images/icons/misc.png'
 import armour from '../../images/icons/armour.png'
+import headlights from '../../images/icons/headlights.png'
 
 const Icons = {
 	icon: icon,
@@ -91,6 +92,7 @@ const Icons = {
 	hydraulics: hydraulics,
 	misc: misc,
 	armour: armour,
+	headlights: headlights,
 }
 
 export { Icons }

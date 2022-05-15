@@ -82,3 +82,4 @@ function InBennys()
       return false
   end
 end
+exports('InBennys', InBennys)

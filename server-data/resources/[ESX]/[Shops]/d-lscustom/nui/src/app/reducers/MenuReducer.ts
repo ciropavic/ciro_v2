@@ -24,7 +24,7 @@ const Menu = (state: State = initialState, data: any) => {
             menus[data.payload.menu].activeElement = 0
             //menus[data.payload.menu].list[menus[data.payload.menu].activeElement].active = false
             menus[data.payload.menu].list[0].active = true
-            return { ...state, menus: {...menus} }
+            return { ...state, menus: {...menus}, activeMenu: "general" }
         case "MOVE_RIGHT":
             var menus = state.menus
             if(menus[state.activeMenu] == null) return state
