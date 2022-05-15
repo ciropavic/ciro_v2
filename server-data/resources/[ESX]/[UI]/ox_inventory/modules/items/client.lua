@@ -137,6 +137,17 @@ Item('lockpick', function(data, slot)
   end
 end)
 
+Item('binoculars', function(data, slot)
+  local veh = IsPedInAnyVehicle(PlayerPedId(), false)
+  if not veh then
+    ox_inventory:useItem(data, function(data)
+      if data then
+        TriggerEvent('binoculars:Toggle')
+      end
+    end)
+  end
+end)
+
 AddEventHandler('onResourceStop', function(resourceName)
   if (GetCurrentResourceName() ~= resourceName) then
     return

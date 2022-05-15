@@ -1,3 +1,9 @@
+ESX = nil
+
+TriggerEvent('esx:getSharedObject', function(obj)
+    ESX = obj
+end)
+
 function onStartup()
     if Config.NoAutoHealthRegen then
         SetPlayerHealthRechargeLimit(PlayerId(), 0)
@@ -253,39 +259,90 @@ Citizen.CreateThread(function()
     end
 end)
 
+local stage = 0
+local movingForward = false
 Citizen.CreateThread(function()
     if Config.Crouch then
         local crouched = false
 
         while true do
             Citizen.Wait(1)
-
-            local ped = GetPlayerPed(-1)
-
-            if (DoesEntityExist(ped) and not IsEntityDead(ped)) then
-                DisableControlAction(0, 36, true)
-
-                if (not IsPauseMenuActive()) then
-                    if (IsDisabledControlJustPressed(0, 36)) then
+            local ped = PlayerPedId()
+            if not IsPedSittingInAnyVehicle(ped) and not IsPedFalling(ped) and not IsPedSwimming(ped) and
+                not IsPedSwimmingUnderWater(ped) then
+                if IsControlJustReleased(0, 36) then
+                    stage = stage + 1
+                    if stage == 2 then
+                        -- Crouch stuff
+                        ClearPedTasks(ped)
                         RequestAnimSet("move_ped_crouched")
-
-                        while (not HasAnimSetLoaded("move_ped_crouched")) do
-                            Citizen.Wait(100)
+                        while not HasAnimSetLoaded("move_ped_crouched") do
+                            Wait(0)
                         end
 
-                        if (crouched == true) then
-                            ResetPedMovementClipset(ped, 0)
-                            crouched = false
-                        elseif (crouched == false) then
-                            SetPedMovementClipset(ped, "move_ped_crouched", 0.25)
-                            crouched = true
+                        SetPedMovementClipset(ped, "move_ped_crouched", 1.0)
+                        SetPedWeaponMovementClipset(ped, "move_ped_crouched", 1.0)
+                        SetPedStrafeClipset(ped, "move_ped_crouched_strafing", 1.0)
+                    elseif stage == 3 then
+                        ClearPedTasks(ped)
+                        RequestAnimSet("move_crawl")
+                        while not HasAnimSetLoaded("move_crawl") do
+                            Wait(0)
                         end
+                    elseif stage > 3 then
+                        stage = 0
+                        ClearPedTasksImmediately(ped)
+                        ResetAnimSet()
+                        SetPedStealthMovement(ped, 0, 0)
                     end
                 end
+
+                if stage == 2 then
+                    if GetEntitySpeed(ped) > 1.0 then
+                        SetPedWeaponMovementClipset(ped, "move_ped_crouched", 1.0)
+                        SetPedStrafeClipset(ped, "move_ped_crouched_strafing", 1.0)
+                    elseif GetEntitySpeed(ped) < 1.0 and
+                        (GetFollowPedCamViewMode() == 4 or GetFollowVehicleCamViewMode() == 4) then
+                        ResetPedWeaponMovementClipset(ped)
+                        ResetPedStrafeClipset(ped)
+                    end
+                elseif stage == 3 then
+                    DisableControlAction(0, 21, true) -- sprint
+                    DisableControlAction(1, 140, true)
+                    DisableControlAction(1, 141, true)
+                    DisableControlAction(1, 142, true)
+
+                    if (IsControlPressed(0, 32) and not movingForward) and Config.EnableProne then
+                        movingForward = true
+                        SetPedMoveAnimsBlendOut(ped)
+                        local pronepos = GetEntityCoords(ped)
+                        TaskPlayAnimAdvanced(ped, "move_crawl", "onfront_fwd", pronepos.x, pronepos.y, pronepos.z + 0.1,
+                            0.0, 0.0, GetEntityHeading(ped), 100.0, 0.4, 1.0, 7, 2.0, 1, 1)
+                        Wait(500)
+                    elseif (not IsControlPressed(0, 32) and movingForward) then
+                        local pronepos = GetEntityCoords(ped)
+                        TaskPlayAnimAdvanced(ped, "move_crawl", "onfront_fwd", pronepos.x, pronepos.y, pronepos.z + 0.1,
+                            0.0, 0.0, GetEntityHeading(ped), 100.0, 0.4, 1.0, 6, 2.0, 1, 1)
+                        Wait(500)
+                        movingForward = false
+                    end
+
+                    if IsControlPressed(0, 34) then
+                        SetEntityHeading(ped, GetEntityHeading(ped) + 1)
+                    end
+
+                    if IsControlPressed(0, 9) then
+                        SetEntityHeading(ped, GetEntityHeading(ped) - 1)
+                    end
+                end
+            else
+                stage = 0
+                Wait(1000)
             end
         end
     end
 end)
+
 
 Citizen.CreateThread(function ()
   if Config.Pause then
@@ -441,6 +498,71 @@ Citizen.CreateThread(function()
 end)
 
 
+RegisterCommand('tackle', function()
+    if not IsPedInAnyVehicle(ESX.PlayerData.ped, false) and GetEntitySpeed(ESX.PlayerData.ped) > 2.5 then
+        Tackle()
+    end
+end)
+
+RegisterKeyMapping('tackle', ' Tackle Player', 'keyboard', 'LMENU')
+
+RegisterNetEvent('tackle:client:GetTackled', function()
+    SetPedToRagdoll(PlayerPedId(), math.random(1000, 6000), math.random(1000, 6000), 0, 0, 0, 0)
+    TimerEnabled = true
+    Wait(1500)
+    TimerEnabled = false
+end)
+
+function Tackle()
+    closestPlayer, distance = ESX.Game.GetClosestPlayer()
+    local closestPlayerPed = GetPlayerPed(closestPlayer)
+    if (distance ~= -1 and distance < 2) then
+        TriggerServerEvent("tackle:server:TacklePlayer", GetPlayerServerId(closestPlayer))
+        TackleAnim()
+    end
+end
+
+function TackleAnim()
+    if not IsPedRagdoll(ESX.PlayerData.ped) then
+        RequestAnimDict("swimming@first_person@diving")
+        while not HasAnimDictLoaded("swimming@first_person@diving") do
+            Wait(1)
+        end
+        if IsEntityPlayingAnim(ped, "swimming@first_person@diving", "dive_run_fwd_-45_loop", 3) then
+            ClearPedTasksImmediately(ped)
+        else
+            TaskPlayAnim(ped, "swimming@first_person@diving", "dive_run_fwd_-45_loop", 3.0, 3.0, -1, 49, 0, false,
+                false, false)
+            Wait(250)
+            ClearPedTasksImmediately(ped)
+            SetPedToRagdoll(ped, 150, 150, 0, 0, 0, 0)
+        end
+    end
+end
+
+function ResetAnimSet()
+  local ped = PlayerPedId()
+  if walkSet == "default" then
+      ResetPedMovementClipset(ped)
+      ResetPedWeaponMovementClipset(ped)
+      ResetPedStrafeClipset(ped)
+  else
+      ResetPedMovementClipset(ped)
+      ResetPedWeaponMovementClipset(ped)
+      ResetPedStrafeClipset(ped)
+      Wait(100)
+      RequestWalking(walkSet)
+      SetPedMovementClipset(ped, walkSet, 1)
+      RemoveAnimSet(walkSet)
+  end
+end
+
+function RequestWalking(set)
+  RequestAnimSet(set)
+  while not HasAnimSetLoaded(set) do
+      Wait(1)
+  end
+end
 
 function hurtMedium(ped, r)
     if IsEntityDead(ped) then

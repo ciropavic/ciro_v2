@@ -114,6 +114,15 @@ return {
     close = true,
 	},
 
+	['binoculars'] = {
+		label = 'Binoculars',
+		weight = 7,
+    consume = 0,
+    degrade = 360000,
+    stack = false,
+    close = true,
+	},
+
 	['lockpick'] = {
 		label = 'Lockpick',
 		weight = 5,
