@@ -102,7 +102,7 @@ Item('megaphone', function (data, slot)
           megaObj = CreateObject(GetHashKey("prop_megaphone_01"), 0, 0, 0, true, true, true)
         end
 
-        AttachEntityToEntity(megaObj, PlayerPedId(), GetPedBoneIndex(PlayerPedId(), 18905), 0.10, 0.03, 0, 90, 150, 100, true, true, false, true, 0, true)
+        AttachEntityToEntity(megaObj, PlayerPedId(), GetPedBoneIndex(PlayerPedId(), 18905), 0.097, 0.02, 0.01, -120.0, 30.0, 50.0, false, false, false, true, 5, true)
         
         if IsPedArmed(ped, 7) then
           SetCurrentPedWeapon(ped, 0xA2719263, true)
