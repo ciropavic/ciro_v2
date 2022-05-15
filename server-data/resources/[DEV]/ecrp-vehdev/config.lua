@@ -47,4 +47,4 @@ Config.DeleteVehicleKeyLabel = "CAPS"
 Config.UseRestart = true
 Config.Restartkey = 208
 Config.RestartKeyLabel = "PGUP"
-Config.RestartResource = "ecrp-vehicles"
+Config.RestartResource = "ecrp-vehicleconfig"

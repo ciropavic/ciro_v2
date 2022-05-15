@@ -128,6 +128,7 @@ Citizen.CreateThread(function()
   -- Volkswagen --
 	AddTextEntry("0x5E701E79", "Volkswagen Pandem Golf R")
 	AddTextEntry("0xB605CE54", "Volkswagen Golf R 2021")
+	AddTextEntry("0x1E545F0E", "Volkswagen Golf GTI 2021")
   -- Yamaha --
 	AddTextEntry("0x57DBAF4F", "Yamaha R1")
 

@@ -7652,5 +7652,37 @@
       <lightSettings value="1" />
       <sirenSettings value="0" />
     </Item>
+    <Item>
+      <modelName>gti</modelName>
+       <colors>
+        <Item>
+          <indices content="char_array">
+            4
+            0
+            0 
+            0
+          </indices>
+          <liveries>
+            <Item value="true" />
+            <Item value="false" />
+            <Item value="false" />
+            <Item value="false" />
+            <Item value="false" />
+            <Item value="false" />
+            <Item value="false" />
+            <Item value="false" />
+          </liveries>
+        </Item>
+      </colors>
+      <kits>
+        <Item>3060_gti_modkit</Item>
+      </kits>
+      <windowsWithExposedEdges />
+      <plateProbabilities>
+        <Probabilities />
+      </plateProbabilities>
+      <lightSettings value="1" />
+      <sirenSettings value="0" />
+    </Item>
   </variationData>
 </CVehicleModelInfoVariation>
