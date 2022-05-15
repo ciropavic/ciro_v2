@@ -26,7 +26,6 @@ end)
 function setProximityState(proximityRange, isCustom)
 	local voiceModeData = Cfg.voiceModes[mode]
 	MumbleSetTalkerProximity(proximityRange + 0.0)
-  print(proximityRange)
   exports['cosmo_hud']:Voicelevel(mode)
 	LocalPlayer.state:set('proximity', {
 		index = mode,
@@ -40,7 +39,6 @@ function setProximityState(proximityRange, isCustom)
 end
 
 exports("overrideProximityRange", function(range, disableCycle)
-  print(range)
 	type_check({range, "number"})
 	setProximityState(range, true)
 	if disableCycle then
@@ -60,7 +58,6 @@ end)
 Citizen.CreateThread(function ()
   while true do
     Citizen.Wait(500)
-    print(MumbleGetTalkerProximity())
   end
 end)
 
