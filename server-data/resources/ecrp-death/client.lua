@@ -1,6 +1,6 @@
 local isDead = false
 local cfg = {}
-local secondsRemaining = 120
+local secondsRemaining = 5
 
 ESX = nil
 
@@ -42,34 +42,6 @@ function loadAnimDict(dict)
     end
 end
 
-function startT(source)
-    local health = GetEntityHealth(GetPlayerPed(-1))
-    if secondsRemaining > 1 then
-        drawTxt(0.85, 1.4, 1.0, 1.0, 0.4, "~w~Dead: ~r~" .. secondsRemaining .. "~w~ seconds remaining", 255, 255, 255,
-            255)
-    end
-    if secondsRemaining < 1 then
-        drawTxt(0.85, 1.4, 1.0, 1.0, 0.4, "HOLD ~r~E~w~ (~r~5~w~) TO ~r~REVIVE", 255, 255, 255, 255)
-    end
-    Citizen.CreateThread(function(src)
-        while true do
-            Citizen.Wait(0)
-            local timer = 0
-            while IsControlPressed(1, 38) and secondsRemaining < 1 do
-                Citizen.Wait(0)
-                timer = timer + 1
-
-                if timer > 60 then
-                    pressed = true
-                    TriggerEvent('ReviveSystem:RespawnTarget', src)
-                    isDead = false
-                    break
-                end
-            end
-        end
-    end)
-end
-
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1000)
@@ -81,14 +53,10 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-        local health = GetEntityHealth(GetPlayerPed(-1))
-        Citizen.Wait(0)
-        if health < 2 then
+        Citizen.Wait(1)
+        local health = GetEntityHealth(PlayerPedId())
+        if health == 0 then
             isDead = true
-            -- startT()
-            -- SetEntityHealth(player, 200)
-            -- loadAnimDict("dead")
-            -- TaskPlayAnim(GetPlayerPed(-1), "dead", "dead_a", 1.0, 1.0, -1, 1, 0, 0, 0, 0)
         end
     end
 end)
@@ -96,15 +64,38 @@ end)
 Citizen.CreateThread(function()
     while true do
         local player = GetPlayerPed(-1)
-        Citizen.Wait(0)
+        Citizen.Wait(1)
         if isDead == true then
-            exports.spawnmanager:setAutoSpawn(false)
-            startT()
+            if secondsRemaining > 1 then
+                drawTxt(0.85, 1.4, 1.0, 1.0, 0.4, "~w~Dead: ~r~" .. secondsRemaining .. "~w~ seconds remaining", 255,
+                    255, 255, 255)
+            end
+            if secondsRemaining < 1 then
+                drawTxt(0.85, 1.4, 1.0, 1.0, 0.4, "HOLD ~r~E~w~ (~r~5~w~) TO ~r~REVIVE", 255, 255, 255, 255)
+            end
             SetEntityHealth(player, 200)
             loadAnimDict("dead")
             TaskPlayAnim(GetPlayerPed(-1), "dead", "dead_a", 1.0, 1.0, -1, 1, 0, 0, 0, 0)
         end
     end
+end)
+
+Citizen.CreateThread(function(src)
+  while true do
+      Citizen.Wait(0)
+      local timer = 0
+      while IsControlPressed(1, 38) and secondsRemaining < 1 and isDead == true do
+          Citizen.Wait(0)
+          timer = timer + 1
+
+          if timer > 60 then
+              pressed = true
+              TriggerEvent('ReviveSystem:RespawnTarget', src)
+              isDead = false
+              break
+          end
+      end
+  end
 end)
 
 local function GetHospitalForRespawn(pCurrPos)
@@ -124,11 +115,11 @@ local function GetHospitalForRespawn(pCurrPos)
 end
 
 RegisterNetEvent("ReviveSystem:checkJob")
-AddEventHandler("ReviveSystem:checkJob", function (pSource, pMessage)
-  local PlayerData = ESX.GetPlayerData()
-  if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" or PlayerData.job.name == "ambulance" then
-    TriggerEvent("ReviveSystem:ReviveTarget", pSource, pMessage)
-  end
+AddEventHandler("ReviveSystem:checkJob", function(pSource, pMessage)
+    local PlayerData = ESX.GetPlayerData()
+    if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" or PlayerData.job.name == "ambulance" then
+        TriggerEvent("ReviveSystem:ReviveTarget", pSource, pMessage)
+    end
 end)
 
 RegisterNetEvent("ReviveSystem:ReviveTarget")
@@ -138,6 +129,7 @@ AddEventHandler("ReviveSystem:ReviveTarget", function(pSource, pMessage)
         NetworkResurrectLocalPlayer(GetEntityCoords(ped_l, true), true, true, false)
         SetPlayerInvincible(ped_l, false)
         ClearPedBloodDamage(ped_l)
+        secondsRemaining = 5
         isDead = false
     end
 end)
@@ -150,6 +142,7 @@ AddEventHandler("ReviveSystem:AdminRevive", function(pMessage)
         SetPlayerInvincible(ped_l, false)
         ClearPedBloodDamage(ped_l)
         isDead = false
+        secondsRemaining = 5
         exports['mythic_notify']:DoHudText('inform', 'You have been resurrected by the gods')
     end
 end)
@@ -183,9 +176,10 @@ AddEventHandler("ReviveSystem:RespawnTarget", function()
         DoScreenFadeIn(500)
         Wait(500)
         exports['mythic_notify']:DoHudText('inform', 'SKIP!')
+        secondsRemaining = 5
         isDead = false
     else
-      exports['mythic_notify']:DoHudText('error', 'Time remaining: ' .. secondsRemaining)
+        exports['mythic_notify']:DoHudText('error', 'Time remaining: ' .. secondsRemaining)
     end
 end)
 
