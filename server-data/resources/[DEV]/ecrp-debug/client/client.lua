@@ -77,7 +77,7 @@ end)
 Citizen.CreateThread(function ()
   while true do
     Citizen.Wait(500)
-    dev = exports['cosmo_hud']:DevActive()
+    dev = exports['ecrp-hud']:DevActive()
   end
 end)
 

@@ -26,7 +26,7 @@ end)
 function setProximityState(proximityRange, isCustom)
 	local voiceModeData = Cfg.voiceModes[mode]
 	MumbleSetTalkerProximity(proximityRange + 0.0)
-  exports['cosmo_hud']:Voicelevel(mode)
+  exports['ecrp-hud']:Voicelevel(mode)
 	LocalPlayer.state:set('proximity', {
 		index = mode,
 		distance = proximityRange,
