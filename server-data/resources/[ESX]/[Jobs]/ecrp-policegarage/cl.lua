@@ -135,9 +135,9 @@ RegisterNetEvent("nh-context:policeGarage", function()
     TriggerEvent("nh-context:createMenu", 
     {
       {
-        header = "Spawn Vehicle",
+        header = "Retrieve Vehicle",
         context = "Spawn a PD vehicle",
-        event = "nh-context:policeCars",
+        event = "nh-context:policeCarsMenu",
         subMenu = true,
       }, 
       {
@@ -149,39 +149,123 @@ RegisterNetEvent("nh-context:policeGarage", function()
   )
 end)
 
+RegisterNetEvent('nh-context:policeCarsMenu', function ()
+  TriggerEvent("nh-context:createMenu",
+  {
+    {
+      header = "Marked",
+      event = "nh-context:policeCars",
+      subMenu = true,
+    }, 
+    {
+      header = "Unmarked",
+      event = "nh-context:policeCarsUM",
+      subMenu = true,
+    }
+  }
+  )
+end)
+
 RegisterNetEvent('nh-context:policeCars', function()
     TriggerEvent('nh-context:createMenu', {{
-        header = "Select a Vehicle"
+        header = "<< Back",
+        event = "nh-context:policeCarsMenu",
     }, {
         header = "Crown Victoria",
         event = "policeCars:spawn",
-        image = "https://i.imgur.com/ltmXe7I.jpeg",
         args = {"NPOLVIC"}
     }, {
         header = "Charger",
         event = "policeCars:spawn",
-        image = "https://i.imgur.com/nh3rily.jpeg",
         args = {"NPOLCHAR"}
     }, {
         header = "Corvette",
         event = "policeCars:spawn",
-        image = "https://i.imgur.com/Kyijdot.jpeg",
         args = {"NPOLVETTE"}
     }, {
         header = "Challenger",
         event = "policeCars:spawn",
-        image = "https://i.imgur.com/BGCBMJC.jpeg",
         args = {"NPOLCHAL"}
     }, {
         header = "Mustang",
         event = "policeCars:spawn",
-        image = "https://i.imgur.com/rAkeHHM.jpeg",
         args = {"NPOLSTANG"}
     }, {
         header = "Explorer",
         event = "policeCars:spawn",
-        image = "https://i.imgur.com/VAr7Ce8.jpeg",
         args = {"NPOLEXP"}
+    },
+    {
+        header = "Motorcycle",
+        event = "policeCars:spawn",
+        args = {"NPOLMM"}
+    }, 
+    {
+        header = "Retinue",
+        event = "policeCars:spawn",
+        args = {"NPOLRETINUE"}
+    },
+    {
+        header = "Blazer",
+        event = "policeCars:spawn",
+        args = {"NPOLBLAZER"}
+    },
+    {
+        header = "Bearcat",
+        event = "policeCars:spawn",
+        args = {"BCAT"}
+    },
+  })
+end)
+
+RegisterNetEvent('nh-context:policeCarsUM', function()
+    TriggerEvent('nh-context:createMenu', {{
+        header = "<< Back",
+        event = "nh-context:policeCarsMenu",
+    }, {
+        header = "Huracan",
+        event = "policeCars:spawn",
+        args = {"POLLAMBO"}
+    }, {
+        header = "Baller",
+        event = "policeCars:spawn",
+        args = {"UCBALLER"}
+    }, {
+        header = "Banshee",
+        event = "policeCars:spawn",
+        args = {"UCBANSHEE"}
+    }, {
+        header = "Buffalo",
+        event = "policeCars:spawn",
+        args = {"UCBUFFALO"}
+    }, {
+        header = "Comet",
+        event = "policeCars:spawn",
+        args = {"UCCOMET"}
+    }, {
+        header = "Comet 2",
+        event = "policeCars:spawn",
+        args = {"UCCOMET2"}
+    },
+    {
+        header = "Coquette",
+        event = "policeCars:spawn",
+        args = {"UCCOQUETTE"}
+    },
+    {
+        header = "Primo",
+        event = "policeCars:spawn",
+        args = {"UCPRIMO"}
+    },
+    {
+        header = "Rancher",
+        event = "policeCars:spawn",
+        args = {"UCRANCHER"}
+    },
+    {
+        header = "Washington",
+        event = "policeCars:spawn",
+        args = {"UCWASHINGTON"}
     },
   })
 end)
@@ -194,17 +278,28 @@ AddEventHandler('policeCars:spawn', function(model)
         local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, spawner[k].x, spawner[k].y, spawner[k].z)
 
         if dist <= 2.0 then
-            ESX.Game.SpawnVehicle(model, vector3(spawner[k].x, spawner[k].y, spawner[k].z), spawner[k].h, function(vehicle)
-                local plate = GetVehicleNumberPlateText(vehicle)
-                exports["onyxLocksystem"]:givePlayerKeys(plate)
-                TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, -1)
-                SetVehicleDirtLevel(vehicle, 0.0)
-                -- exports['LegacyFuel']:SetFuel(vehicle, 100)
-            end)
+            if not IsModelInCdimage(model) then
+                return
+            end
+            RequestModel(model)
+
+            while not HasModelLoaded(model) do
+                Citizen.Wait(10)
+            end
+
+            local vehicle = CreateVehicle(model, spawner[k].x, spawner[k].y, spawner[k].z, spawner[k].h, true, true)
+            local plate = GetVehicleNumberPlateText(vehicle)
+            exports["onyxLocksystem"]:givePlayerKeys(plate)
+            TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, -1)
+            SetVehicleDirtLevel(vehicle, 0.0)
+            exports["ecrp-fuel"]:SetFuel(vehicle, 100)
+            SetModelAsNoLongerNeeded(model)
             return
         end
     end
 end)
+
+
 
 -- Store vehicle if police vehicle
 RegisterNetEvent('policeCars:delete')
