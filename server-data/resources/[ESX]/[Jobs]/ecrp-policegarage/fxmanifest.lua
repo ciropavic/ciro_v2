@@ -1,8 +1,8 @@
-fx_version 'adamant'
+fx_version 'cerulean'
 
 game 'gta5'
 
-author 'Thoomin'
+author 'PandolfoM'
 
 client_scripts {
   '@PolyZone/client.lua',
@@ -10,8 +10,13 @@ client_scripts {
   '@PolyZone/EntityZone.lua',
   '@PolyZone/CircleZone.lua',
   '@PolyZone/ComboZone.lua',
-  'config.lua',
-  'cl.lua'
+  'client/main.lua',
+  'client/zones.lua',
+}
+
+server_scripts {
+  '@oxmysql/lib/MySQL.lua',
+  'server/main.lua',
 }
 
 exports {

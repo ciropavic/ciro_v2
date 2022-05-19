@@ -1,4 +1,3 @@
--- ESX Start
 ESX = nil
 
 Citizen.CreateThread(function()
@@ -11,18 +10,18 @@ Citizen.CreateThread(function()
     end
 end)
 
-RegisterNetEvent('ecrp-garage:Main', function()
+RegisterNetEvent('ecrp-policegarage:Main', function()
     TriggerEvent('nh-context:createMenu', {{
-        header = "Parking"
+        header = "Police Shared Lot"
     }, {
         header = "Retrieve",
-        context = "Take owned vehicle from garage",
-        event = "ecrp-garage:openGarage",
+        context = "Take vehicle from share pool",
+        event = "ecrp-policegarage:openGarage",
         subMenu = true,
     }, {
         header = "Store",
-        context = "Store vehicle to the parking garage",
-        event = "ecrp-garage:storeVehicle",
+        context = "Store vehicle in the share lot",
+        event = "ecrp-policegarage:storeVehicle",
         subMenu = true,
     }})
 end)
@@ -30,7 +29,7 @@ end)
 local vehMenu = {{
     header = "<< Go Back",
     context = "",
-    event = "ecrp-garage:Main"
+    event = "ecrp-policegarage:Main"
 }}
 
 -- checks for dupe vehicls in vehMenu
@@ -44,15 +43,15 @@ Citizen.CreateThread(function()
 end)
 
 -- store vehicles
-RegisterNetEvent('ecrp-garage:storeVehicle')
-AddEventHandler('ecrp-garage:storeVehicle', function()
+RegisterNetEvent('ecrp-policegarage:storeVehicle')
+AddEventHandler('ecrp-policegarage:storeVehicle', function()
     local playerPed = PlayerPedId()
     local playerVeh = GetVehiclePedIsIn(playerPed)
     if GetPedInVehicleSeat(playerVeh, -1) == playerPed then
-        ESX.TriggerServerCallback('ecrp-garage:validCar', function(cb)
+        ESX.TriggerServerCallback('ecrp-policegarage:validCar', function(cb)
             if cb then
                 local vehProps = ESX.Game.GetVehicleProperties(playerVeh)
-                ESX.TriggerServerCallback('ecrp-garage:saveVehicle', function(cb)
+                ESX.TriggerServerCallback('ecrp-policegarage:saveVehicle', function(cb)
                     if cb then
                         ESX.Game.DeleteVehicle(playerVeh)
                         exports['mythic_notify']:DoHudText('inform', 'Your vehicle was stored')
@@ -69,9 +68,9 @@ AddEventHandler('ecrp-garage:storeVehicle', function()
 end)
 
 -- take out vehicles
-RegisterNetEvent('ecrp-garage:openGarage')
-AddEventHandler('ecrp-garage:openGarage', function()
-    ESX.TriggerServerCallback('ecrp-garage:getVehicleList', function(cb)
+RegisterNetEvent('ecrp-policegarage:openGarage')
+AddEventHandler('ecrp-policegarage:openGarage', function()
+    ESX.TriggerServerCallback('ecrp-policegarage:getVehicleList', function(cb)
         if cb ~= "notCars" then
 
             PreloadAllVehicles(cb)
@@ -86,7 +85,7 @@ AddEventHandler('ecrp-garage:openGarage', function()
                         header = vehName,
                         context = "Plate: " .. vehPlate,
                         footer = '<span style="color: green;">Stored</span>',
-                        event = "ecrp:personalVehSpawn",
+                        event = "ecrp-policegarage:VehSpawn",
                         id = "4",
                         args = {v.vehicle.model, v.vehicle.plate, v.vehicle}
                     })
@@ -106,8 +105,8 @@ AddEventHandler('ecrp-garage:openGarage', function()
     end)
 end)
 
-RegisterNetEvent("ecrp-garage:removeSimilarVehicle")
-AddEventHandler("ecrp-garage:removeSimilarVehicle", function(plate)
+RegisterNetEvent("ecrp-policegarage:removeSimilarVehicle")
+AddEventHandler("ecrp-policegarage:removeSimilarVehicle", function(plate)
     local vehicles = ESX.Game.GetVehicles()
     local attempts = 0
     if #plate == 7 then
@@ -142,10 +141,25 @@ function PreloadAllVehicles(vehicles)
     end
 end
 
+RegisterCommand('insertpolice', function ()
+  local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+  local vehicleProps = ESX.Game.GetVehicleProperties(veh)
+  TriggerServerEvent('ecrp-policegarage:addvehtodb', vehicleProps, vehicleProps.plate)
+end)
+
+RegisterNetEvent('ecrp-policegarage:changeplate')
+AddEventHandler('ecrp-policegarage:changeplate', function (plate)
+  local playerPed = PlayerPedId()
+  local vehicle = GetVehiclePedIsIn(playerPed)
+  SetVehicleNumberPlateText(vehicle, plate)
+  SetVehicleNumberPlateTextIndex(vehicle, 4)
+end)
+
+
 -- Vehicle preloading
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(playerData)
-    ESX.TriggerServerCallback('ecrp-garage:getVehicleList', function(cb)
+    ESX.TriggerServerCallback('ecrp-policegarage:getVehicleList', function(cb)
         if cb ~= "notCars" then
             PreloadAllVehicles(cb)
         end

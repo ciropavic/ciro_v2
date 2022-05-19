@@ -74,7 +74,7 @@ body::-webkit-scrollbar {
 }
 
 .context {
-    color: rgb(232, 229, 229);
+    color: grey;
     flex-direction: column;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 0.8rem;
