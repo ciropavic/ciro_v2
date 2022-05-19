@@ -126,6 +126,12 @@ local spawner = {
 {x = -3204.6110839844, y = 842.99536132813, z = 8.5178918838501, h = 122.69799041748},
 {x = -3201.236328125, y = 836.24212646484, z = 8.5171890258789, h = 123.64179992676},
 {x = -3196.5444335938, y = 830.3974609375, z = 8.5168533325195, h = 212.95384216309},
+-- MRPD
+{x = 435.41461181641, y = -1027.158203125, z = 28.146787643433, h = 5.7569766044617},
+{x = 439.17218017578, y = -1026.5861816406, z = 28.077592849731, h = 4.2298603057861},
+{x = 442.54000854492, y = -1026.1737060547, z = 28.015008926392, h = 4.9409985542297},
+{x = 446.06533813477, y = -1025.6617431641, z = 27.945625305176, h = 6.5090565681458},
+{x = 449.59384155273, y = -1025.4699707031, z = 27.883348464966, h = 5.5243496894836},
 }
 
 -- PolyZones
@@ -210,7 +216,16 @@ local parking7709 = BoxZone:Create(vector3(-3200.31, 835.91, 8.93), 23.8, 8.0, {
   maxZ=11.33
 })
 
-local parkingZones = ComboZone:Create({apartmentsParking, pinkCageParking, casinoParking, mirrorParking, paletoParking, uwuParking1, uwuParking2, pierParking, sandyParking}, {
+local mrpd = BoxZone:Create(vector3(442.36, -1026.36, 28.68), 5.8, 18.2, {
+  name="mrpd",
+  heading=6,
+  --debugPoly=true,
+  minZ=27.08,
+  maxZ=31.68
+})
+
+
+local parkingZones = ComboZone:Create({apartmentsParking, pinkCageParking, casinoParking, mirrorParking, paletoParking, uwuParking1, uwuParking2, pierParking, sandyParking, mrpd}, {
     -- debugPoly = true
 })
 

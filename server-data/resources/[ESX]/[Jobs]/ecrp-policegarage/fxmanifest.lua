@@ -12,6 +12,7 @@ client_scripts {
   '@PolyZone/ComboZone.lua',
   'client/main.lua',
   'client/zones.lua',
+  'client/shop.lua',
 }
 
 server_scripts {

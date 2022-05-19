@@ -47,12 +47,27 @@ rootMenuConfig =  {
       icon = "#police-vehicle-garage",
       functionName = "ecrp-policegarage:Main",
       enableMenu = function()
-      local ped = PlayerPedId()
          PlayerData = ESX.GetPlayerData()
          dead = exports["ecrp-death"]:GetDeath()
          inGarage = exports["ecrp-policegarage"]:InGarage()
           if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" then
             if not dead and inGarage then
+              return true
+            end
+          end
+      end,
+    },
+    {
+      id = "policeCarShop",
+      displayName = "Police Vehicle Shop",
+      icon = "#police-vehicle-garage",
+      functionName = "ecrp-policegarage:shopMain",
+      enableMenu = function()
+         PlayerData = ESX.GetPlayerData()
+         dead = exports["ecrp-death"]:GetDeath()
+         inShop = exports["ecrp-policegarage"]:InShop()
+          if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" then
+            if not dead and inShop then
               return true
             end
           end
@@ -93,13 +108,12 @@ rootMenuConfig =  {
         displayName = "Emergency",
         icon = "#police-emergency",
         enableMenu = function()
-           local ped = PlayerPedId()
            PlayerData = ESX.GetPlayerData()
            dead = exports["ecrp-death"]:GetDeath()
             if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" then
-              -- if dead then
+              if dead then
                 return true
-              -- end
+              end
             end
         end,
         subMenus = {"police:downed", "police:downedE"}

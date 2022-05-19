@@ -103,10 +103,46 @@ AddEventHandler('ecrp-policegarage:addvehtodb', function (vehprops, plate)
   end)
 end)
 
+RegisterNetEvent('ecrp-policegarage:addPersonalVeh')
+AddEventHandler('ecrp-policegarage:addPersonalVeh', function (vehprops, plate)
+  local source = source
+	local xPlayer = ESX.GetPlayerFromId(source)
 
-RegisterCommand('setplate', function (source, args)
-  TriggerClientEvent('ecrp-policegarage:changeplate', source, args[1])
+  if xPlayer == nil then
+    return
+  end
+
+  local vehiclePropsjson = json.encode(vehprops)
+  MySQL.insert('INSERT INTO owned_vehicles (owner, plate, vehicle, stored) VALUES (@owner, @plate, @vehicle, @stored)',
+  {
+      ['@owner']   = xPlayer.identifier,
+      ['@plate']   = plate,
+      ['@vehicle'] = vehiclePropsjson,
+      ['@stored'] = 0,
+  }, function (result)
+  end)
 end)
+
+RegisterNetEvent('ecrp-policegarage:checkmoney')
+AddEventHandler('ecrp-policegarage:checkmoney', function (model, price)
+  local source = source
+	local xPlayer = ESX.GetPlayerFromId(source)
+
+  if xPlayer == nil then
+    return
+  end
+
+  if xPlayer.getAccount('bank').money >= (price) or xPlayer.getAccount('money').money >= (price)then
+    xPlayer.removeAccountMoney('bank', (price))
+    TriggerClientEvent('ecrp-policegarage:spawnveh', source, model)
+  else 
+    TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'error', text = 'Not enough money!'})
+  end
+end)
+
+-- RegisterCommand('setplate', function (source, args)
+--   TriggerClientEvent('ecrp-policegarage:changeplate', source, args[1])
+-- end)
 
 function ltrim(s)
     return s:match '^%s*(.*)'

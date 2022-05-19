@@ -123,35 +123,6 @@ policeSpawn:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, poi
   end
 end)
 
--- Spawn police vehicles
--- RegisterNetEvent('policeCars:spawn')
--- AddEventHandler('policeCars:spawn', function(model)
---     for k in pairs(spawner) do
---         local plyCoords = GetEntityCoords(GetPlayerPed(-1), false)
---         local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, spawner[k].x, spawner[k].y, spawner[k].z)
-
---         if dist <= 2.0 then
---             if not IsModelInCdimage(model) then
---                 return
---             end
---             RequestModel(model)
-
---             while not HasModelLoaded(model) do
---                 Citizen.Wait(10)
---             end
-
---             local vehicle = CreateVehicle(model, spawner[k].x, spawner[k].y, spawner[k].z, spawner[k].h, true, true)
---             local plate = GetVehicleNumberPlateText(vehicle)
---             exports["onyxLocksystem"]:givePlayerKeys(plate)
---             TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, -1)
---             SetVehicleDirtLevel(vehicle, 0.0)
---             exports["ecrp-fuel"]:SetFuel(vehicle, 100)
---             SetModelAsNoLongerNeeded(model)
---             return
---         end
---     end
--- end)
-
 function InGarage()
   if insideGarage then
       return true

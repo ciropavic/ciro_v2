@@ -141,11 +141,11 @@ function PreloadAllVehicles(vehicles)
     end
 end
 
-RegisterCommand('insertpolice', function ()
-  local veh = GetVehiclePedIsIn(PlayerPedId(), false)
-  local vehicleProps = ESX.Game.GetVehicleProperties(veh)
-  TriggerServerEvent('ecrp-policegarage:addvehtodb', vehicleProps, vehicleProps.plate)
-end)
+-- RegisterCommand('insertpolice', function ()
+--   local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+--   local vehicleProps = ESX.Game.GetVehicleProperties(veh)
+--   TriggerServerEvent('ecrp-policegarage:addvehtodb', vehicleProps, vehicleProps.plate)
+-- end)
 
 RegisterNetEvent('ecrp-policegarage:changeplate')
 AddEventHandler('ecrp-policegarage:changeplate', function (plate)
