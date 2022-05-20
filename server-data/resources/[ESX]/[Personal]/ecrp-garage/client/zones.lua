@@ -282,8 +282,9 @@ AddEventHandler('ecrp:personalVehSpawn', function(model, plate, mods)
                 ESX.Game.SpawnVehicle(model, vector3(spawner[k].x, spawner[k].y, spawner[k].z), spawner[k].h,
                     function(vehicle)
                         ESX.Game.SetVehicleProperties(vehicle, mods)
+                        local plate2 = GetVehicleNumberPlateText(vehicle)
                         TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, -1)
-                        exports["onyxLocksystem"]:givePlayerKeys(plate)
+                        exports["onyxLocksystem"]:givePlayerKeys(plate2)
                         exports["ecrp-fuel"]:SetFuel(vehicle, GetVehicleFuelLevel(vehicle))
                     end)
                 return

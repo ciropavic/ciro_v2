@@ -99,6 +99,16 @@ Bones['platelight'] = {
 				flipVehicle(entity)
 			end
 		},
+    {
+      icon = "fas fa-dollar-sign",
+			label = "Sell Vehicle",
+			canInteract = function(entity)
+        return GetEntityBoneIndexByName(entity, 'platelight') ~= -1
+			end,
+			action = function(entity)
+        TriggerEvent('ecrp-garage:tradeVehicle', GetVehicleNumberPlateText(entity))
+			end
+		},
 	},
 	distance = 1.2
 }
