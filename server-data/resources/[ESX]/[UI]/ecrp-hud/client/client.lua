@@ -50,7 +50,7 @@ Citizen.CreateThread(function ()
   while true do
     Citizen.Wait(1000)
     local veh = GetVehiclePedIsIn(PlayerPedId(), false)
-    if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or
+    if IsPedSittingInAnyVehicle(ped) and IsVehicleModel(veh, _) or IsVehicleModel(veh, npolchal) or IsVehicleModel(veh, npolvette) or
             IsVehicleModel(veh, npolstang) or IsVehicleModel(veh, npolexp) or
             IsVehicleModel(veh, npolchar) or IsVehicleModel(veh, pollambo) or IsVehicleModel(veh, uccomet2) or IsVehicleModel(veh, uccomet) or IsVehicleModel(veh, ucbuffalo) or IsVehicleModel(veh, uccoquette) then
         SendNUIMessage({showPursuit = true})
