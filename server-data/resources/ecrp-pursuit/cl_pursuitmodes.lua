@@ -116,21 +116,21 @@ Citizen.CreateThread(function()
 
                 while InPursuitModeA == true do
                     Citizen.Wait(5)
-                    if (not IsPauseMenuActive()) and (IsDisabledControlJustPressed(0, ControlForPursuitMode))  then
+                    if (not IsPauseMenuActive()) and GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == PlayerPedId() and (IsDisabledControlJustPressed(0, ControlForPursuitMode))  then
                         InPursuitModeA = false
                         InPursuitModeAPlus = true
                         TriggerEvent('police:Ghost:Pursuit:A:Plus')
 
                         while InPursuitModeAPlus == true do
                             Citizen.Wait(5)
-                            if (not IsPauseMenuActive()) and (IsDisabledControlJustPressed(0, ControlForPursuitMode))  then
+                            if (not IsPauseMenuActive()) and GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == PlayerPedId() and (IsDisabledControlJustPressed(0, ControlForPursuitMode))  then
                                 InPursuitModeAPlus = false
                                 InPursuitModeSPlus = true
                                 TriggerEvent('police:Ghost:Pursuit:S')
 
                                 while InPursuitModeSPlus == true do
                                     Citizen.Wait(5)
-                                    if (not IsPauseMenuActive()) and (IsDisabledControlJustPressed(0, ControlForPursuitMode))  then
+                                    if (not IsPauseMenuActive()) and GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == PlayerPedId() and (IsDisabledControlJustPressed(0, ControlForPursuitMode))  then
                                         InPursuitModeSPlus = false
                                         InPursuitModeA = false
                                         TriggerEvent('police:Ghost:Pursuit:Off')
@@ -150,11 +150,11 @@ Citizen.CreateThread(function ()
     Citizen.Wait(0)
     local veh = GetVehiclePedIsIn(PlayerPedId(), false)
     if InPursuitModeA == true then
-      SetVehicleCheatPowerIncrease(veh, 1.2)
+      SetVehicleCheatPowerIncrease(veh, 1.1)
     elseif InPursuitModeAPlus == true then
-      SetVehicleCheatPowerIncrease(veh, 1.4)
+      SetVehicleCheatPowerIncrease(veh, 1.25)
     elseif InPursuitModeSPlus == true then
-      SetVehicleCheatPowerIncrease(veh, 1.45)
+      SetVehicleCheatPowerIncrease(veh, 1.4)
     end
   end
 end)
