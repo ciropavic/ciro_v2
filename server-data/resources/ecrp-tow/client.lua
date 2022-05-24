@@ -149,7 +149,7 @@ AddEventHandler('ecrp-tow:tow', function()
                 }
             }) then
                 DetachEntity(currentlyTowedVehicle, false, false)
-                local vehiclesCoords = GetOffsetFromEntityInWorldCoords(vehicle, 0.0, -12.0, 0.0)
+                local vehiclesCoords = GetOffsetFromEntityInWorldCoords(vehicle, 0.0, -9.0, 0.0)
                 SetEntityCoords(currentlyTowedVehicle, vehiclesCoords["x"], vehiclesCoords["y"], vehiclesCoords["z"], 1, 0, 0, 1)
                 SetVehicleOnGroundProperly(currentlyTowedVehicle)
                 currentlyTowedVehicle = nil
