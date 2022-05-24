@@ -1,5 +1,6 @@
 fx_version "cerulean"
 game "gta5"
+lua54 'yes'
 description 'Personal garage system for ECRP'
 authors {"PandolfoM"}
 
@@ -20,7 +21,11 @@ server_scripts {
   'server/sell.lua',
 }
 
+shared_script '@ox_lib/init.lua'
+
 exports {
   'InGarage',
   'ShowVehicleMenu'
 }
+
+dependencies {'ox_lib'}

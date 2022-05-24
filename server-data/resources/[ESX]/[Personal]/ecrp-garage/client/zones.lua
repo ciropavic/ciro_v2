@@ -281,7 +281,7 @@ AddEventHandler('ecrp:personalVehSpawn', function(model, plate, mods)
             if dist <= 3.0 then
                 ESX.Game.SpawnVehicle(model, vector3(spawner[k].x, spawner[k].y, spawner[k].z), spawner[k].h,
                     function(vehicle)
-                        ESX.Game.SetVehicleProperties(vehicle, mods)
+                        lib.setVehicleProperties(vehicle, mods)
                         local plate2 = GetVehicleNumberPlateText(vehicle)
                         TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, -1)
                         exports["onyxLocksystem"]:givePlayerKeys(plate2)
