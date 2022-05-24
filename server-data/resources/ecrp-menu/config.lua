@@ -11,11 +11,6 @@ Citizen.CreateThread(function()
     end
 end)
 
-local isPolice = false
-local isMedic = false
-local isInstructorMode = false
-local myJob = "unemployed"
- 
 rootMenuConfig =  {
     {
         id = "general",
@@ -79,7 +74,6 @@ rootMenuConfig =  {
       icon = "#police-vehicle-garage",
       functionName = "ecrp-garage:Main",
       enableMenu = function()
-      local ped = PlayerPedId()
          PlayerData = ESX.GetPlayerData()
          dead = exports["ecrp-death"]:GetDeath()
          inGarage = exports["ecrp-garage"]:InGarage()
@@ -94,7 +88,6 @@ rootMenuConfig =  {
       icon = "#police-vehicle-garage",
       functionName = "d-lscustom:openShop",
       enableMenu = function()
-      local ped = PlayerPedId()
          PlayerData = ESX.GetPlayerData()
          dead = exports["ecrp-death"]:GetDeath()
          inBennys = exports["d-lscustom"]:InBennys()
@@ -118,27 +111,25 @@ rootMenuConfig =  {
         end,
         subMenus = {"police:downed", "police:downedE"}
     },
-    -- {
-    --     id = "police-vehicle",
-    --     displayName = "Police Vehicle",
-    --     icon = "#police-vehicle",
-    --     enableMenu = function()
-    --     local ped = PlayerPedId()
-    --        PlayerData = ESX.GetPlayerData()
-    --        dead = exports["ecrp-death"]:GetDeath()
-    --         if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" and not dead and IsPedInAnyVehicle(PlayerPedId(), false) then
-    --             return true
-    --         end
-    --     end,
-    --     subMenus = {--[[ "general:unseatnearest", ]] "police:runplate", --[[ "police:toggleradar" ]]}
-    -- },
+    {
+      id = "tow-action",
+      displayName = "Tow Vehicle",
+      icon = "#tow",
+      functionName = "ecrp-tow:tow",
+      enableMenu = function()
+         PlayerData = ESX.GetPlayerData()
+         dead = exports["ecrp-death"]:GetDeath()
+          if PlayerData.job.name == "tow" and not dead then
+              return true
+          end
+      end
+    },
     {
         id = "emsDead",
         displayName = "10-14",
         icon = "#ems-dead",
         functionName = "st:panicTriggerMedic",
         enableMenu = function()
-        local ped = PlayerPedId()
            PlayerData = ESX.GetPlayerData()
            dead = exports["ecrp-death"]:GetDeath()
             if PlayerData.job.name == "ambulance" and dead then
@@ -386,6 +377,11 @@ newSubMenus = {
         title = "Hard Cuff",
         icon = "#cuffs-cuff",
         functionName = "ecrp-cuff"
+    }, 
+    ['tow:attach'] = {
+        title = "Tow Vehicle",
+        icon = "#tow-attach",
+        functionName = "ecrp-tow:tow"
     }, 
     ['cuffs:softcuff'] = {
         title = "Soft Cuff",
@@ -817,11 +813,6 @@ AddEventHandler("police:openMDW", function()
     ExecuteCommand('mdw')
 end)
 
-RegisterNetEvent('enablegangmember')
-AddEventHandler('enablegangmember', function(pGangNum)
-    gangNum = pGangNum
-end)
-
 RegisterNetEvent("medicdowned")
 AddEventHandler("medicdowned", function()
     local cord = GetEntityCoords(GetPlayerPed(-1))
@@ -829,27 +820,3 @@ AddEventHandler("medicdowned", function()
         {icon="fa-user-injured", info="EMS Downed"}
         }, {cord[1], cord[2], cord[3]}, "ambulance", 3000, 310, 1 )
 end)
-
-function GetClosestPlayer()
-    local players = GetPlayers()
-    local closestDistance = -1
-    local closestPlayer = -1
-    local closestPed = -1
-    local ply = PlayerPedId()
-    local plyCoords = GetEntityCoords(ply, 0)
-    if not IsPedInAnyVehicle(PlayerPedId(), false) then
-        for index,value in ipairs(players) do
-            local target = GetPlayerPed(value)
-            if(target ~= ply) then
-                local targetCoords = GetEntityCoords(GetPlayerPed(value), 0)
-                local distance = #(vector3(targetCoords["x"], targetCoords["y"], targetCoords["z"]) - vector3(plyCoords["x"], plyCoords["y"], plyCoords["z"]))
-                if(closestDistance == -1 or closestDistance > distance) and not IsPedInAnyVehicle(target, false) then
-                    closestPlayer = value
-                    closestPed = target
-                    closestDistance = distance
-                end
-            end
-        end
-        return closestPlayer, closestDistance, closestPed
-    end
-end
