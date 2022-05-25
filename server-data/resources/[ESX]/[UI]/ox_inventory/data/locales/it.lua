@@ -5,6 +5,7 @@ return {
 	['ui_close'] = "Chiudi",
 	['ui_drop'] = "Butta",
 	['ui_removeattachments'] = "Rimuovi accessori",
+	['ui_copy'] = "Copia numero seriale",
 	-- Tooltip
 	['ui_durability'] = "Durabilità",
 	['ui_ammo'] = "Munizioni",
@@ -18,6 +19,7 @@ return {
 	['ui_shift_drag'] = "Dividi uno stack di oggetti a metà",
 	['ui_ctrl_shift_lmb'] = "Sposta velocemente mezzo stack di oggetti in un altro inventario",
 	['ui_alt_lmb'] = "Usa velocemente un oggetto",
+	['ui_ctrl_c'] = "When hovering over a weapon, copies it's serial number",
 	--
 	['$'] = "$",
 	['male'] = "Uomo",
@@ -81,6 +83,6 @@ return {
 	['use_hotbar'] = "Usa oggetto dalla selezione rapida %s~",
 	['no_durability'] = "Oggetto usurato",
 	['cannot_give'] = "Impossibile dare %s %s al giocatore selezionato",
-	['evidence_cannot_take'] = "Non abbastanza alto in grado per prendere dalle prove", -- ACCURATE TRANSLATION NEEDED
+	['evidence_cannot_take'] = "Il tuo grado non può prendere oggetti dal deposito",
 	['dumpster'] = "Cassonetto"
 }

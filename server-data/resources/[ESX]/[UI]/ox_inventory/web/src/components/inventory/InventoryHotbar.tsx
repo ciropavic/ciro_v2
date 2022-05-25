@@ -28,10 +28,11 @@ const InventoryHotbar: React.FC<{ items: Slot[] }> = ({ items }) => {
           <div
             className="item-container"
             style={{
-              backgroundImage: item.metadata?.image ? `url(${process.env.PUBLIC_URL + `/images/${item.metadata.image}.png`})`
+              backgroundImage: item.metadata?.image
+                ? `url(${process.env.PUBLIC_URL + `/images/${item.metadata.image}.png`})`
                 : item.name
-                  ? `url(${process.env.PUBLIC_URL + `/images/${item.name}.png`})`
-                  : 'none',
+                ? `url(${process.env.PUBLIC_URL + `/images/${item.name}.png`})`
+                : 'none',
             }}
             key={`hotbar-${item.slot}`}
           >
@@ -42,19 +43,23 @@ const InventoryHotbar: React.FC<{ items: Slot[] }> = ({ items }) => {
                     {item.weight > 0
                       ? item.weight >= 1000
                         ? `${(item.weight / 1000).toLocaleString('en-us', {
-                          minimumFractionDigits: 2,
-                        })} `
+                            minimumFractionDigits: 2,
+                          })}kg `
                         : `${item.weight.toLocaleString('en-us', {
-                          minimumFractionDigits: 2,
-                        })} `
-                      : 0}
+                            minimumFractionDigits: 0,
+                          })}g `
+                      : ''}
                     {item.count?.toLocaleString('en-us')}x
                   </span>
                 </div>
                 {item?.durability !== undefined && (
                   <WeightBar percent={item.durability} durability />
                 )}
-                <div className="item-label">{item.metadata?.label ? item.metadata.label : Items[item.name]?.label || item.name}</div>
+                <div className="item-label">
+                  {item.metadata?.label
+                    ? item.metadata.label
+                    : Items[item.name]?.label || item.name}
+                </div>
               </>
             )}
           </div>

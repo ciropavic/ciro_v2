@@ -4,8 +4,6 @@ import useNuiEvent from '../hooks/useNuiEvent';
 import { setShiftPressed, setupInventory } from '../store/inventory';
 import DragPreview from './utils/DragPreview';
 import Notifications from './utils/Notifications';
-import ProgressBar from './utils/ProgressBar';
-import KeyboardInput from './utils/KeyboardInput';
 import useKeyPress from '../hooks/useKeyPress';
 import { Items } from '../store/items';
 import InventoryComponent from './inventory';
@@ -35,6 +33,10 @@ debugData([
             metadata: {
               durability: 100,
               description: `# Testing something  \n**Yes**`,
+              serial: 'SUPERCOOLWATER9725',
+              mustard: '60%',
+              ketchup: '30%',
+              mayo: '10%',
             },
             count: 5,
           },
@@ -94,11 +96,9 @@ const App: React.FC = () => {
 
   return (
     <>
-      <KeyboardInput />
       <DragPreview />
       <Notifications />
       <InventoryComponent />
-      <ProgressBar />
     </>
   );
 };

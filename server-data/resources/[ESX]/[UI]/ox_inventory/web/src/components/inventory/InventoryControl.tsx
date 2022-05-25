@@ -6,7 +6,7 @@ import { DragSource } from '../../typings';
 import { onUse } from '../../dnd/onUse';
 import { onGive } from '../../dnd/onGive';
 import { fetchNui } from '../../utils/fetchNui';
-import { faInfoCircle, faQuestion, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Fade from '../utils/Fade';
 import { Notify } from '../utils/Notifications';
@@ -29,12 +29,18 @@ const InfoScreen: React.FC<{
       <p>[SHIFT + Drag] - {Locale.ui_shift_drag}</p>
       <p>[CTRL + SHIFT + LMB] - {Locale.ui_ctrl_shift_lmb}</p>
       <p>[ALT + LMB] - {Locale.ui_alt_lmb}</p>
+      <p>[CTRL + C] - {Locale.ui_ctrl_c}</p>
+      <span
+        className="info-ox"
+        onClick={() => Notify({ text: 'Made with 🐂 by the Overextended team' })}
+      >
+        🐂
+      </span>
     </div>
   );
 };
 
 const InventoryControl: React.FC = () => {
-  const itemAmount = useAppSelector(selectItemAmount);
   const dispatch = useAppDispatch();
 
   const [infoVisible, setInfoVisible] = useState(false);
@@ -78,18 +84,18 @@ const InventoryControl: React.FC = () => {
           // defaultValue={itemAmount}
           onChange={inputHandler}
         />
-        <button ref={use} className="button">
+        {/* <button ref={use} className="button">
           {Locale.ui_use}
-        </button>
-        {/* <button ref={give} className="button">
-          {Locale.ui_give}
         </button> */}
+        <button ref={give} className="button">
+          {Locale.ui_give}
+        </button>
         <button className="button" onClick={() => fetchNui('exit')}>
           {Locale.ui_close}
         </button>
         <div className="misc-btns">
           <button onClick={() => setInfoVisible(true)}>
-            <FontAwesomeIcon icon={faQuestion} />
+            <FontAwesomeIcon icon={faInfoCircle} />
           </button>
         </div>
       </div>

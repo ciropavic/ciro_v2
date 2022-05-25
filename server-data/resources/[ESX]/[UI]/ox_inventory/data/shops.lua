@@ -4,13 +4,9 @@ return {
 		blip = {
 			id = 59, colour = 69, scale = 0.8
 		}, inventory = {
+			{ name = 'burger', price = 10 },
 			{ name = 'water', price = 10 },
-			{ name = 'coffee', price = 10 },
-			{ name = 'cupcake', price = 10 },
-			{ name = 'icetea', price = 10 },
-			{ name = 'milk', price = 10 },
-			{ name = 'sandwich', price = 10 },
-			{ name = 'phone', price = 1200 },
+			{ name = 'cola', price = 10 },
 		}, locations = {
 			vec3(25.7, -1347.3, 29.49),
 			vec3(-3038.71, 585.9, 7.9),
@@ -41,10 +37,9 @@ return {
 		blip = {
 			id = 93, colour = 69, scale = 0.8
 		}, inventory = {
-			{ name = 'beer', price = 10 },
-			{ name = 'tequila', price = 10 },
-			{ name = 'whisky', price = 15 },
-			{ name = 'wine', price = 15 },
+			{ name = 'water', price = 10 },
+			{ name = 'cola', price = 10 },
+			{ name = 'burger', price = 15 },
 		}, locations = {
 			vec3(1135.808, -982.281, 46.415),
 			vec3(-1222.915, -906.983, 12.326),
@@ -82,27 +77,20 @@ return {
 		blip = {
 			id = 110, colour = 69, scale = 0.8
 		}, inventory = {
-			{ name = 'ammo-pistol', price = 5, },
-			{ name = 'ammo-shotgun', price = 5, },
-			{ name = 'ammo-rifle', price = 5, },
-			{ name = 'ammo-smg', price = 5, },
+			{ name = 'ammo-9', price = 5, },
 			{ name = 'WEAPON_KNIFE', price = 200 },
-			{ name = 'WEAPON_SWITCHBLADE', price = 200 },
-			{ name = 'WEAPON_STUNGUN', price = 500 },
-			{ name = 'WEAPON_BATS', price = 100 },
-			{ name = 'WEAPON_PISTOL', price = 5000, metadata = { registered = true }, license = 'weapon' },
-			{ name = 'WEAPON_BROWNING', price = 10000, metadata = { registered = true }, license = 'weapon' },
-			{ name = 'WEAPON_PISTOL50', price = 20000, metadata = { registered = true }, license = 'weapon' }
+			{ name = 'WEAPON_BAT', price = 100 },
+			{ name = 'WEAPON_PISTOL', price = 1000, metadata = { registered = true }, license = 'weapon' }
 		}, locations = {
-			vec3(-661.08685302734, -937.49664306641, 21.829341888428),
-			vec3(814.75964355469, -2153.2619628906, 29.619184494019),
-			vec3(1694.9243164063, 3757.6428222656, 34.70532989502),
-			vec3(-329.04467773438, 6081.5126953125, 31.454780578613),
-			vec3(249.63198852539, -50.504085540771, 69.941246032715),
-			vec3(16.398851394653, -1109.3586425781, 29.797199249268),
-			vec3(2566.6547851563, 296.62710571289, 108.73497772217),
-			vec3(-1115.3160400391, 2697.5922851563, 18.554258346558),
-			vec3(842.92175292969, -1031.0738525391, 28.194856643677)
+			vec3(-662.180, -934.961, 21.829),
+			vec3(810.25, -2157.60, 29.62),
+			vec3(1693.44, 3760.16, 34.71),
+			vec3(-330.24, 6083.88, 31.45),
+			vec3(252.63, -50.00, 69.94),
+			vec3(22.56, -1109.89, 29.80),
+			vec3(2567.69, 294.38, 108.73),
+			vec3(-1117.58, 2698.61, 18.55),
+			vec3(842.44, -1033.42, 28.19)
 		}, targets = {
 			{ loc = vec3(-660.92, -934.10, 21.94), length = 0.6, width = 0.5, heading = 180.0, minZ = 21.8, maxZ = 22.2, distance = 2.0 },
 			{ loc = vec3(808.86, -2158.50, 29.73), length = 0.6, width = 0.5, heading = 360.0, minZ = 29.6, maxZ = 30.0, distance = 2.0 },
@@ -118,23 +106,19 @@ return {
 
 	PoliceArmoury = {
 		name = 'Police Armoury',
-		jobs = shared.police,
-		-- blip = {
-		-- 	id = 110, colour = 84, scale = 0.8
-		-- },
-     inventory = {
-			{ name = 'ammo-pistol', price = 12, },
-			{ name = 'ammo-smg', price = 12, },
-			{ name = 'ammo-rifle', price = 12, },
-			{ name = 'ammo-shotgun', price = 12, },
-			{ name = 'WEAPON_FLASHLIGHT', price = 287 },
-			{ name = 'WEAPON_NIGHTSTICK', price = 0 },
-			{ name = 'WEAPON_PISTOL', price = 12, metadata = { registered = true, serial = 'POL' }, license = 'weapon' },
-			{ name = 'WEAPON_CARBINERIFLE', price = 12, metadata = { registered = true, serial = 'POL' }, license = 'weapon', grade = 3 },
-			{ name = 'WEAPON_STUNGUN', price = 12, metadata = { registered = true, serial = 'POL'} },
-			{ name = 'pdchestarmor', price = 58 }
+		groups = shared.police,
+		blip = {
+			id = 110, colour = 84, scale = 0.8
+		}, inventory = {
+			{ name = 'ammo-9', price = 5, },
+			{ name = 'ammo-rifle', price = 5, },
+			{ name = 'WEAPON_FLASHLIGHT', price = 200 },
+			{ name = 'WEAPON_NIGHTSTICK', price = 100 },
+			{ name = 'WEAPON_PISTOL', price = 500, metadata = { registered = true, serial = 'POL' }, license = 'weapon' },
+			{ name = 'WEAPON_CARBINERIFLE', price = 1000, metadata = { registered = true, serial = 'POL' }, license = 'weapon', grade = 3 },
+			{ name = 'WEAPON_STUNGUN', price = 500, metadata = { registered = true, serial = 'POL'} }
 		}, locations = {
-			vec3(482.51, -995.83, 30.69)
+			vec3(451.51, -979.44, 30.68)
 		}, targets = {
 			{ loc = vec3(453.21, -980.03, 30.68), length = 0.5, width = 3.0, heading = 270.0, minZ = 30.5, maxZ = 32.0, distance = 6 }
 		}
@@ -142,7 +126,9 @@ return {
 
 	Medicine = {
 		name = 'Medicine Cabinet',
-		jobs = { ['ambulance'] = 0 },
+		groups = {
+			['ambulance'] = 0
+		},
 		blip = {
 			id = 403, colour = 69, scale = 0.8
 		}, inventory = {
@@ -174,7 +160,7 @@ return {
 		name = 'Vending Machine',
 		inventory = {
 			{ name = 'water', price = 10 },
-			{ name = 'sandwich', price = 10 },
+			{ name = 'cola', price = 10 },
 		},
 		model = {
 			`prop_vend_soda_02`, `prop_vend_fridge01`, `prop_vend_water_01`, `prop_vend_soda_01`

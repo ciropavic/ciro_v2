@@ -1,3 +1,5 @@
+if not lib then return end
+
 local Items = server.items
 local Inventory = server.inventory
 
@@ -7,79 +9,98 @@ local locations = shared.qtarget and 'targets' or 'locations'
 
 for shopName, shopDetails in pairs(data('shops')) do
 	Shops[shopName] = {}
+
 	if shopDetails[locations] then
-		for i=1, #shopDetails[locations] do
+		local groups = shopDetails.groups or shopDetails.jobs
+
+		for i = 1, #shopDetails[locations] do
 			Shops[shopName][i] = {
 				label = shopDetails.name,
 				id = shopName..' '..i,
-				jobs = shopDetails.jobs,
+				groups = groups,
 				items = table.clone(shopDetails.inventory),
 				slots = #shopDetails.inventory,
 				type = 'shop',
-				coords = shared.qtarget and shopDetails[locations][i].loc or shopDetails[locations][i]
+				coords = shared.qtarget and shopDetails[locations][i].loc or shopDetails[locations][i],
+				distance = shared.qtarget and shopDetails[locations][i].distance + 1 or nil,
 			}
-			for j=1, Shops[shopName][i].slots do
+
+			for j = 1, Shops[shopName][i].slots do
 				local slot = Shops[shopName][i].items[j]
+
+				if slot.grade and not groups then
+					print(('^1attempted to restrict slot %s (%s) to grade %s, but %s has no job restriction^0'):format(i, slot.name, slot.grade, shopDetails.name))
+					slot.grade = nil
+				end
+
 				local Item = Items(slot.name)
+
 				if Item then
 					slot = {
 						name = Item.name,
 						slot = j,
 						weight = Item.weight,
 						count = slot.count,
-						price = server.randomprices and (math.ceil(slot.price * (math.random(80, 120)/100))) or slot.price,
+						price = (server.randomprices and not currency or currency == 'money') and (math.ceil(slot.price * (math.random(80, 120)/100))) or slot.price,
 						metadata = slot.metadata,
 						license = slot.license,
 						currency = slot.currency,
 						grade = slot.grade
 					}
+
 					Shops[shopName][i].items[j] = slot
 				end
 			end
 		end
 	else
+		local groups = shopDetails.groups or shopDetails.jobs
+
 		Shops[shopName] = {
 			label = shopDetails.name,
 			id = shopName,
-			jobs = shopDetails.jobs,
+			groups = groups,
 			items = shopDetails.inventory,
 			slots = #shopDetails.inventory,
 			type = 'shop',
 		}
-		for i=1, Shops[shopName].slots do
+
+		for i = 1, Shops[shopName].slots do
 			local slot = Shops[shopName].items[i]
+
+			if slot.grade and not groups then
+				print(('^1attempted to restrict slot %s (%s) to grade %s, but %s has no job restriction^0'):format(i, slot.name, slot.grade, shopDetails.name))
+				slot.grade = nil
+			end
+
 			local Item = Items(slot.name)
+
 			if Item then
 				slot = {
 					name = Item.name,
 					slot = i,
 					weight = Item.weight,
 					count = slot.count,
-					price = server.randomprices and (math.ceil(slot.price * (math.random(90, 110)/100))) or slot.price,
+					price = (server.randomprices and not currency or currency == 'money') and (math.ceil(slot.price * (math.random(90, 110)/100))) or slot.price,
 					metadata = slot.metadata,
 					license = slot.license,
 					currency = slot.currency,
 					grade = slot.grade
 				}
+
 				Shops[shopName].items[i] = slot
 			end
 		end
 	end
 end
 
-local ServerCallback = import 'callbacks'
-
-ServerCallback.Register('openShop', function(source, data)
+lib.callback.register('ox_inventory:openShop', function(source, data)
 	local left, shop = Inventory(source)
 	if data then
 		shop = data.id and Shops[data.type][data.id] or Shops[data.type]
 
-		if shop.jobs then
-			local playerJob = left.player.job
-			local shopGrade = shop.jobs[playerJob.name]
-			if not shopGrade or shopGrade > playerJob.grade then
-				return
-			end
+		if shop.groups then
+			local group = server.hasGroup(left, shop.groups)
+			if not group then return end
 		end
 
 		if shop.coords and #(GetEntityCoords(GetPlayerPed(source)) - shop.coords) > 10 then
@@ -92,7 +113,7 @@ ServerCallback.Register('openShop', function(source, data)
 	return {label=left.label, type=left.type, slots=left.slots, weight=left.weight, maxWeight=left.maxWeight}, shop
 end)
 
-local table = import 'table'
+local table = lib.table
 local Log = server.logs
 
 -- http://lua-users.org/wiki/FormattingNumbers
@@ -102,7 +123,7 @@ local function comma_value(n)
 	return left..(num:reverse():gsub('(%d%d%d)','%1,'):reverse())..right
 end
 
-ServerCallback.Register('buyItem', function(source, data)
+lib.callback.register('ox_inventory:buyItem', function(source, data)
 	if data.toType == 'player' then
 		if data.count == nil then data.count = 1 end
 		local playerInv = Inventory(source)
@@ -114,16 +135,19 @@ ServerCallback.Register('buyItem', function(source, data)
 		if fromData then
 			if fromData.count then
 				if fromData.count == 0 then
-					return false, false, {type = 'error', text = shared.locale('shop_nostock')}
+					return false, false, { type = 'error', description = shared.locale('shop_nostock') }
 				elseif data.count > fromData.count then
 					data.count = fromData.count
 				end
 
-			elseif fromData.license and not MySQL.scalar.await('SELECT 1 FROM user_licenses WHERE type = ? AND owner = ?', { fromData.license, playerInv.owner }) then
-				return false, false, {type = 'error', text = shared.locale('item_unlicensed')}
+			elseif fromData.license and shared.framework == 'esx' and not MySQL:selectLicense(fromData.license, playerInv.owner) then
+				return false, false, { type = 'error', description = shared.locale('item_unlicensed') }
 
-			elseif fromData.grade and playerInv.player.job.grade < fromData.grade then
-				return false, false, {type = 'error', text = shared.locale('stash_lowgrade')}
+			elseif fromData.grade then
+				local _, rank = server.hasGroup(playerInv, shop.groups)
+				if fromData.grade > rank then
+					return false, false, { type = 'error', description = shared.locale('stash_lowgrade') }
+				end
 			end
 
 			local currency = fromData.currency or 'money'
@@ -136,17 +160,12 @@ ServerCallback.Register('buyItem', function(source, data)
 			local metadata, count = Items.Metadata(playerInv, fromItem, fromData.metadata and table.clone(fromData.metadata) or {}, data.count)
 			local price = count * fromData.price
 
-			local _, totalCount, _ = Inventory.GetItemSlots(playerInv, fromItem, fromItem.metadata)
-			if fromItem.limit and (totalCount + data.count) > fromItem.limit then
-				return false, false, {type = 'error', text = shared.locale('cannot_carry_limit', fromItem.limit, fromItem.label)}
-			end
-
 			if toData == nil or (fromItem.name == toItem.name and fromItem.stack and table.matches(toData.metadata, metadata)) then
-				local canAfford = Inventory.GetItem(source, currency, false, true) >= price
+				local canAfford = price >= 0 and Inventory.GetItem(source, currency, false, true) >= price
 				if canAfford then
 					local newWeight = playerInv.weight + (fromItem.weight + (metadata?.weight or 0)) * count
 					if newWeight > playerInv.maxWeight then
-						return false, false, {type = 'error', text = shared.locale('cannot_carry')}
+						return false, false, { type = 'error', description = shared.locale('cannot_carry') }
 					else
 						Inventory.SetSlot(playerInv, fromItem, count, metadata, data.toSlot)
 						if fromData.count then shop.items[data.fromSlot].count = fromData.count - count end
@@ -160,18 +179,18 @@ ServerCallback.Register('buyItem', function(source, data)
 					-- Only log purchases for items worth $500 or more
 					if fromData.price >= 500 then
 
-						Log(('%s %s'):format(playerInv.owner, message:lower()),
-							'buyItem', playerInv.owner, shop
+						Log(('%s %s'):format(playerInv.label, message:lower()),
+							'buyItem', playerInv.owner, shop.label
 						)
 
 					end
 
-					return true, {data.toSlot, playerInv.items[data.toSlot], weight}, {type = 'success', text = message}
+					return true, {data.toSlot, playerInv.items[data.toSlot], playerInv.weight}, { type = 'success', description = message }
 				else
-					return false, false, {type = 'error', text = shared.locale('cannot_afford', ('%s%s'):format((currency == 'money' and shared.locale('$') or comma_value(price)), (currency == 'money' and comma_value(price) or ' '..Items(currency).label)))}
+					return false, false, { type = 'error', description = shared.locale('cannot_afford', ('%s%s'):format((currency == 'money' and shared.locale('$') or comma_value(price)), (currency == 'money' and comma_value(price) or ' '..Items(currency).label))) }
 				end
 			end
-			return false, false, {type = 'error', text = shared.locale('unable_stack_items')}
+			return false, false, { type = 'error', description = shared.locale('unable_stack_items') }
 		end
 	end
 end)

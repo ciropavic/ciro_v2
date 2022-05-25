@@ -11,6 +11,7 @@ import { isSlotWithItem } from '../../helpers';
 import { useContextMenu } from 'react-contexify';
 import { onUse } from '../../dnd/onUse';
 import ReactTooltip from 'react-tooltip';
+import { Locale } from '../../store/locale';
 
 interface SlotProps {
   inventory: Inventory;
@@ -130,9 +131,8 @@ const InventorySlot: React.FC<SlotProps> = ({ inventory, item, setCurrentItem })
         onMouseLeave={onMouseLeave}
       >
         <div className="hotbarItemNumbers">
-        {isSlotWithItem(item) && (
-          <>
-              <div>
+          {isSlotWithItem(item) && (
+            <>
               <div className="item-label">
                 {item.metadata?.label ? item.metadata.label : Items[item.name]?.label || item.name}
               </div>
@@ -146,10 +146,10 @@ const InventorySlot: React.FC<SlotProps> = ({ inventory, item, setCurrentItem })
                     ? item.weight >= 1000
                       ? `${(item.weight / 1000).toLocaleString('en-us', {
                           minimumFractionDigits: 2,
-                        })} `
+                        })}`
                       : `${item.weight.toLocaleString('en-us', {
                           minimumFractionDigits: 2,
-                        })} `
+                        })}`
                     : ''}
                 </span>
               </div>
@@ -184,16 +184,16 @@ const InventorySlot: React.FC<SlotProps> = ({ inventory, item, setCurrentItem })
                               item.currency === 'money' || !item.currency ? '#2ECC71' : '#E74C3C',
                           }}
                         >
-                          ${item.price}
+                          {Locale.$}
+                          {item.price}
                         </div>
                       )}
                     </>
                   )}
                 </>
               )}
-              </div>
-          </>
-        )}
+            </>
+          )}
         </div>
       </div>
     </>

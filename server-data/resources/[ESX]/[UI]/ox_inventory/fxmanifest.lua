@@ -7,20 +7,20 @@ game         'gta5'
 --[[ Resource Information ]]--
 name         'ox_inventory'
 author       'Overextended'
-version      '2.2.1'
+version      '2.8.6'
 repository   'https://github.com/overextended/ox_inventory'
-description  'Slot-based inventory with metadata'
+description  'What even is an "ESX.Items" anyway?'
 
 --[[ Manifest ]]--
 dependencies {
-	'/server:5104',
+	'/server:5181',
 	'/onesync',
 	'oxmysql',
-	'pe-lualib'
+	'ox_lib',
 }
 
 shared_scripts {
-	'@pe-lualib/init.lua',
+	'@ox_lib/init.lua',
 	'modules/init.lua'
 }
 
@@ -42,15 +42,15 @@ client_scripts {
 
 server_scripts {
 	'@oxmysql/lib/MySQL.lua',
+	'modules/mysql/server.lua',
 	'modules/logs/server.lua',
 	'modules/items/server.lua',
 	'modules/inventory/server.lua',
 	'modules/shops/server.lua',
 	'server.lua',
-	'version.lua'
+	-- 'setup/convert.lua',
+	'setup/dbcleanup.lua',
 }
-
---server_script 'setup/convert.lua'
 
 ui_page 'web/build/index.html'
 
