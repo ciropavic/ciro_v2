@@ -1,11 +1,3 @@
-ESX = nil
-Citizen.CreateThread(function()
-	while ESX == nil do
-		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-		Citizen.Wait(0)
-	end
-end)
-
 lib.locale()
 TriggerServerEvent('ox_doorlock:getDoors')
 
@@ -117,6 +109,22 @@ RegisterNetEvent('ox_doorlock:setState', function(id, state, source, data)
 		createDoor(data)
 	end
 
+	if source == cache.serverId then
+		if state == 0 then
+			lib.notify({
+				type = 'success',
+				icon = 'unlock',
+				description = locale('unlocked_door')
+			})
+		else
+			lib.notify({
+				type = 'success',
+				icon = 'lock',
+				description = locale('locked_door')
+			})
+		end
+	end
+
 	local door = data or doors[id]
 	local double = door.doors
 	door.state = state
@@ -141,6 +149,8 @@ RegisterNetEvent('ox_doorlock:setState', function(id, state, source, data)
 			Wait(0)
 		end
 
+		if door.state ~= state then return end
+
 		DoorSystemSetDoorState(double[1].hash, door.state, false, false)
 		DoorSystemSetDoorState(double[2].hash, door.state, false, false)
 	else
@@ -149,6 +159,8 @@ RegisterNetEvent('ox_doorlock:setState', function(id, state, source, data)
 			if heading == door.heading then break end
 			Wait(0)
 		end
+
+		if door.state ~= state then return end
 
 		DoorSystemSetDoorState(door.hash, door.state, false, false)
 	end
@@ -201,6 +213,7 @@ CreateThread(function()
 		local num = #nearbyDoors
 
 		if num > 0 then
+			local ratio = drawSprite and GetAspectRatio(true)
 			for i = 1, num do
 				local door = nearbyDoors[i]
 
@@ -215,7 +228,7 @@ CreateThread(function()
 		if closestDoor and closestDoor.distance < closestDoor.maxDistance then
 			if Config.DrawTextUI then
 				if closestDoor.state == 0 and showUI ~= 0 then
-          TriggerEvent('cd_drawtextui:ShowUI', 'show', "<B>[E]</B> Unlocked", 'green', 'green')
+					TriggerEvent('cd_drawtextui:ShowUI', 'show', "<B>[E]</B> Unlocked", 'green', 'green')
 					showUI = 0
 				elseif closestDoor.state == 1 and showUI ~= 1 then
 					TriggerEvent('cd_drawtextui:ShowUI', 'show', "<B>[E]</B> Locked", 'red', 'red')
@@ -240,9 +253,6 @@ CreateThread(function()
 
 					if gameTimer - lastTriggered > 500 then
 						lastTriggered = gameTimer
-            if not IsPedInAnyVehicle(PlayerPedId(), true) then
-              dooranim()
-            end
 						TriggerServerEvent('ox_doorlock:setState', closestDoor.id, closestDoor.state == 1 and 0 or 1)
 					end
 				end
@@ -253,7 +263,7 @@ CreateThread(function()
 		end
 
 		Wait(num > 0 and 0 or 500)
-	end
+	end)
 end)
 
 function loadAnimDict(dict)

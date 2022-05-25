@@ -48,25 +48,24 @@ const Progressbar: React.FC = () => {
 
   return (
     <Flex
-      h="10%"
-      w="100%"
-      position="absolute"
-      bottom="13vh"
-      justifyContent="center"
-      alignItems="center"
+    h="10%"
+    w="100%"
+    position="absolute"
+    bottom="13vh"
+    justifyContent="center"
+    alignItems="center"
     >
-      <Box width="28vh">
+      <Box width={350}>
         {visible && (
           <Box
-            height="4vh"
-            bg="rgba(0, 0, 0, 0.6)"
-            border="2px solid #fff"
-            textAlign="center"
-            
-            borderRadius="sm"
-            boxShadow="lg"
-            overflow="hidden"
-            
+          height="4vh"
+          bg="rgba(0, 0, 0, 0.6)"
+          border="2px solid #fff"
+          textAlign="center"
+          
+          borderRadius="sm"
+          boxShadow="lg"
+          overflow="hidden"
           >
             <Box
               height="4vh"

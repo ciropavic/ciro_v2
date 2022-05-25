@@ -1,4 +1,3 @@
-lib.locale()
 -- These vehicles will be registered as "allowed/valid" tow trucks.
 -- Change the x, y and z offset values for the towed vehicles to be attached to the tow truck.
 -- x = left/right, y = forwards/backwards, z = up/down
@@ -7,7 +6,7 @@ local allowedTowModels = {
         x = 0.0,
         y = -0.85,
         z = 1.0
-    } -- default GTA V flatbed
+    }
 }
 
 local allowTowingBoats = false -- Set to true if you want to be able to tow boats.
