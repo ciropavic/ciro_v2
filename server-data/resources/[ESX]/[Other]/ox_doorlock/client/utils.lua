@@ -49,13 +49,13 @@ local function pickLock(entity)
 		if math.random(1, 500) == 1 then
 			TriggerServerEvent('ox_doorlock:breakLockpick')
 			lib.cancelProgress()
-			lib.notify({ type = 'error', description = locale('lockpick_broke') })
+			-- lib.notify({ type = 'error', description = locale('lockpick_broke') })
 		end
 	end
 
 	if math.random(1, 100) == 1 then
 		TriggerServerEvent('ox_doorlock:breakLockpick')
-		lib.notify({ type = 'error', description = locale('lockpick_broke') })
+		-- lib.notify({ type = 'error', description = locale('lockpick_broke') })
 	end
 
 	if success then

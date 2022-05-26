@@ -4,7 +4,7 @@ shared = {
 	framework = GetConvar('inventory:framework', 'esx'),
 	locale = GetConvar('inventory:locale', 'en'),
 	playerslots = GetConvarInt('inventory:slots', 50),
-	playerweight = GetConvarInt('inventory:weight', 30000),
+	playerweight = GetConvarInt('inventory:weight', 250),
 	autoreload = GetConvar('inventory:autoreload', 'false') == 'true',
 	trimplate = GetConvar('inventory:trimplate', 'true') == 'true',
 	qtarget = GetConvar('inventory:qtarget', 'false') == 'true',

@@ -33,23 +33,43 @@ local ox_inventory = exports[shared.resource]
 -- Clientside item use functions
 -----------------------------------------------------------------------------------------------
 
-Item('bandage', function(data, slot)
-	local maxHealth = GetEntityMaxHealth(cache.ped)
-	local health = GetEntityHealth(cache.ped)
-	ox_inventory:useItem(data, function(data)
-		if data then
-			SetEntityHealth(cache.ped, math.min(maxHealth, math.floor(health + maxHealth / 16)))
-			lib.notify({ description = 'You feel better already' })
-		end
-	end)
+function loadAnimDict(dict)
+  while (not HasAnimDictLoaded(dict)) do
+      RequestAnimDict(dict)
+      Citizen.Wait(5)
+  end
+end
+
+Item('firstaid', function(data, slot)
+	local maxHealth = 200
+	local health = GetEntityHealth(PlayerData.ped)
+	-- if health < maxHealth then
+		ox_inventory:useItem(data, function(data)
+			if data then
+				SetEntityHealth(PlayerData.ped, math.min(maxHealth, math.floor(health + maxHealth / 10)))
+				-- ox_inventory:notify({text = 'You feel better already'})
+			end
+		end)
+	-- end
 end)
 
-Item('armour', function(data, slot)
-	if GetPedArmour(cache.ped) < 100 then
+Item('pdchestarmor', function(data, slot)
+	if GetPedArmour(PlayerData.ped) < 100 then
 		ox_inventory:useItem(data, function(data)
 			if data then
 				SetPlayerMaxArmour(PlayerData.id, 100)
-				SetPedArmour(cache.ped, 100)
+				SetPedArmour(PlayerData.ped, 100)
+			end
+		end)
+	end
+end)
+
+Item('chestarmor', function(data, slot)
+	if GetPedArmour(PlayerData.ped) < 100 then
+		ox_inventory:useItem(data, function(data)
+			if data then
+				SetPlayerMaxArmour(PlayerData.id, 100)
+				SetPedArmour(PlayerData.ped, GetPedArmour(PlayerData.ped) + 50)
 			end
 		end)
 	end
@@ -62,10 +82,10 @@ Item('parachute', function(data, slot)
 			if data then
 				local chute = `GADGET_PARACHUTE`
 				SetPlayerParachuteTintIndex(PlayerData.id, -1)
-				GiveWeaponToPed(cache.ped, chute, 0, true, false)
-				SetPedGadget(cache.ped, chute, true)
+				GiveWeaponToPed(PlayerData.ped, chute, 0, true, false)
+				SetPedGadget(PlayerData.ped, chute, true)
 				lib.requestModel(1269906701)
-				client.parachute = CreateParachuteBagObject(cache.ped, true, true)
+				client.parachute = CreateParachuteBagObject(PlayerData.ped, true, true)
 				if slot.metadata.type then
 					SetPlayerParachuteTintIndex(PlayerData.id, slot.metadata.type)
 				end
@@ -76,6 +96,73 @@ end)
 
 Item('phone', function(data, slot)
 	exports.npwd:setPhoneVisible(not exports.npwd:isPhoneVisible())
+end)
+
+local Megaphone = false
+local megaObj = nil
+Item('megaphone', function (data, slot)
+  local animDict = "anim@mp_player_intselfiethumbs_up"
+  local animation = "idle_a"
+  ox_inventory:useItem(data, function(data)
+    if data then
+      if Megaphone == false then
+        Megaphone = true
+        exports['pma-voice']:overrideProximityRange(500.0, true)
+        if megaObj == nil then
+          megaObj = CreateObject(GetHashKey("prop_megaphone_01"), 0, 0, 0, true, true, true)
+        end
+
+        AttachEntityToEntity(megaObj, PlayerPedId(), GetPedBoneIndex(PlayerPedId(), 18905), 0.097, 0.02, 0.01, -120.0, 30.0, 50.0, false, false, false, true, 5, true)
+        
+        if IsPedArmed(ped, 7) then
+          SetCurrentPedWeapon(ped, 0xA2719263, true)
+        end
+
+        loadAnimDict(animDict)
+        TaskPlayAnim(PlayerPedId(), animDict, animation, 1.0, 4.0, -1, 49, 0, 0, 0, 0)
+      else
+        Megaphone = false
+        ClearPedTasks(PlayerPedId())
+        if megaObj ~= nil then
+          DeleteEntity(megaObj)
+          megaObj = nil
+        end	
+        exports['pma-voice']:clearProximityOverride()
+      end
+    end
+  end)
+end)
+
+
+Item('lockpick', function(data, slot)
+  local veh = IsPedInAnyVehicle(PlayerPedId(), false)
+  if veh then
+    ox_inventory:useItem(data, function(data)
+      if data then
+        TriggerEvent('onyx:checkForKeys')
+      end
+    end)
+  else
+    TriggerEvent('onyx:pickDoor')
+  end
+end)
+
+Item('binoculars', function(data, slot)
+  local veh = IsPedInAnyVehicle(PlayerPedId(), false)
+  if not veh then
+    ox_inventory:useItem(data, function(data)
+      if data then
+        TriggerEvent('binoculars:Toggle')
+      end
+    end)
+  end
+end)
+
+AddEventHandler('onResourceStop', function(resourceName)
+  if (GetCurrentResourceName() ~= resourceName) then
+    return
+  end
+  DeleteEntity(megaObj)
 end)
 
 -----------------------------------------------------------------------------------------------

@@ -109,22 +109,6 @@ RegisterNetEvent('ox_doorlock:setState', function(id, state, source, data)
 		createDoor(data)
 	end
 
-	if source == cache.serverId then
-		if state == 0 then
-			lib.notify({
-				type = 'success',
-				icon = 'unlock',
-				description = locale('unlocked_door')
-			})
-		else
-			lib.notify({
-				type = 'success',
-				icon = 'lock',
-				description = locale('locked_door')
-			})
-		end
-	end
-
 	local door = data or doors[id]
 	local double = door.doors
 	door.state = state
@@ -263,7 +247,7 @@ CreateThread(function()
 		end
 
 		Wait(num > 0 and 0 or 500)
-	end)
+	end
 end)
 
 function loadAnimDict(dict)

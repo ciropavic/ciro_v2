@@ -30,17 +30,12 @@ const InfoScreen: React.FC<{
       <p>[CTRL + SHIFT + LMB] - {Locale.ui_ctrl_shift_lmb}</p>
       <p>[ALT + LMB] - {Locale.ui_alt_lmb}</p>
       <p>[CTRL + C] - {Locale.ui_ctrl_c}</p>
-      <span
-        className="info-ox"
-        onClick={() => Notify({ text: 'Made with 🐂 by the Overextended team' })}
-      >
-        🐂
-      </span>
     </div>
   );
 };
 
 const InventoryControl: React.FC = () => {
+  const itemAmount = useAppSelector(selectItemAmount);
   const dispatch = useAppDispatch();
 
   const [infoVisible, setInfoVisible] = useState(false);
@@ -52,12 +47,12 @@ const InventoryControl: React.FC = () => {
     },
   }));
 
-  const [, give] = useDrop<DragSource, void, any>(() => ({
-    accept: 'SLOT',
-    drop: (source) => {
-      source.inventory === 'player' && onGive(source.item);
-    },
-  }));
+  // const [, give] = useDrop<DragSource, void, any>(() => ({
+  //   accept: 'SLOT',
+  //   drop: (source) => {
+  //     source.inventory === 'player' && onGive(source.item);
+  //   },
+  // }));
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (
@@ -81,15 +76,15 @@ const InventoryControl: React.FC = () => {
           id="itemQuantity"
           placeholder="Amount"
           min={0}
-          // defaultValue={itemAmount}
+          defaultValue={itemAmount}
           onChange={inputHandler}
         />
-        {/* <button ref={use} className="button">
+        <button ref={use} className="button">
           {Locale.ui_use}
-        </button> */}
-        <button ref={give} className="button">
-          {Locale.ui_give}
         </button>
+        {/* <button ref={give} className="button">
+          {Locale.ui_give}
+        </button> */}
         <button className="button" onClick={() => fetchNui('exit')}>
           {Locale.ui_close}
         </button>

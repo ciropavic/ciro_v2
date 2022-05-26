@@ -38,28 +38,31 @@ const InventoryHotbar: React.FC<{ items: Slot[] }> = ({ items }) => {
           >
             {isSlotWithItem(item) && (
               <>
-                <div className="item-count">
-                  <span>
-                    {item.weight > 0
-                      ? item.weight >= 1000
-                        ? `${(item.weight / 1000).toLocaleString('en-us', {
-                            minimumFractionDigits: 2,
-                          })}kg `
-                        : `${item.weight.toLocaleString('en-us', {
-                            minimumFractionDigits: 0,
-                          })}g `
-                      : ''}
-                    {item.count?.toLocaleString('en-us')}x
-                  </span>
-                </div>
-                {item?.durability !== undefined && (
-                  <WeightBar percent={item.durability} durability />
-                )}
                 <div className="item-label">
                   {item.metadata?.label
                     ? item.metadata.label
                     : Items[item.name]?.label || item.name}
                 </div>
+                <div className="item-count">
+                  <span id="itemCount">
+                    {/* {item.count?.toLocaleString('en-us')}x */}
+                    {item.count ? item.count.toLocaleString('en-us') + `x` : ''}
+                  </span>
+                  <span>
+                    {item.weight > 0
+                      ? item.weight >= 1000
+                        ? `${(item.weight / 1000).toLocaleString('en-us', {
+                            minimumFractionDigits: 2,
+                          })}`
+                        : `${item.weight.toLocaleString('en-us', {
+                            minimumFractionDigits: 2,
+                          })}`
+                      : ''}
+                  </span>
+                </div>
+                {item?.durability !== undefined && (
+                  <WeightBar percent={item.durability} durability />
+                )}
               </>
             )}
           </div>
