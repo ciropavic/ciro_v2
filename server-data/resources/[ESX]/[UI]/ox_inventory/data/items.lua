@@ -1,34 +1,34 @@
 return {
-	['testburger'] = {
-		label = 'Test Burger',
-		weight = 220,
-		degrade = 60,
-		client = {
-			status = { hunger = 200000 },
-			anim = 'eating',
-			prop = 'burger',
-			usetime = 2500,
-			export = 'ox_inventory_examples.testburger'
-		},
-		server = {
-			export = 'ox_inventory_examples.testburger',
-			test = 'what an amazingly delicious burger, amirite?'
-		},
-		buttons = {
-			{
-				label = 'Lick it',
-				action = function(slot)
-					print('You licked the burger')
-				end
-			},
-			{
-				label = 'Squeeze it',
-				action = function(slot)
-					print('You squeezed the burger :(')
-				end
-			}
-		}
-	},
+	-- ['testburger'] = {
+	-- 	label = 'Test Burger',
+	-- 	weight = 220,
+	-- 	degrade = 60,
+	-- 	client = {
+	-- 		status = { hunger = 200000 },
+	-- 		anim = 'eating',
+	-- 		prop = 'burger',
+	-- 		usetime = 2500,
+	-- 		export = 'ox_inventory_examples.testburger'
+	-- 	},
+	-- 	server = {
+	-- 		export = 'ox_inventory_examples.testburger',
+	-- 		test = 'what an amazingly delicious burger, amirite?'
+	-- 	},
+	-- 	buttons = {
+	-- 		{
+	-- 			label = 'Lick it',
+	-- 			action = function(slot)
+	-- 				print('You licked the burger')
+	-- 			end
+	-- 		},
+	-- 		{
+	-- 			label = 'Squeeze it',
+	-- 			action = function(slot)
+	-- 				print('You squeezed the burger :(')
+	-- 			end
+	-- 		}
+	-- 	}
+	-- },
 
 	['bandage'] = {
 		label = 'Bandage',
@@ -130,7 +130,7 @@ return {
 
 	['phone'] = {
 		label = 'Phone',
-		weight = 190,
+		weight = 5,
 		stack = false,
 		consume = 0,
 		client = {
@@ -152,18 +152,6 @@ return {
 		label = 'Money',
 	},
 
-	['mustard'] = {
-		label = 'Mustard',
-		weight = 500,
-		client = {
-			status = { hunger = 25000, thirst = 25000 },
-			anim = { dict = 'mp_player_intdrink', clip = 'loop_bottle' },
-			prop = { model = `prop_food_mustard`, pos = vec3(0.01, 0.0, -0.07), rot = vec3(1.0, 1.0, -1.5) },
-			usetime = 2500,
-			notification = 'You.. drank mustard'
-		}
-	},
-
 	['water'] = {
 		label = 'Water',
 		weight = 500,
@@ -179,20 +167,10 @@ return {
 
 	['radio'] = {
 		label = 'Radio',
-		weight = 1000,
+		weight = 5,
 		stack = false,
 		consume = 0,
 		allowArmed = true
-	},
-
-	['armour'] = {
-		label = 'Bulletproof Vest',
-		weight = 3000,
-		stack = false,
-		client = {
-			anim = { dict = 'clothingshirt', clip = 'try_shirt_positive_d' },
-            usetime = 3500
-		}
 	},
 
   ['a_brakes'] = {
