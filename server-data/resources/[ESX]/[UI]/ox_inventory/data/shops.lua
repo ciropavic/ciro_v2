@@ -82,10 +82,10 @@ return {
 		blip = {
 			id = 110, colour = 69, scale = 0.8
 		}, inventory = {
-			{ name = 'ammo-pistol', price = 5, },
+			{ name = 'ammo-9', price = 5, },
 			{ name = 'ammo-shotgun', price = 5, },
 			{ name = 'ammo-rifle', price = 5, },
-			{ name = 'ammo-smg', price = 5, },
+			{ name = 'ammo-45', price = 5, },
 			{ name = 'WEAPON_KNIFE', price = 200 },
 			{ name = 'WEAPON_SWITCHBLADE', price = 200 },
 			{ name = 'WEAPON_STUNGUN', price = 500 },
@@ -123,8 +123,8 @@ return {
 		-- 	id = 110, colour = 84, scale = 0.8
 		-- },
      inventory = {
-			{ name = 'ammo-pistol', price = 12, },
-			{ name = 'ammo-smg', price = 12, },
+			{ name = 'ammo-9', price = 12, },
+			{ name = 'ammo-45', price = 12, },
 			{ name = 'ammo-rifle', price = 12, },
 			{ name = 'ammo-shotgun', price = 12, },
 			{ name = 'WEAPON_FLASHLIGHT', price = 287 },

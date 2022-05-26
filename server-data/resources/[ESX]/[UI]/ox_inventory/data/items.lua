@@ -221,38 +221,6 @@ return {
 		description = ''
 	},
 
-	['ammo-pistol'] = {
-		label = 'Pistol Ammo',
-		weight = 1,
-		stack = true,
-		close = true,
-		description = ''
-	},
-
-	['ammo-shotgun'] = {
-		label = 'Shotgun Ammo',
-		weight = 1,
-		stack = true,
-		close = true,
-		description = ''
-	},
-
-	['ammo-rifle'] = {
-		label = 'Rifle Ammo',
-		weight = 1,
-		stack = true,
-		close = true,
-		description = ''
-	},
-
-	['ammo-smg'] = {
-		label = 'Sub Ammo',
-		weight = 1,
-		stack = true,
-		close = true,
-		description = ''
-	},
-
 	['b_brakes'] = {
 		label = 'b class breaks',
 		weight = 9,
