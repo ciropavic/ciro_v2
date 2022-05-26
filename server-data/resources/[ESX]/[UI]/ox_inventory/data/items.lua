@@ -627,6 +627,7 @@ return {
 
   ['7709_key'] = {
 		label = 'Key Fob',
-    description = '7709 Great Ocean Highway'
+    description = '7709 Great Ocean Highway',
+    stack = false,
 	},
 }
