@@ -8,7 +8,7 @@ files {
     'html/script.js',
     'html/style.css',
     'html/loading-bar.js',
-	'html/buckle.ogg',
+	  'html/buckle.ogg',
     'html/unbuckle.ogg',
     'html/seatBelt_off.png'
 }
@@ -25,4 +25,8 @@ client_scripts {
 server_scripts {
     'config.lua',
     'server/server.lua'
+}
+dependencies {
+	'ecrp-radio',
+  'ecrp-fuel',
 }

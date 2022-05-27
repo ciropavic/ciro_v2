@@ -26,7 +26,6 @@ end)
 function setProximityState(proximityRange, isCustom)
 	local voiceModeData = Cfg.voiceModes[mode]
 	MumbleSetTalkerProximity(proximityRange + 0.0)
-  exports['ecrp-hud']:Voicelevel(mode)
 	LocalPlayer.state:set('proximity', {
 		index = mode,
 		distance = proximityRange,
@@ -55,12 +54,6 @@ exports("clearProximityOverride", function()
 	end
 end)
 
-Citizen.CreateThread(function ()
-  while true do
-    Citizen.Wait(500)
-  end
-end)
-
 RegisterCommand('cycleproximity', function()
 	-- Proximity is either disabled, or manually overwritten.
 	if GetConvarInt('voice_enableProximityCycle', 1) ~= 1 or disableProximityCycle then return end
@@ -77,5 +70,5 @@ RegisterCommand('cycleproximity', function()
 	TriggerEvent('pma-voice:setTalkingMode', mode)
 end, false)
 if gameVersion == 'fivem' then
-	RegisterKeyMapping('cycleproximity', 'Cycle Proximity', 'keyboard', GetConvar('voice_defaultCycle', 'Z'))
+	RegisterKeyMapping('cycleproximity', 'Cycle Proximity', 'keyboard', GetConvar('voice_defaultCycle', 'F11'))
 end
