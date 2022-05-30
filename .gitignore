@@ -4,4 +4,4 @@ crashes/
 *.key
 *.crt
 *.dat
-*.json
+components.json
