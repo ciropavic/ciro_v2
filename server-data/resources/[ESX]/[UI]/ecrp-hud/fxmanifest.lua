@@ -26,6 +26,7 @@ server_scripts {
     'config.lua',
     'server/server.lua'
 }
+
 dependencies {
 	'ecrp-radio',
   'ecrp-fuel',
