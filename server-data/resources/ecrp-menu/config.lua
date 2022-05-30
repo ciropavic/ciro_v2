@@ -27,7 +27,6 @@ rootMenuConfig =  {
         displayName = "Police Actions",
         icon = "#police-action",
         enableMenu = function()
-           local ped = PlayerPedId()
            PlayerData = ESX.GetPlayerData()
            dead = exports["ecrp-death"]:GetDeath()
             if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" and not dead then

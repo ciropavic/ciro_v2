@@ -1,3 +1,12 @@
+local ESX = nil
+Citizen.CreateThread(function()
+    while ESX == nil do
+        TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+        Wait(10)
+    end
+end)
+
+
 RegisterCommand('stuck', function()
     local ped = GetPlayerPed(-1)
     SetEntityInvincible(ped, false)
@@ -21,6 +30,35 @@ RegisterCommand('evidence', function ()
 end)
 
 RegisterKeyMapping('noclip', '(Dev) Noclip','keyboard', '')
+
+
+  RegisterCommand('removebarrier', function()
+    local PlayerData = ESX.GetPlayerData()
+    if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" or PlayerData.job.name == "ambulance" then
+      TriggerEvent('barriers:pickup')
+    end
+  end)
+
+  RegisterCommand('barrier', function()
+    local PlayerData = ESX.GetPlayerData()
+    if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" or PlayerData.job.name == "ambulance" then
+      TriggerEvent('barriers:barrier')
+    end
+  end)
+
+  RegisterCommand('barrier2', function()
+    local PlayerData = ESX.GetPlayerData()
+    if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" or PlayerData.job.name == "ambulance" then
+      TriggerEvent('barriers:sbarrier')
+    end
+  end)
+
+  RegisterCommand('cone', function()
+    local PlayerData = ESX.GetPlayerData()
+    if PlayerData.job.name == "police" or PlayerData.job.name == "bcso" or PlayerData.job.name == "ambulance" then
+      TriggerEvent('barriers:cone')
+    end
+  end)
 
 -- Remove Chat Suggestions
 Citizen.CreateThread(function ()
