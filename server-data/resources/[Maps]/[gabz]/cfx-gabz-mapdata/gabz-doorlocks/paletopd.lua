@@ -466,3 +466,41 @@ table.insert(Config.DoorList, {
 	audioUnlock = {['file'] = 'metallic-creak.ogg', ['volume'] = 0.7},
 	-- autoLock = 1000
 })
+
+-- paletopd_exterior - gatedoor
+table.insert(Config.DoorList, {
+	slides = false,
+	objCoords = vector3(-449.6914, 6024.355, 32.15741),
+	objHeading = 135.0,
+	fixText = false,
+	locked = true,
+	authorizedJobs = { ['police']=0 },
+	garage = false,
+	maxDistance = 2.0,
+	objHash = -1156020871,
+	lockpick = false,
+	audioRemote = false,		
+	-- oldMethod = true,
+	-- audioLock = {['file'] = 'metal-locker.ogg', ['volume'] = 0.6},
+	-- audioUnlock = {['file'] = 'metallic-creak.ogg', ['volume'] = 0.7},
+	-- autoLock = 1000
+})
+
+-- paletopd_exterior - parkinglot bollards
+table.insert(Config.DoorList, {
+	slides = false,
+	objCoords = vector3(-456.4734, 6031.136, 31.13747),
+	objHeading = 44.844528198242,
+	fixText = false,
+	locked = true,
+	authorizedJobs = { ['police']=0 },
+	garage = false,
+	maxDistance = 2.0,
+	objHash = -470936668,
+	lockpick = false,
+	audioRemote = false,		
+	-- oldMethod = true,
+	-- audioLock = {['file'] = 'metal-locker.ogg', ['volume'] = 0.6},
+	-- audioUnlock = {['file'] = 'metallic-creak.ogg', ['volume'] = 0.7},
+	-- autoLock = 1000
+})
