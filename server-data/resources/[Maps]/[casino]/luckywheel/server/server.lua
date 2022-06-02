@@ -4,8 +4,8 @@ amount = 500
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
-RegisterServerEvent('ecrp:getLucky')
-AddEventHandler('ecrp:getLucky', function()
+RegisterServerEvent('ecrp-luckywheel:getLucky')
+AddEventHandler('ecrp-luckywheel:getLucky', function()
     local _source = source
     local xPlayer = ESX.GetPlayerFromId(_source)
     if not isRoll then
@@ -135,15 +135,15 @@ AddEventHandler('ecrp:getLucky', function()
                         TriggerClientEvent('chatMessage', -1, '', {255,255,255}, '^8Vòng quay: ^1'.. xPlayer.name .. " đã thắng được 1 Skin AK Gold!")
                     elseif _priceIndex == 19 then
                         -- print("Win car lp700r")
-                        TriggerClientEvent("ecrp:winCar", _source)
+                        TriggerClientEvent("ecrp-luckywheel:winCar", _source)
                         TriggerClientEvent('chatMessage', -1, '', {255,255,255}, '^8Vòng quay: ^1'.. xPlayer.name .. " đã thắng được 1 Skin AK Gold!")
                     end
-                    TriggerClientEvent("ecrp:rollFinished", -1)
+                    TriggerClientEvent("ecrp-luckywheel:rollFinished", -1)
                 end)
-                TriggerClientEvent("ecrp:doRoll", -1, _priceIndex)
+                TriggerClientEvent("ecrp-luckywheel:doRoll", -1, _priceIndex)
             else
-                TriggerClientEvent("ecrp:rollFinished", -1)    
-                TriggerClientEvent('esx:showNotification', _source, "Not enough money!")
+                TriggerClientEvent("ecrp-luckywheel:rollFinished", -1)    
+                TriggerClientEvent('esx:showNotification', _source, "Bạn không có đủ tiền trong ví để chơi! Yêu cầu " .. ESX.Math.GroupDigits(amount) .. "$ cho 1 lần quay!")
             end
         end
     end

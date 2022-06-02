@@ -135,49 +135,11 @@ Citizen.CreateThread(function()
         distance = 2.0
     })
   end)
-
-
----------------------------------------------------------------------------------- Casino Elevator
--- Lobby
-Citizen.CreateThread(function()
-    exports.qtarget:AddBoxZone("casinoEl", vector3(947.72, 49.87, 75.12), 0.4, 0.4, {
-      name="casinoEl",
-      heading=11,
-      -- debugPoly=true,
-      minZ=74.92,
-      maxZ=75.92
-    }, {
-      options = {{
-          event = 'casinoElevator',
-          icon = 'fa-solid fa-elevator',
-          label = "Elevator",
-      }},
-      distance = 2.0
-  })
-end)
-
--- Rooftop
-Citizen.CreateThread(function()
-    exports.qtarget:AddBoxZone("casinoElRoof", vector3(964.48, 57.5, 112.55), 0.4, 0.2, {
-      name="casinoElRoof",
-      heading=330,
-      --debugPoly=true,
-      minZ=112.2,
-      maxZ=113.0
-    }, {
-      options = {{
-          event = 'casinoElevatorRoof',
-          icon = 'fa-solid fa-elevator',
-          label = "Call Elevator",
-      }},
-      distance = 2.0
-  })
-end)
-
+  
 ---------------------------------------------------------------------------------- Pillbox Elevator
 -- Upper Lobby
 Citizen.CreateThread(function()
-    exports.qtarget:AddBoxZone("casinoElRoof", vector3(330.4, -602.86, 43.28), 0.4, 1, {
+    exports.qtarget:AddBoxZone("pollboxUpper", vector3(330.4, -602.86, 43.28), 0.4, 1, {
       name="pollboxUpper",
       heading=340,
       --debugPoly=true,
@@ -231,42 +193,6 @@ end)
 
 ---------------------------------------------------------------------------------- Events
 ---------------------------------------- Elevator
-RegisterNetEvent("casinoElevator", function()
-  TriggerEvent("nh-context:createMenu", {
-      {
-          header = "Rooftop",
-          context = "Rooftop pleasures",
-          event = "useElevator",
-          args = {964.64, 58.84, 112.55, 57.95}
-      },
-      {
-          header = "Lobby",
-          context = "Gamba time",
-          event = "useElevator",
-          disabled = true,
-          args = {947.86, 50.70, 75.11, 283.68}
-      },
-  })
-end)
-
-RegisterNetEvent("casinoElevatorRoof", function()
-  TriggerEvent("nh-context:createMenu", {
-      {
-          header = "Rooftop",
-          context = "Rooftop pleasures",
-          event = "useElevator",
-          disabled = true,
-          args = {964.64, 58.84, 112.55, 57.95}
-      },
-      {
-          header = "Lobby",
-          context = "Gamba time",
-          event = "useElevator",
-          args = {947.86, 50.70, 75.11, 283.68}
-      },
-  })
-end)
-
 RegisterNetEvent("pillboxElevatorLower", function()
   TriggerEvent("nh-context:createMenu", {
       {

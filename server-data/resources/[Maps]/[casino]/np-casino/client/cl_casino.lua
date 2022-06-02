@@ -143,7 +143,7 @@ function enterCasino(pIsInCasino)
     playSomeBackgroundAudioBaby()
     doSomeTextureReplacesBruv(true)
     showThe6StrImage(true)
-    doWeaponBlock()
+    -- doWeaponBlock()
     -- stopRunningInMyCasino()
   end
   -- if not pFromElevator then
