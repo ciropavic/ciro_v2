@@ -105,3 +105,7 @@ data_file 'AUDIO_WAVEPACK' 'sfx/dlc_audi7a'
 data_file 'AUDIO_GAMEDATA' 'audioconfig/audiea855_game.dat'
 data_file 'AUDIO_SOUNDDATA' 'audioconfig/audiea855_sounds.dat'
 data_file 'AUDIO_WAVEPACK' 'sfx/dlc_audiea855'
+
+data_file 'AUDIO_GAMEDATA' 'audioconfig/one1_game.dat'
+data_file 'AUDIO_SOUNDDATA' 'audioconfig/one1_sounds.dat'
+data_file 'AUDIO_WAVEPACK' 'sfx/dlc_one1'

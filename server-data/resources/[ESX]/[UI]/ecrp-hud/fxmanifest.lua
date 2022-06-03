@@ -28,6 +28,6 @@ server_scripts {
 }
 
 dependencies {
-	'ecrp-radio',
+	-- 'ecrp-radio',
   'ecrp-fuel',
 }

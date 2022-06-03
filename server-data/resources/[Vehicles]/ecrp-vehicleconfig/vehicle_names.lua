@@ -33,6 +33,7 @@ Citizen.CreateThread(function()
   AddTextEntry("Maserati", "Maserati")
   AddTextEntry("Cadillac", "Cadillac")
   AddTextEntry("Mazda", "Mazda")
+  AddTextEntry("Koenigsegg", "Koenigsegg")
 
   -- Alfa Romeo --
 	AddTextEntry("0x663E4820", "Alfa Romeo Giulia GTAm")
