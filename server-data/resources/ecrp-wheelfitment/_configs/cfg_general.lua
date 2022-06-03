@@ -8,6 +8,6 @@ cfg_wheelFitmentPos = {
     coords = vector3(435.41, -975.99, 25.7),
   }
 }
-cfg_scanVehicleTimer = 1000
+cfg_scanVehicleTimer = 10000
 
 cfg_isWhitelisted = true
